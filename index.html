@@ -366,7 +366,7 @@
       border-radius: 3px; color: var(--accent-blue);
     }
 
-    /* ── CARDS GRID ── */
+    /* ── CARDS GRID (used for Other Experience) ── */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -407,6 +407,143 @@
       line-height: 1.65; margin-bottom: 1rem;
     }
     .card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+    /* ── PROJECT GALLERY ── */
+    .project-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+    }
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent-blue);
+      box-shadow: var(--glow-blue);
+    }
+    .project-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: rgba(255,255,255,0.15);
+      flex-shrink: 0;
+    }
+    .project-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover .project-img img {
+      transform: scale(1.07);
+    }
+    .project-img .img-icon {
+      position: relative;
+      z-index: 1;
+      font-size: 3rem;
+      opacity: 0.3;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover .project-img .img-icon {
+      opacity: 0.6;
+    }
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .project-card:hover .project-overlay {
+      opacity: 1;
+    }
+    .project-overlay a {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+      backdrop-filter: blur(4px);
+    }
+    .project-overlay a:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      transform: scale(1.1);
+    }
+    .project-info {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+    .project-info .card-title {
+      font-size: 1rem;
+      margin-bottom: 0;
+    }
+    .project-info .card-desc {
+      font-size: 0.82rem;
+      margin-bottom: 0;
+      flex: 1;
+    }
+    .project-links {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .project-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.78rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      letter-spacing: 0.5px;
+    }
+    .project-link-primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+    }
+    .project-link-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,212,255,0.3);
+    }
+    .project-link-outline {
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .project-link-outline:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
 
     /* ── FREELANCE ── */
     .freelance-grid {
@@ -567,6 +704,7 @@
     @media (max-width: 480px) {
       .hero-name { font-size: 1.8rem; }
       .cards-grid { grid-template-columns: 1fr; }
+      .project-gallery { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -618,10 +756,10 @@
         <a href="mailto:visualbasic008@gmail.com"><i class="fas fa-envelope"></i>visualbasic008@gmail.com</a>
       </div>
       <div class="hero-buttons">
-        <a href="https://github.com" target="_blank" rel="noopener" class="btn btn-primary">
+        <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="btn btn-primary">
           <i class="fab fa-github"></i> GitHub
         </a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener" class="btn btn-outline">
+        <a href="https://www.linkedin.com/in/panagiotis-efstathiadis-7b2a39112/" target="_blank" rel="noopener" class="btn btn-outline">
           <i class="fab fa-linkedin"></i> LinkedIn
         </a>
         <a href="mailto:visualbasic008@gmail.com" class="btn btn-outline">
@@ -884,69 +1022,168 @@
         <h2 class="section-title">Personal <span>Projects</span></h2>
         <div class="section-line"></div>
       </div>
-      <div class="cards-grid">
+      <div class="project-gallery">
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-paw"></i></div>
-          <div class="card-title">RePaw</div>
-          <div class="card-desc">Pet services platform connecting pet owners with service providers.</div>
-          <div class="card-tags"><span class="tag">Pet Services</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);">
+            <i class="fas fa-paw img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">RePaw</div>
+            <div class="card-desc">Pet services platform connecting pet owners with service providers.</div>
+            <div class="card-tags"><span class="tag">Pet Services</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-          <div class="card-title">Finance Accounts</div>
-          <div class="card-desc">Personal finance tracker with transaction management and analytics.</div>
-          <div class="card-tags"><span class="tag">Transactions</span><span class="tag">Analytics</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">
+            <i class="fas fa-chart-line img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">Finance Accounts</div>
+            <div class="card-desc">Personal finance tracker with transaction management and analytics.</div>
+            <div class="card-tags"><span class="tag">Transactions</span><span class="tag">Analytics</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fab fa-youtube"></i></div>
-          <div class="card-title">UR8</div>
-          <div class="card-desc">YouTube clone with video streaming, channels, and user subscriptions.</div>
-          <div class="card-tags"><span class="tag">FFmpeg</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">Bootstrap</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#c31432,#240b36);">
+            <i class="fab fa-youtube img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">UR8</div>
+            <div class="card-desc">YouTube clone with video streaming, channels, and user subscriptions.</div>
+            <div class="card-tags"><span class="tag">FFmpeg</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">Bootstrap</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-tasks"></i></div>
-          <div class="card-title">PixelSprint</div>
-          <div class="card-desc">Task management app with sprint planning, boards, and team collaboration.</div>
-          <div class="card-tags"><span class="tag">Django</span><span class="tag">Celery</span><span class="tag">Bulma</span><span class="tag">HTMX</span><span class="tag">Pytest</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#00b4db,#0083b0);">
+            <i class="fas fa-tasks img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">PixelSprint</div>
+            <div class="card-desc">Task management app with sprint planning, boards, and team collaboration.</div>
+            <div class="card-tags"><span class="tag">Django</span><span class="tag">Celery</span><span class="tag">Bulma</span><span class="tag">HTMX</span><span class="tag">Pytest</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-table-tennis-paddle-ball"></i></div>
-          <div class="card-title">PingPong Game</div>
-          <div class="card-desc">Classic Pong game with single-player AI and two-player local multiplayer modes.</div>
-          <div class="card-tags"><span class="tag">PyGame</span><span class="tag">Python</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+            <i class="fas fa-table-tennis-paddle-ball img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">PingPong Game</div>
+            <div class="card-desc">Classic Pong game with single-player AI and two-player local multiplayer modes.</div>
+            <div class="card-tags"><span class="tag">PyGame</span><span class="tag">Python</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-images"></i></div>
-          <div class="card-title">PhotoFavorites</div>
-          <div class="card-desc">Photo gallery app with end-to-end testing suite using Angular TestBed.</div>
-          <div class="card-tags"><span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">SCSS</span><span class="tag">TestBed</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1);">
+            <i class="fas fa-images img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">PhotoFavorites</div>
+            <div class="card-desc">Photo gallery app with end-to-end testing suite using Angular TestBed.</div>
+            <div class="card-tags"><span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">SCSS</span><span class="tag">TestBed</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-microphone"></i></div>
-          <div class="card-title">Speech Recognition 0–9</div>
-          <div class="card-desc">ML model recognizing spoken digits 0–9 using audio feature extraction and neural networks.</div>
-          <div class="card-tags"><span class="tag">Python</span><span class="tag">Keras</span><span class="tag">scikit-learn</span><span class="tag">librosa</span><span class="tag">pyaudio</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#fc5c7d,#6a82fb);">
+            <i class="fas fa-microphone img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">Speech Recognition 0–9</div>
+            <div class="card-desc">ML model recognizing spoken digits 0–9 using audio feature extraction and neural networks.</div>
+            <div class="card-tags"><span class="tag">Python</span><span class="tag">Keras</span><span class="tag">scikit-learn</span><span class="tag">librosa</span><span class="tag">pyaudio</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-download"></i></div>
-          <div class="card-title">Kivy YouTube Downloader</div>
-          <div class="card-desc">Cross-platform desktop app for downloading YouTube music and videos.</div>
-          <div class="card-tags"><span class="tag">Python</span><span class="tag">Kivy</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#302b63,#0f0c29);">
+            <i class="fas fa-download img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">Kivy YouTube Downloader</div>
+            <div class="card-desc">Cross-platform desktop app for downloading YouTube music and videos.</div>
+            <div class="card-tags"><span class="tag">Python</span><span class="tag">Kivy</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
-        <div class="card reveal">
-          <div class="card-icon"><i class="fas fa-code"></i></div>
-          <div class="card-title">Misc Projects</div>
-          <div class="card-desc">Various academic and experimental projects spanning multiple languages and paradigms.</div>
-          <div class="card-tags"><span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Prolog</span><span class="tag">HTML</span></div>
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+            <i class="fas fa-code img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title">Misc Projects</div>
+            <div class="card-desc">Various academic and experimental projects spanning multiple languages and paradigms.</div>
+            <div class="card-tags"><span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Prolog</span><span class="tag">HTML</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1054,8 +1291,8 @@
     <div class="footer-name">Panagiotis Efstathiadis</div>
     <div class="footer-sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
     <div class="footer-links">
-      <a href="https://github.com" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/panagiotis-efstathiadis-7b2a39112/" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
       <a href="mailto:visualbasic008@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
       <a href="tel:+306982572887" title="Phone"><i class="fas fa-phone"></i></a>
     </div>
@@ -1198,7 +1435,7 @@
 
     /* ── STAGGER DELAY for cards ── */
     (function() {
-      document.querySelectorAll('.cards-grid .card, .freelance-grid .freelance-card, .edu-grid .edu-card').forEach(function(el, i) {
+      document.querySelectorAll('.project-gallery .project-card, .cards-grid .card, .freelance-grid .freelance-card, .edu-grid .edu-card').forEach(function(el, i) {
         el.style.transitionDelay = (i * 0.07) + 's';
       });
     })();
