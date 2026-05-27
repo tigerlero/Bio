@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="page_title_pricing">Pricing — Panagiotis Efstathiadis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .pricing-hero {
+      background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(0,212,255,0.08));
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">PE</a>
+    <ul class="nav-links">
+      <li><a href="index.html#skills" data-i18n="nav_skills">Skills</a></li>
+      <li><a href="index.html#experience" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="index.html#freelance" data-i18n="nav_freelance">Freelance</a></li>
+      <li><a href="index.html#projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="index.html#education" data-i18n="nav_education">Education</a></li>
+      <li><a href="index.html#teaching" data-i18n="nav_teaching">Teaching</a></li>
+    </ul>
+    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="el">EL</option>
+      <option value="it">IT</option>
+      <option value="tr">TR</option>
+      <option value="ro">RO</option>
+      <option value="sq">SQ</option>
+      <option value="bg">BG</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+    </select>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="mobile-link" data-i18n="home_link">Home</a>
+    <a href="index.html#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
+    <a href="index.html#experience" class="mobile-link" data-i18n="nav_experience">Experience</a>
+    <a href="index.html#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
+  </div>
+
+  <div class="page-hero pricing-hero">
+    <div>
+      <span class="section-tag" data-i18n="pricing_tag">// pricing</span>
+      <h1><span data-i18n="page_pricing_prefix">Service </span><span data-i18n="page_pricing_suffix" style="color:var(--accent-purple);">Pricing</span></h1>
+      <p data-i18n="pricing_desc">Transparent pricing for freelance services. Every project is unique — these are starting points.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-inner">
+
+      <div class="currency-switcher-wrap" id="currency-switcher">
+        <label data-i18n="currency_eur">EUR</label>
+        <button class="currency-btn active" data-currency="eur" onclick="switchCurrency('eur')">€</button>
+        <button class="currency-btn" data-currency="usd" onclick="switchCurrency('usd')">$</button>
+        <button class="currency-btn" data-currency="gbp" onclick="switchCurrency('gbp')">£</button>
+      </div>
+
+      <div class="pricing-grid">
+
+        <!-- SERVICE 0: Landing Page / Portfolio -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <i class="fas fa-file-alt"></i>
+            <div>
+              <h3 data-i18n="svc_0_name">Landing Page / Portfolio</h3>
+              <p class="pricing-desc" data-i18n="svc_0_desc">Single-page or multi-page personal/business site.</p>
+            </div>
+          </div>
+          <div class="pricing-tiers">
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_basic">Basic</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="300" data-price-usd="330" data-price-gbp="260">300</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_standard">Standard</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="600" data-price-usd="655" data-price-gbp="515">600</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier premium">
+              <div class="pricing-tier-label" data-i18n="tier_premium">Premium</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="1000" data-price-usd="1095" data-price-gbp="860">1,000</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVICE 1: Business Website -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <i class="fas fa-building"></i>
+            <div>
+              <h3 data-i18n="svc_1_name">Business Website</h3>
+              <p class="pricing-desc" data-i18n="svc_1_desc">Multi-page business site with CMS, blog, contact forms, and SEO.</p>
+            </div>
+          </div>
+          <div class="pricing-tiers">
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_basic">Basic</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="800" data-price-usd="875" data-price-gbp="690">800</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_standard">Standard</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="1500" data-price-usd="1640" data-price-gbp="1290">1,500</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_4">Performance optimization</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier premium">
+              <div class="pricing-tier-label" data-i18n="tier_premium">Premium</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="3000" data-price-usd="3275" data-price-gbp="2580">3,000</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVICE 2: E-commerce Store -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <i class="fas fa-shopping-cart"></i>
+            <div>
+              <h3 data-i18n="svc_2_name">E-commerce Store</h3>
+              <p class="pricing-desc" data-i18n="svc_2_desc">Online store with product catalog, cart, payments, and order management.</p>
+            </div>
+          </div>
+          <div class="pricing-tiers">
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_basic">Basic</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="800" data-price-usd="875" data-price-gbp="690">800</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_standard">Standard</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="1500" data-price-usd="1640" data-price-gbp="1290">1,500</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_4">Performance optimization</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier premium">
+              <div class="pricing-tier-label" data-i18n="tier_premium">Premium</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="3000" data-price-usd="3275" data-price-gbp="2580">3,000</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVICE 3: Web Application -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <i class="fas fa-globe"></i>
+            <div>
+              <h3 data-i18n="svc_3_name">Web Application</h3>
+              <p class="pricing-desc" data-i18n="svc_3_desc">Custom web app with user accounts, dashboards, APIs, and database.</p>
+            </div>
+          </div>
+          <div class="pricing-tiers">
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_basic">Basic</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="800" data-price-usd="875" data-price-gbp="690">800</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_standard">Standard</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="1800" data-price-usd="1965" data-price-gbp="1550">1,800</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_4">Performance optimization</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier premium">
+              <div class="pricing-tier-label" data-i18n="tier_premium">Premium</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="4000" data-price-usd="4365" data-price-gbp="3440">4,000</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVICE 4: Desktop Application -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <i class="fas fa-desktop"></i>
+            <div>
+              <h3 data-i18n="svc_4_name">Desktop Application</h3>
+              <p class="pricing-desc" data-i18n="svc_4_desc">Cross-platform desktop app using Python (Kivy, PyQt) or Electron.</p>
+            </div>
+          </div>
+          <div class="pricing-tiers">
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_basic">Basic</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="500" data-price-usd="545" data-price-gbp="430">500</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_standard">Standard</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="1200" data-price-usd="1310" data-price-gbp="1030">1,200</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_4">Performance optimization</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier premium">
+              <div class="pricing-tier-label" data-i18n="tier_premium">Premium</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="2500" data-price-usd="2730" data-price-gbp="2150">2,500</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVICE 5: Mobile Application -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <i class="fas fa-mobile-alt"></i>
+            <div>
+              <h3 data-i18n="svc_5_name">Mobile Application</h3>
+              <p class="pricing-desc" data-i18n="svc_5_desc">Cross-platform mobile app using React Native or Flutter.</p>
+            </div>
+          </div>
+          <div class="pricing-tiers">
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_basic">Basic</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="800" data-price-usd="875" data-price-gbp="690">800</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier">
+              <div class="pricing-tier-label" data-i18n="tier_standard">Standard</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="1500" data-price-usd="1640" data-price-gbp="1290">1,500</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_4">Performance optimization</span></li>
+              </ul>
+            </div>
+            <div class="pricing-tier premium">
+              <div class="pricing-tier-label" data-i18n="tier_premium">Premium</div>
+              <div class="pricing-tier-price">
+                <span class="price-display" data-price-eur="3000" data-price-usd="3275" data-price-gbp="2580">3,000</span>
+                <span class="pricing-tier-currency price-currency">€</span>
+              </div>
+              <ul class="pricing-features">
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+                <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="pricing-note" data-i18n="pricing_note">* Every project is unique. Final pricing depends on scope, complexity, and specific requirements. Contact me for a free quote.</p>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name" data-i18n="footer_name">Panagiotis Efstathiadis</div>
+      <div class="footer-sub" data-i18n="footer_sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
+      <div class="footer-copy" data-i18n="footer_copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS & JS.</div>
+      <div class="footer-links">
+        <a href="https://github.com/tigerlero" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/panagiotis-efstathiadis-3323b48b" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="index.html" data-i18n="home_link">Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="js/i18n.js"></script>
+  <script>
+    translatePage(localStorage.getItem('lang') || 'en');
+    var ls = document.getElementById('lang-switcher');
+    if (ls) {
+      ls.value = localStorage.getItem('lang') || 'en';
+      ls.addEventListener('change', function() {
+        if (window.translatePage) window.translatePage(this.value);
+      });
+    }
+
+    var currentCurrency = 'eur';
+
+    function formatPrice(n) {
+      return Number(n).toLocaleString();
+    }
+
+    window.switchCurrency = function(ccy) {
+      currentCurrency = ccy;
+      var sym = { eur: '\u20AC', usd: '\u0024', gbp: '\u00A3' }[ccy] || '\u20AC';
+      document.querySelectorAll('.price-display').forEach(function(el) {
+        var val = el.getAttribute('data-price-' + ccy);
+        if (val) el.textContent = formatPrice(val);
+      });
+      document.querySelectorAll('.price-currency').forEach(function(el) {
+        el.textContent = sym;
+      });
+      document.querySelectorAll('.currency-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-currency') === ccy);
+      });
+    };
+  </script>
+  <script>
+    (function() {
+      var nav = document.getElementById('navbar');
+      var btn = document.getElementById('back-top');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 80) { nav.classList.add('scrolled'); btn.classList.add('visible'); }
+        else { nav.classList.remove('scrolled'); btn.classList.remove('visible'); }
+      });
+    })();
+    (function() {
+      var ham = document.getElementById('hamburger');
+      var menu = document.getElementById('mobile-menu');
+      if (ham && menu) {
+        ham.addEventListener('click', function() {
+          ham.classList.toggle('open'); menu.classList.toggle('open');
+        });
+        document.querySelectorAll('.mobile-link').forEach(function(a) {
+          a.addEventListener('click', function() {
+            ham.classList.remove('open'); menu.classList.remove('open');
+          });
+        });
+      }
+    })();
+    (function() {
+      var opts = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        });
+      }, opts);
+      document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+    })();
+    (function() {
+      document.querySelectorAll('.pricing-card').forEach(function(el, i) {
+        el.style.transitionDelay = (i * 0.1) + 's';
+      });
+    })();
+  </script>
+</body>
+</html>
