@@ -401,6 +401,11 @@
         </div>
       </div>
 
+      <div class="mode-switcher-wrap reveal">
+        <button class="mode-btn active" data-mode="remote" onclick="switchMode('remote')"><span data-i18n="mode_remote">Remote</span></button>
+        <button class="mode-btn" data-mode="inperson" onclick="switchMode('inperson')"><span data-i18n="mode_inperson">In Person</span></button>
+      </div>
+
       <div class="tut-grid">
 
         <div class="tut-card reveal">
@@ -410,15 +415,15 @@
           <div class="tut-tiers">
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_beginner">Beginner</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9">10</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9" data-price-eur-ip="15" data-price-usd-ip="16" data-price-gbp-ip="13">10</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_advanced">Advanced</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13">15</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13" data-price-eur-ip="20" data-price-usd-ip="22" data-price-gbp-ip="17">15</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_professional">Professional</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17">20</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17" data-price-eur-ip="25" data-price-usd-ip="27" data-price-gbp-ip="22">20</span><span class="price-currency">€</span></span>
             </div>
           </div>
           <div class="tut-unit" data-i18n="per_session">per session</div>
@@ -431,15 +436,15 @@
           <div class="tut-tiers">
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_beginner">Beginner</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9">10</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9" data-price-eur-ip="15" data-price-usd-ip="16" data-price-gbp-ip="13">10</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_advanced">Advanced</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13">15</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13" data-price-eur-ip="20" data-price-usd-ip="22" data-price-gbp-ip="17">15</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_professional">Professional</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17">20</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17" data-price-eur-ip="25" data-price-usd-ip="27" data-price-gbp-ip="22">20</span><span class="price-currency">€</span></span>
             </div>
           </div>
           <div class="tut-unit" data-i18n="per_session">per session</div>
@@ -452,15 +457,15 @@
           <div class="tut-tiers">
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_beginner">Beginner</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9">10</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9" data-price-eur-ip="15" data-price-usd-ip="16" data-price-gbp-ip="13">10</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_advanced">Advanced</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13">15</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13" data-price-eur-ip="20" data-price-usd-ip="22" data-price-gbp-ip="17">15</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_professional">Professional</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17">20</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17" data-price-eur-ip="25" data-price-usd-ip="27" data-price-gbp-ip="22">20</span><span class="price-currency">€</span></span>
             </div>
           </div>
           <div class="tut-unit" data-i18n="per_session">per session</div>
@@ -473,15 +478,15 @@
           <div class="tut-tiers">
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_beginner">Beginner</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9">10</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9" data-price-eur-ip="15" data-price-usd-ip="16" data-price-gbp-ip="13">10</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_advanced">Advanced</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13">15</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13" data-price-eur-ip="20" data-price-usd-ip="22" data-price-gbp-ip="17">15</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_professional">Professional</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17">20</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17" data-price-eur-ip="25" data-price-usd-ip="27" data-price-gbp-ip="22">20</span><span class="price-currency">€</span></span>
             </div>
           </div>
           <div class="tut-unit" data-i18n="per_session">per session</div>
@@ -494,15 +499,15 @@
           <div class="tut-tiers">
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_beginner">Beginner</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9">10</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9" data-price-eur-ip="15" data-price-usd-ip="16" data-price-gbp-ip="13">10</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_advanced">Advanced</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13">15</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13" data-price-eur-ip="20" data-price-usd-ip="22" data-price-gbp-ip="17">15</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_professional">Professional</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17">20</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17" data-price-eur-ip="25" data-price-usd-ip="27" data-price-gbp-ip="22">20</span><span class="price-currency">€</span></span>
             </div>
           </div>
           <div class="tut-unit" data-i18n="per_session">per session</div>
@@ -515,15 +520,15 @@
           <div class="tut-tiers">
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_beginner">Beginner</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9">10</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="10" data-price-usd="11" data-price-gbp="9" data-price-eur-ip="15" data-price-usd-ip="16" data-price-gbp-ip="13">10</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_advanced">Advanced</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13">15</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="15" data-price-usd="16" data-price-gbp="13" data-price-eur-ip="20" data-price-usd-ip="22" data-price-gbp-ip="17">15</span><span class="price-currency">€</span></span>
             </div>
             <div class="tut-tier">
               <span class="tut-tier-label" data-i18n="tier_professional">Professional</span>
-              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17">20</span><span class="price-currency">€</span></span>
+              <span class="tut-tier-price"><span class="price-display" data-price-eur="20" data-price-usd="22" data-price-gbp="17" data-price-eur-ip="25" data-price-usd-ip="27" data-price-gbp-ip="22">20</span><span class="price-currency">€</span></span>
             </div>
           </div>
           <div class="tut-unit" data-i18n="per_session">per session</div>
@@ -583,6 +588,31 @@
       document.querySelectorAll('.currency-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-currency') === ccy);
       });
+    };
+
+    window.switchMode = function(mode) {
+      document.querySelectorAll('.tut-card .price-display').forEach(function(el) {
+        if (mode === 'inperson') {
+          if (!el.hasAttribute('data-price-eur-rm')) {
+            el.setAttribute('data-price-eur-rm', el.getAttribute('data-price-eur'));
+            el.setAttribute('data-price-usd-rm', el.getAttribute('data-price-usd'));
+            el.setAttribute('data-price-gbp-rm', el.getAttribute('data-price-gbp'));
+          }
+          el.setAttribute('data-price-eur', el.getAttribute('data-price-eur-ip'));
+          el.setAttribute('data-price-usd', el.getAttribute('data-price-usd-ip'));
+          el.setAttribute('data-price-gbp', el.getAttribute('data-price-gbp-ip'));
+        } else {
+          if (el.hasAttribute('data-price-eur-rm')) {
+            el.setAttribute('data-price-eur', el.getAttribute('data-price-eur-rm'));
+            el.setAttribute('data-price-usd', el.getAttribute('data-price-usd-rm'));
+            el.setAttribute('data-price-gbp', el.getAttribute('data-price-gbp-rm'));
+          }
+        }
+      });
+      document.querySelectorAll('.mode-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
+      });
+      if (window.switchCurrency) window.switchCurrency(currentCurrency || 'eur');
     };
   </script>
   <script>
