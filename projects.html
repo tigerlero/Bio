@@ -3,18 +3,232 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects — Panagiotis Efstathiadis</title>
+  <title data-i18n="page_title_projects">Projects — Panagiotis Efstathiadis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    .detail-grid { gap: 3rem; }
-    .detail-section .detail-media { max-height: 500px; overflow: hidden; }
-    .detail-section .detail-media img { width: 100%; height: auto; display: block; }
-    .project-detail-hero {
+    .page-hero {
       background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08));
+    }
+    .detail-grid { display: flex; flex-direction: column; gap: 4rem; }
+
+    /* ── GALLERY ── */
+    .gallery-wrap {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .gallery-main {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg);
+    }
+    .gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .gallery-main:hover img { transform: scale(1.03); }
+    .gallery-main .gallery-gradient {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-main .gallery-gradient i {
+      font-size: 4rem;
+      opacity: 0.25;
+    }
+    .gallery-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: all 0.3s;
+      opacity: 0;
+    }
+    .gallery-wrap:hover .gallery-arrow { opacity: 1; }
+    .gallery-arrow:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+    .gallery-arrow-prev { left: 1rem; }
+    .gallery-arrow-next { right: 1rem; }
+    .gallery-counter {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 2;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: 0.78rem;
+      font-family: 'Orbitron', sans-serif;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+    .gallery-thumbs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: rgba(0,0,0,0.3);
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-blue) transparent;
+    }
+    .gallery-thumbs::-webkit-scrollbar { height: 4px; }
+    .gallery-thumbs::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 2px; }
+    .gallery-thumb {
+      flex-shrink: 0;
+      width: 80px;
+      height: 56px;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      opacity: 0.5;
+      position: relative;
+    }
+    .gallery-thumb:hover { opacity: 0.8; }
+    .gallery-thumb.active {
+      border-color: var(--accent-blue);
+      opacity: 1;
+      box-shadow: 0 0 12px rgba(0,212,255,0.3);
+    }
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-thumb .thumb-gradient {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(20px);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .lightbox.open {
+      display: flex;
+      opacity: 1;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 10001;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .lightbox-close:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      object-fit: contain;
+    }
+    .lightbox-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10001;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+    }
+    .lightbox-arrow:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+    .lightbox-arrow-prev { left: 1.5rem; }
+    .lightbox-arrow-next { right: 1.5rem; }
+    .lightbox-counter {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.6);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      background: rgba(0,0,0,0.5);
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .gallery-thumb { width: 60px; height: 42px; }
+      .gallery-main { aspect-ratio: 4 / 3; }
+      .lightbox-arrow { width: 40px; height: 40px; font-size: 0.9rem; }
+      .lightbox-arrow-prev { left: 0.75rem; }
+      .lightbox-arrow-next { right: 0.75rem; }
     }
   </style>
 </head>
@@ -23,29 +237,44 @@
   <nav id="navbar">
     <a href="index.html" class="nav-logo">PE</a>
     <ul class="nav-links">
-      <li><a href="index.html#skills">Skills</a></li>
-      <li><a href="index.html#experience">Experience</a></li>
-      <li><a href="index.html#freelance">Freelance</a></li>
-      <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="index.html#education">Education</a></li>
-      <li><a href="index.html#teaching">Teaching</a></li>
+      <li><a href="index.html#skills" data-i18n="nav_skills">Skills</a></li>
+      <li><a href="index.html#experience" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="index.html#freelance" data-i18n="nav_freelance">Freelance</a></li>
+      <li><a href="index.html#projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="index.html#education" data-i18n="nav_education">Education</a></li>
+      <li><a href="index.html#teaching" data-i18n="nav_teaching">Teaching</a></li>
     </ul>
+    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="el">EL</option>
+      <option value="it">IT</option>
+      <option value="tr">TR</option>
+      <option value="ro">RO</option>
+      <option value="sq">SQ</option>
+      <option value="bg">BG</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+    </select>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
   <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html" class="mobile-link">Home</a>
-    <a href="index.html#skills" class="mobile-link">Skills</a>
-    <a href="index.html#experience" class="mobile-link">Experience</a>
-    <a href="index.html#projects" class="mobile-link">Projects</a>
+    <a href="index.html" class="mobile-link" data-i18n="home_link">Home</a>
+    <a href="index.html#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
+    <a href="index.html#experience" class="mobile-link" data-i18n="nav_experience">Experience</a>
+    <a href="index.html#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
   </div>
 
-  <div class="page-hero project-detail-hero">
+  <div class="page-hero" style="min-height:40vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;overflow:hidden;">
     <div>
-      <span class="section-tag">// showcase</span>
-      <h1>Project <span style="color:var(--accent-blue);">Gallery</span></h1>
-      <p>Detailed look at each project with screenshots and links.</p>
+      <span class="section-tag" data-i18n="gallery_tag">// showcase</span>
+      <h1 style="font-family:'Orbitron',sans-serif;font-size:clamp(2rem,5vw,3.5rem);color:#fff;margin-bottom:0.5rem;">
+        <span data-i18n="page_gallery_prefix">Project </span><span data-i18n="page_gallery_suffix" style="color:var(--accent-blue);">Gallery</span>
+      </h1>
+      <p style="color:var(--text-muted);font-size:1.05rem;max-width:600px;margin:0 auto;" data-i18n="gallery_desc">
+        Detailed look at each project with screenshots, descriptions, and links.
+      </p>
     </div>
   </div>
 
@@ -53,238 +282,399 @@
     <div class="section-inner">
       <div class="detail-grid">
 
-        <!-- PixelSprint -->
+        <!-- ══════ PIXELSPRINT ══════ -->
         <div id="pixelsprint" class="detail-section reveal">
-          <div class="detail-media">
-            <img src="assets/img/pixelsprint1.png" alt="PixelSprint screenshot 1">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="pixelsprint">
+              <img src="assets/img/pixelsprint1.png" alt="PixelSprint">
+            </div>
+            <button class="gallery-arrow gallery-arrow-prev" data-gallery="pixelsprint"><i class="fas fa-chevron-left"></i></button>
+            <button class="gallery-arrow gallery-arrow-next" data-gallery="pixelsprint"><i class="fas fa-chevron-right"></i></button>
+            <div class="gallery-counter" data-gallery="pixelsprint">1 / 2</div>
+            <div class="gallery-thumbs" data-gallery="pixelsprint">
+              <div class="gallery-thumb active" data-index="0"><img src="assets/img/pixelsprint1.png" alt=""></div>
+              <div class="gallery-thumb" data-index="1"><img src="assets/img/pixel2.png" alt=""></div>
+            </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">PixelSprint</div>
-            <div class="card-desc">Task management app with sprint planning, boards, and team collaboration.</div>
+            <div class="card-title" data-i18n="proj_pixelsprint_title">PixelSprint</div>
+            <div class="card-desc" data-i18n="proj_pixelsprint_desc">Task management app with sprint planning, boards, and team collaboration.</div>
           </div>
           <div class="detail-body">
-            <p>A full-featured task management application inspired by Agile methodologies. PixelSprint allows teams to create sprints, manage tasks across boards, track progress, and collaborate in real-time. Built with Django on the backend with Celery for async task processing, Bulma for styling, and HTMX for seamless interactions.</p>
-            <div class="detail-media-grid">
-              <img src="assets/img/pixelsprint1.png" alt="PixelSprint screenshot 1">
-              <img src="assets/img/pixel2.png" alt="PixelSprint screenshot 2">
-            </div>
+            <p data-i18n="proj_detail_pixelsprint">A full-featured task management application inspired by Agile methodologies. PixelSprint allows teams to create sprints, manage tasks across boards, track progress, and collaborate in real-time. Built with Django on the backend with Celery for async task processing, Bulma for styling, and HTMX for seamless interactions.</p>
             <div class="timeline-tags">
               <span class="tag">Django</span><span class="tag">Celery</span><span class="tag">Bulma</span>
               <span class="tag">HTMX</span><span class="tag">Pytest</span><span class="tag">PostgreSQL</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/PixelSprint" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+              <a href="https://github.com/tigerlero/PixelSprint" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- RePaw -->
+        <!-- ══════ RePaw ══════ -->
         <div id="repaw" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);height:300px;">
-              <i class="fas fa-paw img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="repaw">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);">
+                <i class="fas fa-paw"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="repaw">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="repaw">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);">
+                  <i class="fas fa-paw"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">RePaw</div>
-            <div class="card-desc">Pet services platform connecting pet owners with service providers.</div>
+            <div class="card-title" data-i18n="proj_repaw_title">RePaw</div>
+            <div class="card-desc" data-i18n="proj_repaw_desc">Pet services platform connecting pet owners with service providers.</div>
           </div>
           <div class="detail-body">
-            <p>RePaw is a platform that bridges the gap between pet owners and pet service providers. Users can find, compare, and book services like grooming, walking, boarding, and veterinary care. The platform features user profiles, service listings, reviews, and an integrated booking system.</p>
+            <p data-i18n="proj_detail_repaw">RePaw is a platform that bridges the gap between pet owners and pet service providers. Users can find, compare, and book services like grooming, walking, boarding, and veterinary care. The platform features user profiles, service listings, reviews, and an integrated booking system.</p>
             <div class="timeline-tags">
               <span class="tag">Pet Services</span><span class="tag">Booking</span><span class="tag">Fullstack</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/RePaw" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/RePaw" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- Finance Accounts -->
+        <!-- ══════ Finance Accounts ══════ -->
         <div id="finance" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);height:300px;">
-              <i class="fas fa-chart-line img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="finance">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="finance">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="finance">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Finance Accounts</div>
-            <div class="card-desc">Personal finance tracker with transaction management and analytics.</div>
+            <div class="card-title" data-i18n="proj_finance_title">Finance Accounts</div>
+            <div class="card-desc" data-i18n="proj_finance_desc">Personal finance tracker with transaction management and analytics.</div>
           </div>
           <div class="detail-body">
-            <p>A comprehensive personal finance management application built with Django. Track income and expenses, categorize transactions, view spending analytics with interactive charts, and manage budgets. Features include recurring transactions, export capabilities, and multi-account support.</p>
+            <p data-i18n="proj_detail_finance">A comprehensive personal finance management application built with Django. Track income and expenses, categorize transactions, view spending analytics with interactive charts, and manage budgets. Features include recurring transactions, export capabilities, and multi-account support.</p>
             <div class="timeline-tags">
               <span class="tag">Django</span><span class="tag">Python</span><span class="tag">Analytics</span>
               <span class="tag">PostgreSQL</span><span class="tag">Bootstrap</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/financialDjango" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/financialDjango" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- UR8 -->
+        <!-- ══════ UR8 ══════ -->
         <div id="ur8" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#c31432,#240b36);height:300px;">
-              <i class="fab fa-youtube img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="ur8">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#c31432,#240b36);">
+                <i class="fab fa-youtube"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="ur8">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="ur8">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#c31432,#240b36);">
+                  <i class="fab fa-youtube"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">UR8</div>
-            <div class="card-desc">YouTube clone with video streaming, channels, and user subscriptions.</div>
+            <div class="card-title" data-i18n="proj_ur8_title">UR8</div>
+            <div class="card-desc" data-i18n="proj_ur8_desc">YouTube clone with video streaming, channels, and user subscriptions.</div>
           </div>
           <div class="detail-body">
-            <p>A full-stack video sharing platform inspired by YouTube. UR8 supports video upload and streaming via FFmpeg processing, user channels, subscriptions, comments, likes/dislikes, and playlists. Built with a robust backend using PostgreSQL and Redis for caching and task queuing.</p>
+            <p data-i18n="proj_detail_ur8">A full-stack video sharing platform inspired by YouTube. UR8 supports video upload and streaming via FFmpeg processing, user channels, subscriptions, comments, likes/dislikes, and playlists. Built with a robust backend using PostgreSQL and Redis for caching and task queuing.</p>
             <div class="timeline-tags">
               <span class="tag">FFmpeg</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span>
               <span class="tag">Bootstrap</span><span class="tag">Video Streaming</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/UR8" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/UR8" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- Speech Recognition -->
+        <!-- ══════ Speech Recognition ══════ -->
         <div id="speech" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#fc5c7d,#6a82fb);height:300px;">
-              <i class="fas fa-microphone img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="speech">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#fc5c7d,#6a82fb);">
+                <i class="fas fa-microphone"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="speech">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="speech">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#fc5c7d,#6a82fb);">
+                  <i class="fas fa-microphone"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Speech Recognition 0–9</div>
-            <div class="card-desc">ML model recognizing spoken digits 0–9 using audio feature extraction.</div>
+            <div class="card-title" data-i18n="proj_speech_title">Speech Recognition 0–9</div>
+            <div class="card-desc" data-i18n="proj_speech_desc">ML model recognizing spoken digits 0–9 using audio feature extraction.</div>
           </div>
           <div class="detail-body">
-            <p>A machine learning project that recognizes spoken digits (0-9) using the Free Spoken Digit Dataset (FSDD). Features are extracted using librosa (MFCC, chroma, mel-spectrogram) and classified using a Keras neural network. Includes real-time prediction via pyaudio microphone input.</p>
+            <p data-i18n="proj_detail_speech">A machine learning project that recognizes spoken digits (0-9) using the Free Spoken Digit Dataset (FSDD). Features are extracted using librosa (MFCC, chroma, mel-spectrogram) and classified using a Keras neural network. Includes real-time prediction via pyaudio microphone input.</p>
             <div class="timeline-tags">
               <span class="tag">Python</span><span class="tag">Keras</span><span class="tag">scikit-learn</span>
               <span class="tag">librosa</span><span class="tag">pyaudio</span><span class="tag">ML</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/FSDD-0-9-Speech-Recognition-" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/FSDD-0-9-Speech-Recognition-" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- PyPong -->
+        <!-- ══════ PyPong ══════ -->
         <div id="pypong" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);height:300px;">
-              <i class="fas fa-table-tennis-paddle-ball img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="pypong">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+                <i class="fas fa-table-tennis-paddle-ball"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="pypong">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="pypong">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+                  <i class="fas fa-table-tennis-paddle-ball"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">PingPong Game</div>
-            <div class="card-desc">Classic Pong game built with PyGame in 3 hours.</div>
+            <div class="card-title" data-i18n="proj_pypong_title">PingPong Game</div>
+            <div class="card-desc" data-i18n="proj_pypong_desc">Classic Pong game built with PyGame.</div>
           </div>
           <div class="detail-body">
-            <p>A classic Pong arcade game recreation built with PyGame. Features include single-player mode with an AI opponent, two-player local multiplayer, score tracking, and increasing difficulty. Built as a rapid prototyping challenge completed in under 3 hours.</p>
+            <p data-i18n="proj_detail_pypong">A classic Pong arcade game recreation built with PyGame. Features include single-player mode with an AI opponent, two-player local multiplayer, score tracking, and increasing difficulty. Built as a rapid prototyping challenge completed in under 3 hours.</p>
             <div class="timeline-tags">
               <span class="tag">PyGame</span><span class="tag">Python</span><span class="tag">Game Dev</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/PyPong3hours" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/PyPong3hours" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- Kivy YouTube Downloader -->
-        <div id="kivy" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#302b63,#0f0c29);height:300px;">
-              <i class="fas fa-download img-icon" style="font-size:5rem;"></i>
+        <!-- ══════ PhotoFavorites ══════ -->
+        <div id="photofav" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="photofav">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1);">
+                <i class="fas fa-images"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="photofav">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="photofav">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1);">
+                  <i class="fas fa-images"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Kivy YouTube Downloader</div>
-            <div class="card-desc">Cross-platform desktop app for downloading YouTube music and videos.</div>
+            <div class="card-title" data-i18n="proj_photofav_title">PhotoFavorites</div>
+            <div class="card-desc" data-i18n="proj_photofav_desc">Photo gallery app with end-to-end testing suite using Angular TestBed.</div>
           </div>
           <div class="detail-body">
-            <p>A cross-platform desktop application built with Kivy that allows users to download YouTube videos and audio. Supports various formats and quality options, playlist downloading, and a clean user interface. Works on Windows, macOS, and Linux.</p>
+            <p data-i18n="proj_detail_photofav">A photo gallery application built with Angular and TypeScript. Features include image upload, album management, favorites system, and a comprehensive end-to-end testing suite using Angular TestBed and SCSS for styling.</p>
+            <div class="timeline-tags">
+              <span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">SCSS</span><span class="tag">TestBed</span>
+            </div>
+            <div class="detail-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════ Kivy YouTube Downloader ══════ -->
+        <div id="kivy" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="kivy">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#302b63,#0f0c29);">
+                <i class="fas fa-download"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="kivy">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="kivy">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#302b63,#0f0c29);">
+                  <i class="fas fa-download"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="proj_kivy_title">Kivy YouTube Downloader</div>
+            <div class="card-desc" data-i18n="proj_kivy_desc">Cross-platform desktop app for downloading YouTube music and videos.</div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="proj_detail_kivy">A cross-platform desktop application built with Kivy that allows users to download YouTube videos and audio. Supports various formats and quality options, playlist downloading, and a clean user interface. Works on Windows, macOS, and Linux.</p>
             <div class="timeline-tags">
               <span class="tag">Python</span><span class="tag">Kivy</span><span class="tag">Cross-platform</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/kivy-youtube-downloader" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/kivy-youtube-downloader" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- Tournaments -->
+        <!-- ══════ Tournaments ══════ -->
         <div id="tournaments" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);height:300px;">
-              <i class="fas fa-trophy img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="tournaments">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+                <i class="fas fa-trophy"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="tournaments">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="tournaments">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+                  <i class="fas fa-trophy"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Tournaments</div>
-            <div class="card-desc">Tournament management and bracket system.</div>
+            <div class="card-title" data-i18n="proj_tournaments_title">Tournaments</div>
+            <div class="card-desc" data-i18n="proj_tournaments_desc">Tournament management and bracket system.</div>
           </div>
           <div class="detail-body">
-            <p>A tournament management application that handles bracket generation, team registration, match scheduling, and score tracking. Supports single-elimination, double-elimination, and round-robin formats.</p>
+            <p data-i18n="proj_detail_tournaments">A tournament management application that handles bracket generation, team registration, match scheduling, and score tracking. Supports single-elimination, double-elimination, and round-robin formats with a clean interface.</p>
             <div class="timeline-tags">
               <span class="tag">Django</span><span class="tag">Tournaments</span><span class="tag">Brackets</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/Tournaments" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/Tournaments" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- CryptDB-Server -->
+        <!-- ══════ CryptDB-Server ══════ -->
         <div id="cryptdb" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);height:300px;">
-              <i class="fas fa-shield-alt img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="cryptdb">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="cryptdb">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="cryptdb">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">CryptDB-Server</div>
-            <div class="card-desc">Encrypted database server with secure query processing.</div>
+            <div class="card-title" data-i18n="proj_cryptdb_title">CryptDB-Server</div>
+            <div class="card-desc" data-i18n="proj_cryptdb_desc">Encrypted database server with secure query processing.</div>
           </div>
           <div class="detail-body">
-            <p>A proof-of-concept encrypted database server that processes queries over encrypted data. Demonstrates techniques for query execution on encrypted databases while maintaining data privacy and security.</p>
+            <p data-i18n="proj_detail_cryptdb">A proof-of-concept encrypted database server that processes queries over encrypted data. Demonstrates techniques for query execution on encrypted databases while maintaining data privacy and security.</p>
             <div class="timeline-tags">
               <span class="tag">Security</span><span class="tag">Database</span><span class="tag">Encryption</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/CryptDB-Server" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/CryptDB-Server" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
 
-        <!-- AsteroidSpaceGame -->
+        <!-- ══════ AsteroidSpaceGame ══════ -->
         <div id="asteroid" class="detail-section reveal">
-          <div class="detail-media">
-            <div class="project-img" style="background:linear-gradient(135deg,#000000,#434343);height:300px;">
-              <i class="fas fa-meteor img-icon" style="font-size:5rem;"></i>
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="asteroid">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#000000,#434343);">
+                <i class="fas fa-meteor"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="asteroid">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="asteroid">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#000000,#434343);">
+                  <i class="fas fa-meteor"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">AsteroidSpaceGame</div>
-            <div class="card-desc">Space-themed asteroid shooter game.</div>
+            <div class="card-title" data-i18n="proj_asteroid_title">AsteroidSpaceGame</div>
+            <div class="card-desc" data-i18n="proj_asteroid_desc">Space-themed asteroid shooter game.</div>
           </div>
           <div class="detail-body">
-            <p>A space shooter game built with Python where players navigate a spacecraft through asteroid fields, shoot obstacles, and score points. Features progressive difficulty, particle effects, and responsive controls.</p>
+            <p data-i18n="proj_detail_asteroid">A space shooter game built with Python where players navigate a spacecraft through asteroid fields, shoot obstacles, and score points. Features progressive difficulty, particle effects, and responsive controls.</p>
             <div class="timeline-tags">
               <span class="tag">PyGame</span><span class="tag">Python</span><span class="tag">Game Dev</span>
             </div>
             <div class="detail-links">
-              <a href="https://github.com/tigerlero/AsteroidSpaceGame" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> View Source</a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+              <a href="https://github.com/tigerlero/AsteroidSpaceGame" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════ Misc Projects ══════ -->
+        <div id="misc" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="misc">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+                <i class="fas fa-code"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="misc">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="misc">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+                  <i class="fas fa-code"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="proj_misc_title">Misc Projects</div>
+            <div class="card-desc" data-i18n="proj_misc_desc">Various academic and experimental projects.</div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="proj_detail_misc">Various academic and experimental projects spanning multiple languages and paradigms including SQL, Java, Kotlin, Prolog, and HTML.</p>
+            <div class="timeline-tags">
+              <span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Prolog</span><span class="tag">HTML</span>
+            </div>
+            <div class="detail-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
@@ -293,56 +683,230 @@
     </div>
   </section>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close"><i class="fas fa-times"></i></button>
+    <button class="lightbox-arrow lightbox-arrow-prev" id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+    <button class="lightbox-arrow lightbox-arrow-next" id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
   <footer>
-    <div class="footer-name">Panagiotis Efstathiadis</div>
-    <div class="footer-sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
+    <div class="footer-name" data-i18n="footer_name">Panagiotis Efstathiadis</div>
+    <div class="footer-sub" data-i18n="footer_sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
     <div class="footer-links">
       <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
       <a href="https://www.linkedin.com/in/panagiotis-efstathiadis-7b2a39112/" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
       <a href="mailto:visualbasic008@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
       <a href="tel:+306982572887" title="Phone"><i class="fas fa-phone"></i></a>
     </div>
-    <div class="footer-copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS &amp; JS.</div>
+    <div class="footer-copy" data-i18n="footer_copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS &amp; JS.</div>
   </footer>
 
   <button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <i class="fas fa-chevron-up"></i>
   </button>
+  <span id="back-top-label" style="display:none" data-i18n="back_to_top">Back to top</span>
 
-  <script src="js/main.js"></script>
+  <script src="js/i18n.js"></script>
   <script>
+    translatePage(localStorage.getItem('lang') || 'en');
+    var ls = document.getElementById('lang-switcher');
+    if (ls) {
+      ls.value = localStorage.getItem('lang') || 'en';
+      ls.addEventListener('change', function() {
+        if (window.translatePage) window.translatePage(this.value);
+      });
+    }
+  </script>
+  <script>
+    // ── GALLERY SYSTEM ──
     (function() {
+      var galleries = {};
+
+      function initGallery(galleryId) {
+        var main = document.querySelector('.gallery-main[data-gallery="' + galleryId + '"]');
+        var thumbsContainer = document.querySelector('.gallery-thumbs[data-gallery="' + galleryId + '"]');
+        var thumbs = thumbsContainer ? thumbsContainer.querySelectorAll('.gallery-thumb') : [];
+        var prev = document.querySelector('.gallery-arrow-prev[data-gallery="' + galleryId + '"]');
+        var next = document.querySelector('.gallery-arrow-next[data-gallery="' + galleryId + '"]');
+        var counter = document.querySelector('.gallery-counter[data-gallery="' + galleryId + '"]');
+
+        if (!main || thumbs.length === 0) return;
+
+        var images = [];
+        thumbs.forEach(function(th) {
+          var img = th.querySelector('img');
+          if (img) images.push(img.getAttribute('src'));
+          else {
+            var grad = th.querySelector('.thumb-gradient');
+            if (grad) images.push('gradient:' + grad.style.background);
+          }
+        });
+
+        var current = 0;
+
+        function showImage(index) {
+          current = index;
+          thumbs.forEach(function(t, i) {
+            t.classList.toggle('active', i === index);
+          });
+          if (counter) counter.textContent = (index + 1) + ' / ' + images.length;
+
+          var src = images[index];
+          var imgEl = main.querySelector('img');
+          var gradEl = main.querySelector('.gallery-gradient');
+
+          if (src && src.startsWith('gradient:')) {
+            if (imgEl) imgEl.style.display = 'none';
+            if (!gradEl) {
+              gradEl = document.createElement('div');
+              gradEl.className = 'gallery-gradient';
+              main.appendChild(gradEl);
+            }
+            gradEl.style.display = 'flex';
+            gradEl.style.background = src.replace('gradient:', '');
+            // Keep the icon if it exists
+            var existingIcon = main.querySelector('.gallery-gradient i');
+            if (!existingIcon) {
+              var thumbGrad = thumbs[index].querySelector('.thumb-gradient');
+              if (thumbGrad) {
+                var icon = thumbGrad.querySelector('i');
+                if (icon) gradEl.innerHTML = '<i class="' + icon.className + '" style="font-size:4rem;opacity:0.25;"></i>';
+              }
+            }
+          } else {
+            if (gradEl) gradEl.style.display = 'none';
+            if (!imgEl) {
+              imgEl = document.createElement('img');
+              imgEl.alt = '';
+              main.appendChild(imgEl);
+            }
+            imgEl.style.display = 'block';
+            imgEl.setAttribute('src', src);
+          }
+        }
+
+        thumbs.forEach(function(th, i) {
+          th.addEventListener('click', function() { showImage(i); });
+        });
+        if (prev) prev.addEventListener('click', function() {
+          showImage((current - 1 + images.length) % images.length);
+        });
+        if (next) next.addEventListener('click', function() {
+          showImage((current + 1) % images.length);
+        });
+
+        // Click main image to open lightbox
+        main.addEventListener('click', function() {
+          openLightbox(galleryId, current);
+        });
+
+        galleries[galleryId] = {
+          images: images,
+          current: current,
+          showImage: showImage
+        };
+      }
+
+      // ── LIGHTBOX ──
+      var lb = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lightbox-img');
+      var lbCounter = document.getElementById('lightbox-counter');
+      var lbPrev = document.getElementById('lightbox-prev');
+      var lbNext = document.getElementById('lightbox-next');
+      var lbClose = document.getElementById('lightbox-close');
+      var lbGalleryId = null;
+      var lbIndex = 0;
+
+      function openLightbox(galleryId, index) {
+        var g = galleries[galleryId];
+        if (!g) return;
+        lbGalleryId = galleryId;
+        lbIndex = index;
+        updateLightbox();
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function updateLightbox() {
+        var g = galleries[lbGalleryId];
+        if (!g) return;
+        var src = g.images[lbIndex];
+        if (src && src.startsWith('gradient:')) {
+          lbImg.style.display = 'none';
+          lbImg.src = '';
+          lbCounter.textContent = (lbIndex + 1) + ' / ' + g.images.length + ' (no preview)';
+          return;
+        }
+        lbImg.style.display = 'block';
+        lbImg.src = src;
+        lbCounter.textContent = (lbIndex + 1) + ' / ' + g.images.length;
+      }
+
+      function closeLightbox() {
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      function prevLightbox() {
+        var g = galleries[lbGalleryId];
+        if (!g) return;
+        lbIndex = (lbIndex - 1 + g.images.length) % g.images.length;
+        updateLightbox();
+      }
+
+      function nextLightbox() {
+        var g = galleries[lbGalleryId];
+        if (!g) return;
+        lbIndex = (lbIndex + 1) % g.images.length;
+        updateLightbox();
+      }
+
+      lbClose.addEventListener('click', closeLightbox);
+      lbPrev.addEventListener('click', prevLightbox);
+      lbNext.addEventListener('click', nextLightbox);
+      lb.addEventListener('click', function(e) {
+        if (e.target === lb) closeLightbox();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') prevLightbox();
+        if (e.key === 'ArrowRight') nextLightbox();
+      });
+
+      // ── INIT ──
+      var galleryIds = ['pixelsprint', 'repaw', 'finance', 'ur8', 'speech', 'pypong', 'photofav', 'kivy', 'tournaments', 'cryptdb', 'asteroid', 'misc'];
+      galleryIds.forEach(function(id) { initGallery(id); });
+
+      // ── NAVBAR ──
       var nav = document.getElementById('navbar');
       var btn = document.getElementById('back-top');
       window.addEventListener('scroll', function() {
-        if (window.scrollY > 80) { nav.classList.add('scrolled'); btn.classList.add('visible'); }
-        else { nav.classList.remove('scrolled'); btn.classList.remove('visible'); }
+        if (window.scrollY > 80) { nav.classList.add('scrolled'); if (btn) btn.classList.add('visible'); }
+        else { nav.classList.remove('scrolled'); if (btn) btn.classList.remove('visible'); }
       });
-    })();
-    (function() {
+
+      // ── HAMBURGER ──
       var ham = document.getElementById('hamburger');
       var menu = document.getElementById('mobile-menu');
       if (ham && menu) {
-        ham.addEventListener('click', function() {
-          ham.classList.toggle('open'); menu.classList.toggle('open');
-        });
+        ham.addEventListener('click', function() { ham.classList.toggle('open'); menu.classList.toggle('open'); });
         document.querySelectorAll('.mobile-link').forEach(function(a) {
-          a.addEventListener('click', function() {
-            ham.classList.remove('open'); menu.classList.remove('open');
-          });
+          a.addEventListener('click', function() { ham.classList.remove('open'); menu.classList.remove('open'); });
         });
       }
-    })();
-    (function() {
+
+      // ── REVEAL OBSERVER ──
       var opts = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
       var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-        });
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
       }, opts);
       document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
-    })();
-    (function() {
+
+      // ── STAGGER ──
       document.querySelectorAll('.detail-section').forEach(function(el, i) {
         el.style.transitionDelay = (i * 0.07) + 's';
       });

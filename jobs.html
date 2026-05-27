@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Experience — Panagiotis Efstathiadis</title>
+  <title data-i18n="page_title_jobs">Experience — Panagiotis Efstathiadis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -72,29 +72,40 @@
   <nav id="navbar">
     <a href="index.html" class="nav-logo">PE</a>
     <ul class="nav-links">
-      <li><a href="index.html#skills">Skills</a></li>
-      <li><a href="index.html#experience">Experience</a></li>
-      <li><a href="index.html#freelance">Freelance</a></li>
-      <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="index.html#education">Education</a></li>
-      <li><a href="index.html#teaching">Teaching</a></li>
+      <li><a href="index.html#skills" data-i18n="nav_skills">Skills</a></li>
+      <li><a href="index.html#experience" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="index.html#freelance" data-i18n="nav_freelance">Freelance</a></li>
+      <li><a href="index.html#projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="index.html#education" data-i18n="nav_education">Education</a></li>
+      <li><a href="index.html#teaching" data-i18n="nav_teaching">Teaching</a></li>
     </ul>
+    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="el">EL</option>
+      <option value="it">IT</option>
+      <option value="tr">TR</option>
+      <option value="ro">RO</option>
+      <option value="sq">SQ</option>
+      <option value="bg">BG</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+    </select>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
   <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html" class="mobile-link">Home</a>
-    <a href="index.html#skills" class="mobile-link">Skills</a>
-    <a href="index.html#experience" class="mobile-link">Experience</a>
-    <a href="index.html#projects" class="mobile-link">Projects</a>
+    <a href="index.html" class="mobile-link" data-i18n="home_link">Home</a>
+    <a href="index.html#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
+    <a href="index.html#experience" class="mobile-link" data-i18n="nav_experience">Experience</a>
+    <a href="index.html#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
   </div>
 
   <div class="page-hero job-detail-hero">
     <div>
-      <span class="section-tag">// career</span>
-      <h1>Work <span style="color:var(--accent-blue);">Experience</span></h1>
-      <p>Detailed breakdown of professional roles and responsibilities.</p>
+      <span class="section-tag" data-i18n="jobs_tag">// career</span>
+      <h1><span data-i18n="page_experience_prefix">Work </span><span data-i18n="page_experience_suffix" style="color:var(--accent-blue);">Experience</span></h1>
+      <p data-i18n="jobs_desc">Detailed breakdown of professional roles and responsibilities.</p>
     </div>
   </div>
 
@@ -104,16 +115,16 @@
 
         <div class="job-card reveal">
           <div class="timeline-period">2023 — Present</div>
-          <div class="timeline-role">Fullstack Developer</div>
-          <div class="timeline-company">Valmore-Neogen</div>
-          <div class="timeline-desc">
+          <div class="timeline-role" data-i18n="job_0_role">Fullstack Developer</div>
+          <div class="timeline-company" data-i18n="job_0_company">Valmore-Neogen</div>
+          <div class="timeline-desc" data-i18n="job_0_desc">
             Building and maintaining fullstack web applications across multiple client projects, handling both frontend and backend responsibilities. Working with cross-functional teams to deliver scalable solutions.
           </div>
           <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> Developed and deployed React and Vue.js frontends</li>
-            <li><i class="fas fa-check-circle"></i> Built RESTful APIs with Express and PHP</li>
-            <li><i class="fas fa-check-circle"></i> Containerized applications using Docker</li>
-            <li><i class="fas fa-check-circle"></i> Managed MongoDB databases and optimized queries</li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_0">Developed and deployed React and Vue.js frontends</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_1">Built RESTful APIs with Express and PHP</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_2">Containerized applications using Docker</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_3">Managed MongoDB databases and optimized queries</span></li>
           </ul>
           <div class="timeline-tags">
             <span class="tag">React</span><span class="tag">Vue</span><span class="tag">PHP</span>
@@ -123,16 +134,16 @@
 
         <div class="job-card reveal">
           <div class="timeline-period">2026 — Present</div>
-          <div class="timeline-role">Fullstack Developer</div>
-          <div class="timeline-company">ExpressTransfers</div>
-          <div class="timeline-desc">
+          <div class="timeline-role" data-i18n="job_1_role">Fullstack Developer</div>
+          <div class="timeline-company" data-i18n="job_1_company">ExpressTransfers</div>
+          <div class="timeline-desc" data-i18n="job_1_desc">
             Developing a transfer booking platform with payment integration, interactive maps, and containerized deployment. Building the complete platform from the ground up.
           </div>
           <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> Integrated Stripe payment processing</li>
-            <li><i class="fas fa-check-circle"></i> Built interactive maps with Leaflet.js</li>
-            <li><i class="fas fa-check-circle"></i> Developed WordPress backend with custom plugins</li>
-            <li><i class="fas fa-check-circle"></i> Containerized with Docker for deployment</li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_0">Integrated Stripe payment processing</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_1">Built interactive maps with Leaflet.js</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_2">Developed WordPress backend with custom plugins</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_3">Containerized with Docker for deployment</span></li>
           </ul>
           <div class="timeline-tags">
             <span class="tag">WordPress</span><span class="tag">Docker</span><span class="tag">Stripe</span>
@@ -142,16 +153,16 @@
 
         <div class="job-card reveal">
           <div class="timeline-period">2025</div>
-          <div class="timeline-role">Fullstack Developer</div>
-          <div class="timeline-company">Evalion-SHL</div>
-          <div class="timeline-desc">
+          <div class="timeline-role" data-i18n="job_2_role">Fullstack Developer</div>
+          <div class="timeline-company" data-i18n="job_2_company">Evalion-SHL</div>
+          <div class="timeline-desc" data-i18n="job_2_desc">
             Developed enterprise-grade web applications using modern PHP stack with end-to-end testing and containerized environments.
           </div>
           <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> Built Laravel applications with Vue.js frontends</li>
-            <li><i class="fas fa-check-circle"></i> Implemented end-to-end testing with Playwright</li>
-            <li><i class="fas fa-check-circle"></i> Used Laravel Sail for Docker-based development</li>
-            <li><i class="fas fa-check-circle"></i> Developed with Inertia.js for seamless SPA experience</li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_0">Built Laravel applications with Vue.js frontends</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_1">Implemented end-to-end testing with Playwright</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_2">Used Laravel Sail for Docker-based development</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_3">Developed with Inertia.js for seamless SPA experience</span></li>
           </ul>
           <div class="timeline-tags">
             <span class="tag">Laravel</span><span class="tag">Vue</span><span class="tag">Sail</span>
@@ -161,16 +172,16 @@
 
         <div class="job-card reveal">
           <div class="timeline-period">2022 — 2023</div>
-          <div class="timeline-role">Fullstack Developer</div>
-          <div class="timeline-company">Infologic-Weblogic</div>
-          <div class="timeline-desc">
+          <div class="timeline-role" data-i18n="job_3_role">Fullstack Developer</div>
+          <div class="timeline-company" data-i18n="job_3_company">Infologic-Weblogic</div>
+          <div class="timeline-desc" data-i18n="job_3_desc">
             Built a React-based CRM with AI chatbot powered by LLama2, a booking web app, and REST APIs. Developed template component answer systems for automated responses.
           </div>
           <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> Developed AI chatbot integration with LLama2</li>
-            <li><i class="fas fa-check-circle"></i> Built Django REST Framework APIs</li>
-            <li><i class="fas fa-check-circle"></i> Created React-based CRM dashboard</li>
-            <li><i class="fas fa-check-circle"></i> Implemented template component answer systems</li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_0">Developed AI chatbot integration with LLama2</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_1">Built Django REST Framework APIs</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_2">Created React-based CRM dashboard</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_3">Implemented template component answer systems</span></li>
           </ul>
           <div class="timeline-tags">
             <span class="tag">Django REST</span><span class="tag">React</span><span class="tag">LLama2</span>
@@ -180,16 +191,16 @@
 
         <div class="job-card reveal">
           <div class="timeline-period">2022</div>
-          <div class="timeline-role">Fullstack Developer &amp; IT</div>
-          <div class="timeline-company">Newdeal Real Estates</div>
-          <div class="timeline-desc">
+          <div class="timeline-role" data-i18n="job_4_role">Fullstack Developer &amp; IT</div>
+          <div class="timeline-company" data-i18n="job_4_company">Newdeal Real Estates</div>
+          <div class="timeline-desc" data-i18n="job_4_desc">
             Full-stack development, IT support, SEO optimization, analytics setup, and CRM management for a real estate platform.
           </div>
           <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> Developed real estate platform with Flask and MongoDB</li>
-            <li><i class="fas fa-check-circle"></i> Implemented SEO strategies and Google Analytics</li>
-            <li><i class="fas fa-check-circle"></i> Managed WordPress and Laravel sites</li>
-            <li><i class="fas fa-check-circle"></i> Configured Plesk server hosting and domains</li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_0">Developed real estate platform with Flask and MongoDB</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_1">Implemented SEO strategies and Google Analytics</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_2">Managed WordPress and Laravel sites</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_3">Configured Plesk server hosting and domains</span></li>
           </ul>
           <div class="timeline-tags">
             <span class="tag">MongoDB</span><span class="tag">Flask</span><span class="tag">Firebase</span>
@@ -200,16 +211,16 @@
 
         <div class="job-card reveal">
           <div class="timeline-period">2021 — 2022</div>
-          <div class="timeline-role">Frontend / Fullstack Developer</div>
-          <div class="timeline-company">Datawise</div>
-          <div class="timeline-desc">
+          <div class="timeline-role" data-i18n="job_5_role">Frontend / Fullstack Developer</div>
+          <div class="timeline-company" data-i18n="job_5_company">Datawise</div>
+          <div class="timeline-desc" data-i18n="job_5_desc">
             Developed React and Node.js applications, Moodle e-learning integrations, and Java-based tools with Material UI design system.
           </div>
           <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> Built React applications with Material UI</li>
-            <li><i class="fas fa-check-circle"></i> Developed Node.js backend services</li>
-            <li><i class="fas fa-check-circle"></i> Integrated Moodle e-learning platform</li>
-            <li><i class="fas fa-check-circle"></i> Created Java-based tools and utilities</li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_0">Built React applications with Material UI</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_1">Developed Node.js backend services</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_2">Integrated Moodle e-learning platform</span></li>
+            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_3">Created Java-based tools and utilities</span></li>
           </ul>
           <div class="timeline-tags">
             <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Moodle</span>
@@ -220,27 +231,38 @@
       </div>
 
       <div style="text-align:center;margin-top:3rem;">
-        <a href="index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        <a href="index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back_home">Back to Home</span></a>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="footer-name">Panagiotis Efstathiadis</div>
-    <div class="footer-sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
+    <div class="footer-name" data-i18n="footer_name">Panagiotis Efstathiadis</div>
+    <div class="footer-sub" data-i18n="footer_sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
     <div class="footer-links">
       <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
       <a href="https://www.linkedin.com/in/panagiotis-efstathiadis-7b2a39112/" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
       <a href="mailto:visualbasic008@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
       <a href="tel:+306982572887" title="Phone"><i class="fas fa-phone"></i></a>
     </div>
-    <div class="footer-copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS &amp; JS.</div>
+    <div class="footer-copy" data-i18n="footer_copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS &amp; JS.</div>
   </footer>
 
   <button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <i class="fas fa-chevron-up"></i>
   </button>
 
+  <script src="js/i18n.js"></script>
+  <script>
+    translatePage(localStorage.getItem('lang') || 'en');
+    var ls = document.getElementById('lang-switcher');
+    if (ls) {
+      ls.value = localStorage.getItem('lang') || 'en';
+      ls.addEventListener('change', function() {
+        if (window.translatePage) window.translatePage(this.value);
+      });
+    }
+  </script>
   <script src="js/main.js"></script>
   <script>
     (function() {

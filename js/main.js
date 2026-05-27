@@ -65,26 +65,30 @@ function initSite() {
   (function() {
     const el = document.getElementById('typed-text');
     if (!el) return;
-    const phrases = [
-      'Computer Scientist',
-      'Fullstack Engineer',
-      'React & Vue Developer',
-      'Django & Laravel Dev',
-      'Game Developer',
-      'ML Enthusiast'
-    ];
-    let pi = 0, ci = 0, deleting = false;
+    var pi = 0, ci = 0, deleting = false, to = null;
+    function getPhrases() {
+      var p = [];
+      for (var i = 0; i < 6; i++) p.push(window._get ? window._get('typing_' + i) : '');
+      return p;
+    }
     function type() {
-      const phrase = phrases[pi];
+      var phrases = getPhrases();
+      if (phrases.length === 0 || !phrases[0]) return;
+      var phrase = phrases[pi];
       if (!deleting) {
         el.textContent = phrase.slice(0, ++ci);
-        if (ci === phrase.length) { deleting = true; setTimeout(type, 1800); return; }
+        if (ci === phrase.length) { deleting = true; to = setTimeout(type, 1800); return; }
       } else {
         el.textContent = phrase.slice(0, --ci);
         if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
       }
-      setTimeout(type, deleting ? 55 : 90);
+      to = setTimeout(type, deleting ? 55 : 90);
     }
+    window.restartTyping = function() {
+      if (to) clearTimeout(to);
+      ci = 0; deleting = false; pi = 0;
+      if (el) type();
+    };
     type();
   })();
 
@@ -138,4 +142,5 @@ function initSite() {
       el.style.transitionDelay = (i * 0.07) + 's';
     });
   })();
+
 }

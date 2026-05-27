@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panagiotis Efstathiadis — Computer Scientist & Fullstack Engineer</title>
+  <title data-i18n="page_title_index">Panagiotis Efstathiadis — Computer Scientist & Fullstack Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -16,55 +16,674 @@
   <nav id="navbar">
     <a href="#hero" class="nav-logo">PE</a>
     <ul class="nav-links">
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#freelance">Freelance</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#teaching">Teaching</a></li>
+      <li><a href="#skills" data-i18n="nav_skills">Skills</a></li>
+      <li><a href="#experience" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="#freelance" data-i18n="nav_freelance">Freelance</a></li>
+      <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="#education" data-i18n="nav_education">Education</a></li>
+      <li><a href="#teaching" data-i18n="nav_teaching">Teaching</a></li>
     </ul>
+    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="el">EL</option>
+      <option value="it">IT</option>
+      <option value="tr">TR</option>
+      <option value="ro">RO</option>
+      <option value="sq">SQ</option>
+      <option value="bg">BG</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+    </select>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
   <div class="mobile-menu" id="mobile-menu">
-    <a href="#skills" class="mobile-link">Skills</a>
-    <a href="#experience" class="mobile-link">Experience</a>
-    <a href="#freelance" class="mobile-link">Freelance</a>
-    <a href="#projects" class="mobile-link">Projects</a>
-    <a href="#education" class="mobile-link">Education</a>
-    <a href="#teaching" class="mobile-link">Teaching</a>
+    <a href="#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
+    <a href="#experience" class="mobile-link" data-i18n="nav_experience">Experience</a>
+    <a href="#freelance" class="mobile-link" data-i18n="nav_freelance">Freelance</a>
+    <a href="#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
+    <a href="#education" class="mobile-link" data-i18n="nav_education">Education</a>
+    <a href="#teaching" class="mobile-link" data-i18n="nav_teaching">Teaching</a>
   </div>
 
-  <!-- SECTION PARTIALS LOADED HERE -->
-  <div id="hero-placeholder"></div>
-  <div id="skills-placeholder"></div>
-  <div id="experience-placeholder"></div>
-  <div id="freelance-placeholder"></div>
-  <div id="projects-placeholder"></div>
-  <div id="education-placeholder"></div>
-  <div id="teaching-placeholder"></div>
-  <div id="other-placeholder"></div>
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="particle-canvas"></canvas>
+    <div class="grid-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-tag">&#x2022; <span data-i18n="hero_tag">Available for opportunities</span> &#x2022;</div>
+      <h1 class="hero-name">
+        <span class="glitch" data-text="Panagiotis">Panagiotis</span><br/>
+        <span class="glitch" data-text="Efstathiadis">Efstathiadis</span>
+      </h1>
+      <div class="hero-subtitle">
+        <span id="typed-text"></span><span class="cursor"></span>
+      </div>
+      <p class="hero-location">
+        <i class="fas fa-map-marker-alt"></i><span data-i18n="hero_location">Greece, Dodecanese, Leros</span>
+      </p>
+      <div class="hero-contact">
+        <a href="tel:+306982572887"><i class="fas fa-phone"></i>+30 698 257 2887</a>
+        <a href="mailto:visualbasic008@gmail.com"><i class="fas fa-envelope"></i>visualbasic008@gmail.com</a>
+      </div>
+      <div class="hero-buttons">
+        <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="btn btn-primary">
+          <i class="fab fa-github"></i> <span data-i18n="btn_github">GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/panagiotis-efstathiadis-7b2a39112/" target="_blank" rel="noopener" class="btn btn-outline">
+          <i class="fab fa-linkedin"></i> <span data-i18n="btn_linkedin">LinkedIn</span>
+        </a>
+        <a href="mailto:visualbasic008@gmail.com" class="btn btn-outline">
+          <i class="fas fa-paper-plane"></i> <span data-i18n="btn_contact">Contact</span>
+        </a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span data-i18n="hero_scroll">SCROLL</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_capabilities">// capabilities</span>
+        <h2 class="section-title" data-i18n="title_techstack">Tech Stack</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-categories">
+        <div class="reveal">
+          <div class="skill-category-title"><i class="fas fa-desktop"></i> <span data-i18n="cat_frontend">Frontend</span></div>
+          <div class="skill-badges">
+            <span class="badge"><i class="fab fa-react"></i>React</span>
+            <span class="badge"><i class="fab fa-vuejs"></i>Vue.js</span>
+            <span class="badge"><i class="fas fa-n"></i>Next.js</span>
+            <span class="badge"><i class="fab fa-angular"></i>Angular</span>
+            <span class="badge"><i class="fas fa-code"></i>HTMX</span>
+            <span class="badge"><i class="fab fa-sass"></i>SCSS</span>
+            <span class="badge"><i class="fas fa-wind"></i>Tailwind</span>
+            <span class="badge"><i class="fas fa-layer-group"></i>MUI</span>
+            <span class="badge"><i class="fas fa-leaf"></i>Bulma</span>
+            <span class="badge"><i class="fab fa-bootstrap"></i>Bootstrap</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="skill-category-title"><i class="fas fa-server"></i> <span data-i18n="cat_backend">Backend &amp; Databases</span></div>
+          <div class="skill-badges">
+            <span class="badge"><i class="fab fa-python"></i>Django</span>
+            <span class="badge"><i class="fab fa-node-js"></i>Express</span>
+            <span class="badge"><i class="fas fa-code"></i>Laravel</span>
+            <span class="badge"><i class="fas fa-database"></i>MySQL</span>
+            <span class="badge"><i class="fas fa-database"></i>PostgreSQL</span>
+            <span class="badge"><i class="fas fa-leaf"></i>MongoDB</span>
+            <span class="badge"><i class="fas fa-database"></i>SQLite</span>
+            <span class="badge"><i class="fas fa-fire"></i>Firebase</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="skill-category-title"><i class="fas fa-tools"></i> <span data-i18n="cat_devops">DevOps &amp; Tools</span></div>
+          <div class="skill-badges">
+            <span class="badge"><i class="fab fa-docker"></i>Docker</span>
+            <span class="badge"><i class="fab fa-linux"></i>Linux</span>
+            <span class="badge"><i class="fas fa-server"></i>Apache</span>
+            <span class="badge"><i class="fas fa-server"></i>Plesk</span>
+            <span class="badge"><i class="fab fa-git-alt"></i>Git</span>
+            <span class="badge"><i class="fab fa-bitbucket"></i>Bitbucket</span>
+            <span class="badge"><i class="fab fa-gitlab"></i>GitLab</span>
+            <span class="badge"><i class="fab fa-jira"></i>Jira</span>
+            <span class="badge"><i class="fas fa-tasks"></i>ClickUp</span>
+            <span class="badge"><i class="fab fa-microsoft"></i>ADO</span>
+            <span class="badge"><i class="fab fa-wordpress"></i>WordPress</span>
+            <span class="badge"><i class="fas fa-globe"></i>Drupal</span>
+            <span class="badge"><i class="fas fa-graduation-cap"></i>Moodle</span>
+            <span class="badge"><i class="fas fa-shopping-cart"></i>Shopware</span>
+            <span class="badge"><i class="fas fa-cloud"></i>Heroku</span>
+            <span class="badge"><i class="fas fa-cloud"></i>Render</span>
+            <span class="badge"><i class="fas fa-shield-alt"></i>Cloudflare</span>
+            <span class="badge"><i class="fab fa-aws"></i>AWS</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="skill-category-title"><i class="fas fa-brain"></i> <span data-i18n="cat_aiml">AI / ML</span></div>
+          <div class="skill-badges">
+            <span class="badge"><i class="fas fa-brain"></i>Keras</span>
+            <span class="badge"><i class="fas fa-fire"></i>TensorFlow</span>
+            <span class="badge"><i class="fas fa-atom"></i>PyTorch</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="skill-category-title"><i class="fas fa-gamepad"></i> <span data-i18n="cat_gamedev">Game Development</span></div>
+          <div class="skill-badges">
+            <span class="badge"><i class="fas fa-code"></i>C#</span>
+            <span class="badge"><i class="fas fa-code"></i>.NET</span>
+            <span class="badge"><i class="fas fa-unity"></i>Unity</span>
+            <span class="badge"><i class="fas fa-code"></i>C++</span>
+            <span class="badge"><i class="fas fa-cube"></i>OpenGL</span>
+            <span class="badge"><i class="fas fa-gamepad"></i>Unreal Engine 5</span>
+            <span class="badge"><i class="fas fa-cube"></i>Blender</span>
+            <span class="badge"><i class="fas fa-user"></i>DAZ</span>
+            <span class="badge"><i class="fab fa-python"></i>PyGame</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" style="background: rgba(0,212,255,0.02);">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_work">// work history</span>
+        <h2 class="section-title" data-i18n="title_experience">Professional Experience</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card reveal-left">
+            <div class="timeline-period">2023 — Present</div>
+            <div class="timeline-role" data-i18n="exp_0_role">Fullstack Developer</div>
+            <div class="timeline-company" data-i18n="exp_0_company">Valmore-Neogen</div>
+            <div class="timeline-desc" data-i18n="exp_0_desc">Building and maintaining fullstack web applications across multiple client projects, handling both frontend and backend responsibilities.</div>
+            <div class="timeline-tags">
+              <span class="tag">React</span><span class="tag">Vue</span><span class="tag">PHP</span>
+              <span class="tag">Express</span><span class="tag">Docker</span><span class="tag">MongoDB</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card reveal-right">
+            <div class="timeline-period">2026 — Present</div>
+            <div class="timeline-role" data-i18n="exp_1_role">Fullstack Developer</div>
+            <div class="timeline-company" data-i18n="exp_1_company">ExpressTransfers</div>
+            <div class="timeline-desc" data-i18n="exp_1_desc">Developing a transfer booking platform with payment integration, interactive maps, and containerized deployment.</div>
+            <div class="timeline-tags">
+              <span class="tag">WordPress</span><span class="tag">Docker</span><span class="tag">Stripe</span>
+              <span class="tag">Django</span><span class="tag">Leaflet</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card reveal-left">
+            <div class="timeline-period">2025</div>
+            <div class="timeline-role" data-i18n="exp_2_role">Fullstack Developer</div>
+            <div class="timeline-company" data-i18n="exp_2_company">Evalion-SHL</div>
+            <div class="timeline-desc" data-i18n="exp_2_desc">Developed enterprise-grade web applications using modern PHP stack with end-to-end testing and containerized environments.</div>
+            <div class="timeline-tags">
+              <span class="tag">Laravel</span><span class="tag">Vue</span><span class="tag">Sail</span>
+              <span class="tag">Inertia</span><span class="tag">Playwright</span><span class="tag">Docker</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card reveal-right">
+            <div class="timeline-period">2022 — 2023</div>
+            <div class="timeline-role" data-i18n="exp_3_role">Fullstack Developer</div>
+            <div class="timeline-company" data-i18n="exp_3_company">Infologic-Weblogic</div>
+            <div class="timeline-desc" data-i18n="exp_3_desc">Built a React-based CRM with AI chatbot powered by LLama2, a booking web app, and REST APIs. Developed template component answer systems.</div>
+            <div class="timeline-tags">
+              <span class="tag">Django REST</span><span class="tag">React</span><span class="tag">LLama2</span>
+              <span class="tag">LLM/AI</span><span class="tag">CRM</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card reveal-left">
+            <div class="timeline-period">2022</div>
+            <div class="timeline-role" data-i18n="exp_4_role">Fullstack Developer &amp; IT</div>
+            <div class="timeline-company" data-i18n="exp_4_company">Newdeal Real Estates</div>
+            <div class="timeline-desc" data-i18n="exp_4_desc">Full-stack development, IT support, SEO optimization, analytics setup, and CRM management for a real estate platform.</div>
+            <div class="timeline-tags">
+              <span class="tag">MongoDB</span><span class="tag">Flask</span><span class="tag">Firebase</span>
+              <span class="tag">WordPress</span><span class="tag">Laravel</span><span class="tag">Plesk</span>
+              <span class="tag">SEO</span><span class="tag">CRM</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card reveal-right">
+            <div class="timeline-period">2021 — 2022</div>
+            <div class="timeline-role" data-i18n="exp_5_role">Frontend / Fullstack Developer</div>
+            <div class="timeline-company" data-i18n="exp_5_company">Datawise</div>
+            <div class="timeline-desc" data-i18n="exp_5_desc">Developed React and Node.js applications, Moodle e-learning integrations, and Java-based tools with Material UI.</div>
+            <div class="timeline-tags">
+              <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Moodle</span>
+              <span class="tag">Java</span><span class="tag">MUI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREELANCE -->
+  <section id="freelance">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_independent">// independent work</span>
+        <h2 class="section-title" data-i18n="title_freelance">Freelance Projects</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="freelance-grid">
+        <div class="freelance-card reveal">
+          <div class="freelance-name"><i class="fas fa-heartbeat" style="color:var(--accent-blue);margin-right:8px;"></i><span data-i18n="fl_0_name">CareBeat.co.uk</span></div>
+          <div class="freelance-period">2026 — Present</div>
+          <div class="freelance-desc" data-i18n="fl_0_desc">Healthcare platform development and maintenance.</div>
+        </div>
+        <div class="freelance-card reveal">
+          <div class="freelance-name"><i class="fas fa-tree" style="color:var(--accent-blue);margin-right:8px;"></i><span data-i18n="fl_1_name">DrakosDesign.gr</span></div>
+          <div class="freelance-period">2025 — Present</div>
+          <div class="freelance-desc" data-i18n="fl_1_desc">Woodshop e-commerce store — product catalog, cart, and checkout.</div>
+        </div>
+        <div class="freelance-card reveal">
+          <div class="freelance-name"><i class="fas fa-car" style="color:var(--accent-blue);margin-right:8px;"></i><span data-i18n="fl_2_name">Expresstransfers.gr</span></div>
+          <div class="freelance-period">2026 — Present</div>
+          <div class="freelance-desc" data-i18n="fl_2_desc">Transfer booking platform with Stripe payments and Leaflet maps.</div>
+        </div>
+        <div class="freelance-card reveal">
+          <div class="freelance-name"><i class="fas fa-island-tropical" style="color:var(--accent-blue);margin-right:8px;"></i><span data-i18n="fl_3_name">IslandBookings.gr</span></div>
+          <div class="freelance-period">2025 — 2026</div>
+          <div class="freelance-desc" data-i18n="fl_3_desc">Island accommodation booking platform.</div>
+        </div>
+        <div class="freelance-card reveal">
+          <div class="freelance-name"><i class="fas fa-user" style="color:var(--accent-blue);margin-right:8px;"></i><span data-i18n="fl_4_name">MariaKostoula.gr</span></div>
+          <div class="freelance-period">2022 — 2024</div>
+          <div class="freelance-desc" data-i18n="fl_4_desc">Personal portfolio and professional website.</div>
+        </div>
+        <div class="freelance-card reveal">
+          <div class="freelance-name"><i class="fas fa-users" style="color:var(--accent-blue);margin-right:8px;"></i><span data-i18n="fl_5_name">Enosiypallilonlerou.gr</span></div>
+          <div class="freelance-period">2016 — 2018</div>
+          <div class="freelance-desc" data-i18n="fl_5_desc">Union website for employees of Leros island.</div>
+        </div>
+      </div>
+      <div class="reveal" style="margin-top:2.5rem; text-align:center;">
+        <div class="skill-category-title" style="justify-content:center; max-width:600px; margin:0 auto 1rem;">
+          <i class="fas fa-layer-group"></i> <span data-i18n="fl_stack">Freelance Stack</span>
+        </div>
+        <div class="skill-badges" style="justify-content:center;">
+          <span class="badge"><i class="fab fa-wordpress"></i>WordPress</span>
+          <span class="badge"><i class="fas fa-search"></i>SEO</span>
+          <span class="badge"><i class="fab fa-aws"></i>AWS</span>
+          <span class="badge"><i class="fab fa-stripe"></i>Stripe</span>
+          <span class="badge"><i class="fab fa-python"></i>Django</span>
+          <span class="badge"><i class="fas fa-wind"></i>Tailwind</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" style="background: rgba(124,58,237,0.03);">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_personal">// personal work</span>
+        <h2 class="section-title" data-i18n="title_projects">Personal Projects</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="project-gallery">
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);">
+            <i class="fas fa-paw img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/RePaw" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_repaw_title">RePaw</div>
+            <div class="card-desc" data-i18n="proj_repaw_desc">Pet services platform connecting pet owners with service providers.</div>
+            <div class="card-tags"><span class="tag">Pet Services</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/RePaw" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#repaw" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">
+            <i class="fas fa-chart-line img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/financialDjango" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_finance_title">Finance Accounts</div>
+            <div class="card-desc" data-i18n="proj_finance_desc">Personal finance tracker with transaction management and analytics.</div>
+            <div class="card-tags"><span class="tag">Transactions</span><span class="tag">Analytics</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/financialDjango" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#finance" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#c31432,#240b36);">
+            <i class="fab fa-youtube img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/UR8" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_ur8_title">UR8</div>
+            <div class="card-desc" data-i18n="proj_ur8_desc">YouTube clone with video streaming, channels, and user subscriptions.</div>
+            <div class="card-tags"><span class="tag">FFmpeg</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">Bootstrap</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/UR8" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#ur8" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#00b4db,#0083b0);">
+            <img src="assets/img/pixelsprint1.png" alt="PixelSprint">
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/PixelSprint" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#pixelsprint" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_pixelsprint_title">PixelSprint</div>
+            <div class="card-desc" data-i18n="proj_pixelsprint_desc">Task management app with sprint planning, boards, and team collaboration.</div>
+            <div class="card-tags"><span class="tag">Django</span><span class="tag">Celery</span><span class="tag">Bulma</span><span class="tag">HTMX</span><span class="tag">Pytest</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/PixelSprint" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#pixelsprint" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+            <i class="fas fa-table-tennis-paddle-ball img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/PyPong3hours" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" target="_blank" rel="noopener" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_pypong_title">PingPong Game</div>
+            <div class="card-desc" data-i18n="proj_pypong_desc">Classic Pong game with single-player AI and two-player local multiplayer modes.</div>
+            <div class="card-tags"><span class="tag">PyGame</span><span class="tag">Python</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/PyPong3hours" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#pypong" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1);">
+            <i class="fas fa-images img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#photofav" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_photofav_title">PhotoFavorites</div>
+            <div class="card-desc" data-i18n="proj_photofav_desc">Photo gallery app with end-to-end testing suite using Angular TestBed.</div>
+            <div class="card-tags"><span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">SCSS</span><span class="tag">TestBed</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#photofav" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#fc5c7d,#6a82fb);">
+            <i class="fas fa-microphone img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/FSDD-0-9-Speech-Recognition-" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#speech" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_speech_title">Speech Recognition 0–9</div>
+            <div class="card-desc" data-i18n="proj_speech_desc">ML model recognizing spoken digits 0–9 using audio feature extraction and neural networks.</div>
+            <div class="card-tags"><span class="tag">Python</span><span class="tag">Keras</span><span class="tag">scikit-learn</span><span class="tag">librosa</span><span class="tag">pyaudio</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/FSDD-0-9-Speech-Recognition-" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#speech" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#302b63,#0f0c29);">
+            <i class="fas fa-download img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/kivy-youtube-downloader" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#kivy" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_kivy_title">Kivy YouTube Downloader</div>
+            <div class="card-desc" data-i18n="proj_kivy_desc">Cross-platform desktop app for downloading YouTube music and videos.</div>
+            <div class="card-tags"><span class="tag">Python</span><span class="tag">Kivy</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/kivy-youtube-downloader" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#kivy" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+            <i class="fas fa-trophy img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/Tournaments" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#tournaments" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_tournaments_title">Tournaments</div>
+            <div class="card-desc" data-i18n="proj_tournaments_desc">Tournament management and bracket system supporting multiple formats.</div>
+            <div class="card-tags"><span class="tag">Django</span><span class="tag">Brackets</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/Tournaments" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#tournaments" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+            <i class="fas fa-shield-alt img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/CryptDB-Server" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#cryptdb" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_cryptdb_title">CryptDB-Server</div>
+            <div class="card-desc" data-i18n="proj_cryptdb_desc">Encrypted database server with secure query processing.</div>
+            <div class="card-tags"><span class="tag">Security</span><span class="tag">Database</span><span class="tag">Encryption</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/CryptDB-Server" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#cryptdb" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#000000,#434343);">
+            <i class="fas fa-meteor img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero/AsteroidSpaceGame" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+              <a href="projects.html#asteroid" target="_blank" rel="noopener" title="View Details"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_asteroid_title">AsteroidSpaceGame</div>
+            <div class="card-desc" data-i18n="proj_asteroid_desc">Space-themed asteroid shooter game with progressive difficulty.</div>
+            <div class="card-tags"><span class="tag">PyGame</span><span class="tag">Python</span><span class="tag">Game Dev</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero/AsteroidSpaceGame" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+              <a href="projects.html#asteroid" class="project-link-outline"><i class="fas fa-info-circle"></i> Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-img" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+            <i class="fas fa-code img-icon"></i>
+            <div class="project-overlay">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="View on GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="card-title" data-i18n="proj_misc_title">Misc Projects</div>
+            <div class="card-desc" data-i18n="proj_misc_desc">Various academic and experimental projects spanning multiple languages and paradigms.</div>
+            <div class="card-tags"><span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Prolog</span><span class="tag">HTML</span></div>
+            <div class="project-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="project-link-primary"><i class="fab fa-github"></i> Source</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:3rem;">
+        <a href="projects.html" class="btn btn-primary"><i class="fas fa-images"></i> <span data-i18n="btn_gallery">Full Project Gallery</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_background">// background</span>
+        <h2 class="section-title" data-i18n="title_education">Education & Certifications</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="edu-grid">
+        <div class="edu-card reveal">
+          <div class="edu-icon"><i class="fas fa-graduation-cap"></i></div>
+          <div class="edu-title" data-i18n="edu_0_title">B.Sc. Computer Science</div>
+          <div class="edu-sub" data-i18n="edu_0_sub">University of Piraeus (UNIPI)</div>
+        </div>
+        <div class="edu-card reveal">
+          <div class="edu-icon"><i class="fas fa-certificate"></i></div>
+          <div class="edu-title" data-i18n="edu_1_title">ECDL Expert Certification</div>
+          <div class="edu-sub" data-i18n="edu_1_sub">Office Suite · Operating Systems · PC Hardware</div>
+        </div>
+        <div class="edu-card reveal">
+          <div class="edu-icon"><i class="fas fa-language"></i></div>
+          <div class="edu-title" data-i18n="edu_2_title">Languages</div>
+          <div class="edu-sub" data-i18n="edu_2_sub">English C2 · Greek Native</div>
+        </div>
+        <div class="edu-card reveal">
+          <div class="edu-icon"><i class="fas fa-terminal"></i></div>
+          <div class="edu-title" data-i18n="edu_3_title">Programming Languages</div>
+          <div class="edu-sub" style="margin-top:0.75rem;">
+            <div class="skill-badges">
+              <span class="badge">C</span><span class="badge">C++</span><span class="badge">C#</span>
+              <span class="badge">VB</span><span class="badge">Assembly</span><span class="badge">Lua</span>
+              <span class="badge">JavaScript</span><span class="badge">TypeScript</span><span class="badge">PHP</span><span class="badge">Python</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEACHING -->
+  <section id="teaching" style="background: rgba(0,212,255,0.02);">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_knowledge">// knowledge sharing</span>
+        <h2 class="section-title" data-i18n="title_teaching">Teaching & Tutoring</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="teaching-list">
+        <div class="teaching-item reveal">
+          <div class="teaching-title"><i class="fas fa-chalkboard-teacher" style="color:var(--accent-purple);margin-right:8px;"></i><span data-i18n="teach_0_title">Algorithmics Tutor — Licences</span></div>
+          <div class="teaching-desc" data-i18n="teach_0_desc">Certified to teach Unity, Python, Frontend Development, and Game Design through the Algorithmics platform.</div>
+        </div>
+        <div class="teaching-item reveal">
+          <div class="teaching-title"><i class="fas fa-school" style="color:var(--accent-purple);margin-right:8px;"></i><span data-i18n="teach_1_title">ECDL Tutor — "Kypseli", Piraeus (2016)</span></div>
+          <div class="teaching-desc" data-i18n="teach_1_desc">Taught children IT fundamentals, Microsoft Office, and Windows OS.</div>
+        </div>
+        <div class="teaching-item reveal">
+          <div class="teaching-title"><i class="fas fa-laptop-code" style="color:var(--accent-purple);margin-right:8px;"></i><span data-i18n="teach_2_title">Algorithmics Tutor (2024)</span></div>
+          <div class="teaching-desc" data-i18n="teach_2_desc">Delivered courses in Python, Frontend development, Unity game development, and Video Blogging.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OTHER EXPERIENCE -->
+  <section id="other">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag" data-i18n="tag_additional">// additional roles</span>
+        <h2 class="section-title" data-i18n="title_other">Other Experience</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="other-grid">
+        <div class="card reveal">
+          <div class="card-icon"><i class="fas fa-flask"></i></div>
+          <div class="card-title" data-i18n="other_0_title">7th Laboratory Center of Piraeus</div>
+          <div class="card-desc" data-i18n="other_0_desc">2015–2016 · Built and maintained the center's Drupal website with custom PHP development.</div>
+          <div class="card-tags"><span class="tag">Drupal</span><span class="tag">PHP</span></div>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="card-title" data-i18n="other_1_title">Greek Army — IT Specialist</div>
+          <div class="card-desc" data-i18n="other_1_desc">2020–2021 · Server administration, hardware repairs, MS Office support, and logistics IT management.</div>
+          <div class="card-tags"><span class="tag">Server Admin</span><span class="tag">Hardware</span><span class="tag">MS Office</span><span class="tag">Logistics</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-name">Panagiotis Efstathiadis</div>
-    <div class="footer-sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
+    <div class="footer-name" data-i18n="footer_name">Panagiotis Efstathiadis</div>
+    <div class="footer-sub" data-i18n="footer_sub">Computer Scientist · Fullstack Engineer · Greece, Leros</div>
     <div class="footer-links">
       <a href="https://github.com/tigerlero" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
       <a href="https://www.linkedin.com/in/panagiotis-efstathiadis-7b2a39112/" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
       <a href="mailto:visualbasic008@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
       <a href="tel:+306982572887" title="Phone"><i class="fas fa-phone"></i></a>
     </div>
-    <div class="footer-copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS &amp; JS.</div>
+    <div class="footer-copy" data-i18n="footer_copy">&copy; 2025 Panagiotis Efstathiadis. Built with pure HTML, CSS &amp; JS.</div>
   </footer>
 
   <!-- BACK TO TOP -->
   <button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <i class="fas fa-chevron-up"></i>
   </button>
+  <span id="back-top-label" style="display:none" data-i18n="back_to_top">Back to top</span>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/loader.js"></script>
+  <script>
+    initSite();
+    translatePage(localStorage.getItem('lang') || 'en');
+    (function(){
+      var s = document.getElementById('lang-switcher');
+      if (s) {
+        s.value = localStorage.getItem('lang') || 'en';
+        s.addEventListener('change', function() {
+          if (window.translatePage) window.translatePage(this.value);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
