@@ -1,0 +1,43 @@
+<!-- SERVICE PRICING DATA - Shared prices across service types -->
+<script>
+window.SERVICE_PRICING = [
+  { id: 'svc_0', name: 'Landing Page / Portfolio', icon: 'fa-file-alt', tiers: ['basic', 'standard', 'premium'], prices: { basic: 300, standard: 600, premium: 1000 } },
+  { id: 'svc_web', name: 'Website (Business/E-commerce/Apps/Mobile)', icon: 'fa-globe', tiers: ['basic', 'standard', 'premium'], prices: { basic: 800, standard: 1500, premium: 3000 } },
+  { id: 'svc_desktop', name: 'Desktop Application', icon: 'fa-desktop', tiers: ['basic', 'standard', 'premium'], prices: { basic: 500, standard: 1200, premium: 2500 } },
+  { id: 'svc_webapp', name: 'Web Application', icon: 'fa-window-maximize', tiers: ['standard', 'premium'], prices: { standard: 1800, premium: 4000 } }
+];
+
+window.TEACHING_PRICING = [
+  { id: 'tut_0', name: 'MS Office', icon: 'fa-file-word', prices: { remote: { beginner: 10, advanced: 15, professional: 20 }, inperson: { beginner: 15, advanced: 20, professional: 25 } } },
+  { id: 'tut_1', name: 'Windows & Linux', icon: 'fa-desktop', prices: { remote: { beginner: 10, advanced: 15, professional: 20 }, inperson: { beginner: 15, advanced: 20, professional: 25 } } },
+  { id: 'tut_2', name: 'Video Editing', icon: 'fa-video', prices: { remote: { beginner: 10, advanced: 15, professional: 20 }, inperson: { beginner: 15, advanced: 20, professional: 25 } } },
+  { id: 'tut_3', name: 'Image Editing', icon: 'fa-image', prices: { remote: { beginner: 10, advanced: 15, professional: 20 }, inperson: { beginner: 15, advanced: 20, professional: 25 } } },
+  { id: 'tut_4', name: 'Sound Editing', icon: 'fa-headphones', prices: { remote: { beginner: 10, advanced: 15, professional: 20 }, inperson: { beginner: 15, advanced: 20, professional: 25 } } },
+  { id: 'tut_5', name: 'Coding & Programming', icon: 'fa-code', prices: { remote: { beginner: 10, advanced: 15, professional: 20 }, inperson: { beginner: 15, advanced: 20, professional: 25 } } }
+];
+</script>
+
+<!-- BASIC TIER FEATURES -->
+<ul class="pricing-features" data-tier="basic">
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_0">Responsive design</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_1">Contact form</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_2">Basic SEO</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_0_3">Social media integration</span></li>
+</ul>
+
+<!-- STANDARD TIER FEATURES -->
+<ul class="pricing-features" data-tier="standard">
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_0">All Basic features</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_1">CMS integration</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_2">Blog / news section</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_3">Advanced SEO</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_1_4">Performance optimization</span></li>
+</ul>
+
+<!-- PREMIUM TIER FEATURES -->
+<ul class="pricing-features" data-tier="premium">
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_0">All Standard features</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_1">Custom features</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_2">Priority support</span></li>
+  <li><i class="fas fa-check"></i> <span data-i18n="svc_feat_2_3">Ongoing maintenance</span></li>
+</ul>
