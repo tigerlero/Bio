@@ -10,63 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
-  <style>
-    .job-detail-hero {
-      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08));
-    }
-    .job-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 2rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.35s;
-    }
-    .job-card:hover {
-      border-color: var(--accent-blue);
-      box-shadow: var(--glow-blue);
-      transform: translateY(-4px);
-    }
-    .job-card .timeline-period {
-      font-size: 0.8rem;
-      margin-bottom: 0.75rem;
-    }
-    .job-card .timeline-role {
-      font-size: 1.2rem;
-    }
-    .job-card .timeline-company {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-    .job-card .timeline-desc {
-      line-height: 1.8;
-    }
-    .job-highlights {
-      list-style: none;
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-    .job-highlights li {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-    }
-    .job-highlights li i {
-      color: var(--accent-blue);
-      font-size: 0.7rem;
-      margin-top: 0.35rem;
-      flex-shrink: 0;
-    }
-    .job-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-  </style>
 </head>
 <body>
 
@@ -103,140 +46,305 @@
     <a href="index.html#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
   </div>
 
-  <div class="page-hero job-detail-hero">
+  <div class="page-hero" style="min-height:40vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;overflow:hidden;">
     <div>
       <span class="section-tag" data-i18n="jobs_tag">// career</span>
-      <h1><span data-i18n="page_experience_prefix">Work </span><span data-i18n="page_experience_suffix" style="color:var(--accent-blue);">Experience</span></h1>
-      <p data-i18n="jobs_desc">Detailed breakdown of professional roles and responsibilities.</p>
+      <h1 style="font-family:'Orbitron',sans-serif;font-size:clamp(2rem,5vw,3.5rem);color:#fff;margin-bottom:0.5rem;">
+        <span data-i18n="page_experience_prefix">Work </span><span data-i18n="page_experience_suffix" style="color:var(--accent-blue);">Experience</span>
+      </h1>
+      <p style="color:var(--text-muted);font-size:1.05rem;max-width:600px;margin:0 auto;" data-i18n="jobs_desc">
+        Detailed breakdown of professional roles and responsibilities.
+      </p>
     </div>
   </div>
 
   <section>
     <div class="section-inner">
-      <div class="job-grid">
+      <div class="detail-grid">
 
-        <div class="job-card reveal">
-          <div class="timeline-period">2023 — Present</div>
-          <div class="timeline-role" data-i18n="job_0_role">Fullstack Developer</div>
-          <div class="timeline-company" data-i18n="job_0_company">Valmore-Neogen</div>
-          <div class="timeline-desc" data-i18n="job_0_desc">
-            Building and maintaining fullstack web applications across multiple client projects, handling both frontend and backend responsibilities. Working with cross-functional teams to deliver scalable solutions.
+        <!-- ══════ Valmore-Neogen ══════ -->
+        <div id="valmore" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="valmore">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">
+                <img src="assets/logos/valmore.png" alt="Valmore" style="max-height:80px;max-width:200px;object-fit:contain;filter:brightness(0) invert(1);">
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="valmore">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="valmore">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);">
+                  <img src="assets/logos/valmore.png" alt="Valmore" style="max-height:24px;max-width:60px;object-fit:contain;filter:brightness(0) invert(1);">
+                </div>
+              </div>
+            </div>
           </div>
-          <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_0">Developed and deployed React and Vue.js frontends</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_1">Built RESTful APIs with Express and PHP</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_2">Containerized applications using Docker</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_3">Managed MongoDB databases and optimized queries</span></li>
-          </ul>
-          <div class="timeline-tags">
-            <span class="tag">React</span><span class="tag">Vue</span><span class="tag">PHP</span>
-            <span class="tag">Express</span><span class="tag">Docker</span><span class="tag">MongoDB</span>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="job_0_role">Fullstack Developer</div>
+            <div class="card-desc" data-i18n="job_0_company">Valmore-Neogen</div>
+            <div class="job-meta">
+              <span><i class="fas fa-calendar-alt"></i> 2023 — Present</span>
+            </div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="job_0_desc">
+              Building and maintaining fullstack web applications across multiple client projects, handling both frontend and backend responsibilities. Working with cross-functional teams to deliver scalable solutions.
+            </p>
+            <ul class="job-highlights">
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_0">Developed and deployed React and Vue.js frontends</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_1">Built RESTful APIs with Express and PHP</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_2">Containerized applications using Docker</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_0_hl_3">Managed MongoDB databases and optimized queries</span></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">React</span><span class="tag">Vue</span><span class="tag">PHP</span>
+              <span class="tag">Express</span><span class="tag">Docker</span><span class="tag">MongoDB</span>
+            </div>
+            <div class="detail-links">
+              <a href="index.html#experience" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+              <a href="https://www.neogen.com/" target="_blank" rel="noopener" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> Neogen</a>
+              <a href="https://www.valmore.gr/" target="_blank" rel="noopener" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> Valmore</a>
+            </div>
           </div>
         </div>
 
-        <div class="job-card reveal">
-          <div class="timeline-period">2026 — Present</div>
-          <div class="timeline-role" data-i18n="job_1_role">Fullstack Developer</div>
-          <div class="timeline-company" data-i18n="job_1_company">ExpressTransfers</div>
-          <div class="timeline-desc" data-i18n="job_1_desc">
-            Developing a transfer booking platform with payment integration, interactive maps, and containerized deployment. Building the complete platform from the ground up.
+        <!-- ══════ ExpressTransfers ══════ -->
+        <div id="expresstransfers" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="expresstransfers">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+                <img src="assets/logos/expresstransfers.png" alt="ExpressTransfers" style="max-height:80px;max-width:200px;object-fit:contain;filter:url(#ast-img-color-filter-2);">
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="expresstransfers">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="expresstransfers">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+                  <img src="assets/logos/expresstransfers.png" alt="ExpressTransfers" style="max-height:24px;max-width:60px;object-fit:contain;filter:url(#ast-img-color-filter-2);">
+                </div>
+              </div>
+            </div>
           </div>
-          <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_0">Integrated Stripe payment processing</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_1">Built interactive maps with Leaflet.js</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_2">Developed WordPress backend with custom plugins</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_3">Containerized with Docker for deployment</span></li>
-          </ul>
-          <div class="timeline-tags">
-            <span class="tag">WordPress</span><span class="tag">Docker</span><span class="tag">Stripe</span>
-            <span class="tag">Django</span><span class="tag">Leaflet</span>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="job_1_role">Fullstack Developer</div>
+            <div class="card-desc" data-i18n="job_1_company">ExpressTransfers</div>
+            <div class="job-meta">
+              <span><i class="fas fa-calendar-alt"></i> 2026 — Present</span>
+            </div>
           </div>
-        </div>
-
-        <div class="job-card reveal">
-          <div class="timeline-period">2025</div>
-          <div class="timeline-role" data-i18n="job_2_role">Fullstack Developer</div>
-          <div class="timeline-company" data-i18n="job_2_company">Evalion-SHL</div>
-          <div class="timeline-desc" data-i18n="job_2_desc">
-            Developed enterprise-grade web applications using modern PHP stack with end-to-end testing and containerized environments.
-          </div>
-          <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_0">Built Laravel applications with Vue.js frontends</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_1">Implemented end-to-end testing with Playwright</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_2">Used Laravel Sail for Docker-based development</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_3">Developed with Inertia.js for seamless SPA experience</span></li>
-          </ul>
-          <div class="timeline-tags">
-            <span class="tag">Laravel</span><span class="tag">Vue</span><span class="tag">Sail</span>
-            <span class="tag">Inertia</span><span class="tag">Playwright</span><span class="tag">Docker</span>
-          </div>
-        </div>
-
-        <div class="job-card reveal">
-          <div class="timeline-period">2022 — 2023</div>
-          <div class="timeline-role" data-i18n="job_3_role">Fullstack Developer</div>
-          <div class="timeline-company" data-i18n="job_3_company">Infologic-Weblogic</div>
-          <div class="timeline-desc" data-i18n="job_3_desc">
-            Built a React-based CRM with AI chatbot powered by LLama2, a booking web app, and REST APIs. Developed template component answer systems for automated responses.
-          </div>
-          <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_0">Developed AI chatbot integration with LLama2</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_1">Built Django REST Framework APIs</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_2">Created React-based CRM dashboard</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_3">Implemented template component answer systems</span></li>
-          </ul>
-          <div class="timeline-tags">
-            <span class="tag">Django REST</span><span class="tag">React</span><span class="tag">LLama2</span>
-            <span class="tag">LLM/AI</span><span class="tag">CRM</span>
+          <div class="detail-body">
+            <p data-i18n="job_1_desc">
+              Developing a transfer booking platform with payment integration, interactive maps, and containerized deployment. Building the complete platform from the ground up.
+            </p>
+            <ul class="job-highlights">
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_0">Integrated Stripe payment processing</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_1">Built interactive maps with Leaflet.js</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_2">Developed WordPress backend with custom plugins</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_1_hl_3">Containerized with Docker for deployment</span></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">WordPress</span><span class="tag">Docker</span><span class="tag">Stripe</span>
+              <span class="tag">Django</span><span class="tag">Leaflet</span>
+            </div>
+            <div class="detail-links">
+              <a href="index.html#experience" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+              <a href="https://expresstransfers.gr/" target="_blank" rel="noopener" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> <span data-i18n="btn_visit">Visit Website</span></a>
+            </div>
           </div>
         </div>
 
-        <div class="job-card reveal">
-          <div class="timeline-period">2022</div>
-          <div class="timeline-role" data-i18n="job_4_role">Fullstack Developer &amp; IT</div>
-          <div class="timeline-company" data-i18n="job_4_company">Newdeal Real Estates</div>
-          <div class="timeline-desc" data-i18n="job_4_desc">
-            Full-stack development, IT support, SEO optimization, analytics setup, and CRM management for a real estate platform.
+        <!-- ══════ Evalion-SHL ══════ -->
+        <div id="evalion" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="evalion">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#c31432,#240b36);">
+                <img src="assets/logos/evalion.png" alt="Evalion-SHL" style="max-height:80px;max-width:200px;object-fit:contain;filter:brightness(0) invert(1);">
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="evalion">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="evalion">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#c31432,#240b36);">
+                  <img src="assets/logos/evalion.png" alt="Evalion-SHL" style="max-height:24px;max-width:60px;object-fit:contain;filter:brightness(0) invert(1);">
+                </div>
+              </div>
+            </div>
           </div>
-          <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_0">Developed real estate platform with Flask and MongoDB</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_1">Implemented SEO strategies and Google Analytics</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_2">Managed WordPress and Laravel sites</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_3">Configured Plesk server hosting and domains</span></li>
-          </ul>
-          <div class="timeline-tags">
-            <span class="tag">MongoDB</span><span class="tag">Flask</span><span class="tag">Firebase</span>
-            <span class="tag">WordPress</span><span class="tag">Laravel</span><span class="tag">Plesk</span>
-            <span class="tag">SEO</span><span class="tag">CRM</span>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="job_2_role">Fullstack Developer</div>
+            <div class="card-desc" data-i18n="job_2_company">Evalion-SHL</div>
+            <div class="job-meta">
+              <span><i class="fas fa-calendar-alt"></i> 2025</span>
+            </div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="job_2_desc">
+              Developed enterprise-grade web applications using modern PHP stack with end-to-end testing and containerized environments.
+            </p>
+            <ul class="job-highlights">
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_0">Built Laravel applications with Vue.js frontends</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_1">Implemented end-to-end testing with Playwright</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_2">Used Laravel Sail for Docker-based development</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_2_hl_3">Developed with Inertia.js for seamless SPA experience</span></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">Laravel</span><span class="tag">Vue</span><span class="tag">Sail</span>
+              <span class="tag">Inertia</span><span class="tag">Playwright</span><span class="tag">Docker</span>
+            </div>
+            <div class="detail-links">
+              <a href="index.html#experience" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+              <a href="https://www.evalion-shl.com/" target="_blank" rel="noopener" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> <span data-i18n="btn_visit">Visit Website</span></a>
+            </div>
           </div>
         </div>
 
-        <div class="job-card reveal">
-          <div class="timeline-period">2021 — 2022</div>
-          <div class="timeline-role" data-i18n="job_5_role">Frontend / Fullstack Developer</div>
-          <div class="timeline-company" data-i18n="job_5_company">Datawise</div>
-          <div class="timeline-desc" data-i18n="job_5_desc">
-            Developed React and Node.js applications, Moodle e-learning integrations, and Java-based tools with Material UI design system.
+        <!-- ══════ Infologic-Weblogic ══════ -->
+        <div id="infologic" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="infologic">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#302b63,#0f0c29);">
+                <i class="fas fa-robot"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="infologic">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="infologic">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#302b63,#0f0c29);">
+                  <i class="fas fa-robot"></i>
+                </div>
+              </div>
+            </div>
           </div>
-          <ul class="job-highlights">
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_0">Built React applications with Material UI</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_1">Developed Node.js backend services</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_2">Integrated Moodle e-learning platform</span></li>
-            <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_3">Created Java-based tools and utilities</span></li>
-          </ul>
-          <div class="timeline-tags">
-            <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Moodle</span>
-            <span class="tag">Java</span><span class="tag">MUI</span>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="job_3_role">Fullstack Developer</div>
+            <div class="card-desc" data-i18n="job_3_company">Infologic-Weblogic</div>
+            <div class="job-meta">
+              <span><i class="fas fa-calendar-alt"></i> 2022 — 2023</span>
+            </div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="job_3_desc">
+              Built a React-based CRM with AI chatbot powered by LLama2, a booking web app, and REST APIs. Developed template component answer systems for automated responses.
+            </p>
+            <ul class="job-highlights">
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_0">Developed AI chatbot integration with LLama2</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_1">Built Django REST Framework APIs</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_2">Created React-based CRM dashboard</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_3_hl_3">Implemented template component answer systems</span></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">Django REST</span><span class="tag">React</span><span class="tag">LLama2</span>
+              <span class="tag">LLM/AI</span><span class="tag">CRM</span>
+            </div>
+            <div class="detail-links">
+              <a href="index.html#experience" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+            </div>
           </div>
         </div>
 
-      </div>
+        <!-- ══════ Newdeal Real Estates ══════ -->
+        <div id="newdeal" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="newdeal">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#000000,#434343);">
+                <img src="assets/logos/newdeal.png" alt="NewDeal" style="max-height:80px;max-width:200px;object-fit:contain;">
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="newdeal">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="newdeal">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#000000,#434343);">
+                  <img src="assets/logos/newdeal.png" alt="NewDeal" style="max-height:24px;max-width:60px;object-fit:contain;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="job_4_role">Fullstack Developer &amp; IT</div>
+            <div class="card-desc" data-i18n="job_4_company">Newdeal Real Estates</div>
+            <div class="job-meta">
+              <span><i class="fas fa-calendar-alt"></i> 2022</span>
+            </div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="job_4_desc">
+              Full-stack development, IT support, SEO optimization, analytics setup, and CRM management for a real estate platform.
+            </p>
+            <ul class="job-highlights">
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_0">Developed real estate platform with Flask and MongoDB</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_1">Implemented SEO strategies and Google Analytics</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_2">Managed WordPress and Laravel sites</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_4_hl_3">Configured Plesk server hosting and domains</span></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">MongoDB</span><span class="tag">Flask</span><span class="tag">Firebase</span>
+              <span class="tag">WordPress</span><span class="tag">Laravel</span><span class="tag">Plesk</span>
+              <span class="tag">SEO</span><span class="tag">CRM</span>
+            </div>
+            <div class="detail-links">
+              <a href="index.html#experience" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+              <a href="https://newdeal.gr/el" target="_blank" rel="noopener" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> <span data-i18n="btn_visit">Visit Website</span></a>
+            </div>
+          </div>
+        </div>
 
-      <div style="text-align:center;margin-top:3rem;">
-        <a href="index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back_home">Back to Home</span></a>
+        <!-- ══════ Datawise ══════ -->
+        <div id="datawise" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="datawise">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#00b4db,#0083b0);">
+                <img src="assets/logos/datawise.png" alt="Datawise" style="max-height:80px;max-width:200px;object-fit:contain;">
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="datawise">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="datawise">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#00b4db,#0083b0);">
+                  <img src="assets/logos/datawise.png" alt="Datawise" style="max-height:24px;max-width:60px;object-fit:contain;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="job_5_role">Frontend / Fullstack Developer</div>
+            <div class="card-desc" data-i18n="job_5_company">Datawise</div>
+            <div class="job-meta">
+              <span><i class="fas fa-calendar-alt"></i> 2021 — 2022</span>
+            </div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="job_5_desc">
+              Developed React and Node.js applications, Moodle e-learning integrations, and Java-based tools with Material UI design system.
+            </p>
+            <ul class="job-highlights">
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_0">Built React applications with Material UI</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_1">Developed Node.js backend services</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_2">Integrated Moodle e-learning platform</span></li>
+              <li><i class="fas fa-check-circle"></i> <span data-i18n="job_5_hl_3">Created Java-based tools and utilities</span></li>
+            </ul>
+            <div class="timeline-tags">
+              <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Moodle</span>
+              <span class="tag">Java</span><span class="tag">MUI</span>
+            </div>
+            <div class="detail-links">
+              <a href="index.html#experience" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+              <a href="https://datawise.ai/" target="_blank" rel="noopener" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> <span data-i18n="btn_visit">Visit Website</span></a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close"><i class="fas fa-times"></i></button>
+    <button class="lightbox-arrow lightbox-arrow-prev" id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+    <button class="lightbox-arrow lightbox-arrow-next" id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
 
   <footer>
     <div class="footer-name" data-i18n="footer_name">Panagiotis Efstathiadis</div>
@@ -253,55 +361,24 @@
   <button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <i class="fas fa-chevron-up"></i>
   </button>
+  <span id="back-top-label" style="display:none" data-i18n="back_to_top">Back to top</span>
 
   <script src="js/i18n.js"></script>
-  <script>
-    translatePage(localStorage.getItem('lang') || 'en');
-    var ls = document.getElementById('lang-switcher');
-    if (ls) {
-      ls.value = localStorage.getItem('lang') || 'en';
-      ls.addEventListener('change', function() {
-        if (window.translatePage) window.translatePage(this.value);
-      });
-    }
-  </script>
   <script src="js/main.js"></script>
+  <script src="js/gallery.js"></script>
   <script>
+    initSite();
+    translatePage(localStorage.getItem('lang') || 'en');
     (function() {
-      var nav = document.getElementById('navbar');
-      var btn = document.getElementById('back-top');
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 80) { nav.classList.add('scrolled'); btn.classList.add('visible'); }
-        else { nav.classList.remove('scrolled'); btn.classList.remove('visible'); }
-      });
-    })();
-    (function() {
-      var ham = document.getElementById('hamburger');
-      var menu = document.getElementById('mobile-menu');
-      if (ham && menu) {
-        ham.addEventListener('click', function() {
-          ham.classList.toggle('open'); menu.classList.toggle('open');
-        });
-        document.querySelectorAll('.mobile-link').forEach(function(a) {
-          a.addEventListener('click', function() {
-            ham.classList.remove('open'); menu.classList.remove('open');
-          });
+      var s = document.getElementById('lang-switcher');
+      if (s) {
+        s.value = localStorage.getItem('lang') || 'en';
+        s.addEventListener('change', function() {
+          if (window.translatePage) window.translatePage(this.value);
         });
       }
-    })();
-    (function() {
-      var opts = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-        });
-      }, opts);
-      document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
-    })();
-    (function() {
-      document.querySelectorAll('.job-card').forEach(function(el, i) {
-        el.style.transitionDelay = (i * 0.07) + 's';
-      });
+      var galleryIds = ['valmore', 'expresstransfers', 'evalion', 'infologic', 'newdeal', 'datawise'];
+      galleryIds.forEach(function(id) { if (window.initGallery) window.initGallery(id); });
     })();
   </script>
 </body>

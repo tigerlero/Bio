@@ -138,7 +138,7 @@ function initSite() {
 
   /* ── STAGGER DELAY for cards ── */
   (function() {
-    document.querySelectorAll('.project-gallery .project-card, .cards-grid .card, .freelance-grid .freelance-card, .edu-grid .edu-card').forEach(function(el, i) {
+    document.querySelectorAll('.project-gallery .project-card, .cards-grid .card, .freelance-grid .freelance-card, .edu-grid .edu-card, .detail-section').forEach(function(el, i) {
       el.style.transitionDelay = (i * 0.07) + 's';
     });
   })();
