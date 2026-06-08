@@ -44,7 +44,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.scene.start('OverworldScene');
+    this.scene.start('TitleScene');
   }
 
   private createPlaceholderTextures(): void {

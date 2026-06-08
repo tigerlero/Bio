@@ -104,7 +104,7 @@ export class TitleScene extends Phaser.Scene {
     back.on('pointerover', () => back.setColor('#66ccff'));
     back.on('pointerout', () => back.setColor('#4488aa'));
     back.on('pointerdown', () => {
-      window.location.href = window.location.origin;
+      window.location.href = '../';
     });
 
     // Init audio + BGM on first interaction

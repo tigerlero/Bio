@@ -53,7 +53,7 @@ export class PauseMenu {
         this.scene.scene.start('TitleScene');
       }},
       { label: 'Exit to Website', fn: () => {
-        window.location.href = window.location.origin;
+        window.location.href = '../';
       }},
     ];
 
