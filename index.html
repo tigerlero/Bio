@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bio Explorer — Interactive Portfolio Game</title>
+  <meta name="description" content="Explore my portfolio as a 2D open-world game! Visit project NPCs, job buildings, skill gems, and education books in a Stardew Valley-style world." />
+  <meta name="keywords" content="portfolio, game, 2d, interactive, phaser" />
+  <meta property="og:title" content="Bio Explorer — Interactive Portfolio Game" />
+  <meta property="og:description" content="Explore my portfolio as a 2D open-world game! Visit project NPCs, job buildings, skill gems, and education books." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://opengraph.githubassets.com/1/game-preview.png" />
+  <meta property="og:image:width" content="800" />
+  <meta property="og:image:height" content="600" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bio Explorer — Interactive Portfolio Game" />
+  <meta name="twitter:description" content="Explore my portfolio as a 2D open-world game!" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    #game { width: 100%; height: 100%; }
+    /* High-contrast mode */
+    .bio-high-contrast #game canvas { filter: contrast(1.5) brightness(1.1); }
+    .bio-high-contrast .modal-content {
+      background: #000 !important;
+      color: #ff0 !important;
+      border: 3px solid #ff0 !important;
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/index-D7jZOEZ6.js"></script>
+</head>
+<body>
+  <div id="game" role="application" aria-label="Bio Explorer Game - 2D open world portfolio game. Navigate with WASD or arrow keys. Press E to interact."></div>
+</body>
+</html>
