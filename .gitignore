@@ -1,2 +1,5 @@
 .vscode/
 .kiro/
+game/node_modules/
+game/dist/
+*.md

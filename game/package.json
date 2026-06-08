@@ -1,0 +1,23 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "postbuild": "node -e \"var f=require('fs').readFileSync('dist/index.html','utf-8').replace('type=\\\"module\\\" crossorigin ','');require('fs').writeFileSync('dist/index.html',f);console.log('Patched for file://')\"",
+    "deploy": "npm run build && node -e \"var f=require('fs'),p='../play';if(f.existsSync(p))f.rmSync(p,{recursive:true});f.cpSync('dist',p,{recursive:true});console.log('Deployed to ../play/')\"",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16"
+  }
+}
