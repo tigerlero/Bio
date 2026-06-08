@@ -52,6 +52,9 @@ export class PauseMenu {
         AudioManager.get().stopBgm(0.3);
         this.scene.scene.start('TitleScene');
       }},
+      { label: 'Exit to Website', fn: () => {
+        window.location.href = window.location.origin;
+      }},
     ];
 
     this.keyUp = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
