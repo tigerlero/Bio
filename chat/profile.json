@@ -404,6 +404,14 @@
       "category": "Minigame"
     },
     {
+      "id": "dev-mario",
+      "title": "Dev Mario",
+      "description": "Super Mario-style platformer with a developer protagonist. Run, jump, and stomp Bugs and Deadlines across a 5200px scrolling level. Collect coins, enter pipe sub-levels for Focus Mode to grab glowing bytes with intense visuals, and reach the Sprint End flag to deliver the demo on time! Built with Phaser.js and TypeScript.",
+      "tech": ["TypeScript", "Phaser.js", "Platformer"],
+      "playUrl": "play/?game=mario",
+      "category": "Minigame"
+    },
+    {
       "id": "pingpong",
       "title": "PingPong Game",
       "description": "Classic Pong game built with Python and PyGame. Features AI opponent with adjustable difficulty, local 2-player multiplayer mode, score tracking, and sound effects.",

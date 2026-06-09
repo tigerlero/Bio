@@ -222,6 +222,21 @@ export class SkillGardenScene extends Phaser.Scene {
       fontSize: '9px', color: '#ff6644', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
+    // Dev Mario portal
+    const marioPortalX = worldW / 2 + 160;
+    const marioPortalY = worldH - 40;
+    portal = this.add.graphics();
+    portal.fillStyle(0xff8844, 0.4);
+    portal.fillCircle(marioPortalX, marioPortalY, 16);
+    portal.lineStyle(2, 0xff8844, 0.7);
+    portal.strokeCircle(marioPortalX, marioPortalY, 16);
+    this.add.text(marioPortalX, marioPortalY, 'M', {
+      fontSize: '14px', color: '#ff8844', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(marioPortalX, marioPortalY + 22, 'Mario', {
+      fontSize: '9px', color: '#ff8844', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
     // Player
     this.playerSprite = this.add.sprite(this.px, this.py, 'player_sheet').setDepth(20).play('player_idle_down');
 
@@ -330,6 +345,12 @@ export class SkillGardenScene extends Phaser.Scene {
       nearBug = true;
     }
 
+    const marioPortalX = portalX + 160;
+    let nearMario = false;
+    if (Phaser.Math.Distance.Between(this.px, this.py, marioPortalX, portalY) < 35) {
+      nearMario = true;
+    }
+
     const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
     if (nearGem && interact) {
       AudioManager.get().playSfx('interact');
@@ -364,6 +385,14 @@ export class SkillGardenScene extends Phaser.Scene {
       });
     }
 
+    if (nearMario && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => {
+        this.scene.start('DevMarioScene');
+      });
+    }
+
     if (nearReturn) {
       this.prompt.setText('Press E to return');
       this.prompt.setPosition(this.px, this.py - 16);
@@ -378,6 +407,10 @@ export class SkillGardenScene extends Phaser.Scene {
       this.prompt.setVisible(true);
     } else if (nearBug) {
       this.prompt.setText('Press E: Bug Breaker');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearMario) {
+      this.prompt.setText('Press E: Dev Mario');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearGem) {

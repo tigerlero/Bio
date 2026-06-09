@@ -338,6 +338,16 @@ export class PacmanScene extends Phaser.Scene {
   }
 
   private updateGhost(ghost: Ghost, delta: number): void {
+    if (ghost.eatenTimer > 0) {
+      ghost.eatenTimer -= delta;
+      if (ghost.eatenTimer <= 0) {
+        ghost.mode = 'leaving';
+        ghost.releaseTimer = 100;
+        ghost.released = false;
+        ghost.eatenTimer = 0;
+      }
+      return;
+    }
     if (ghost.mode === 'leaving') {
       ghost.releaseTimer -= delta;
       if (ghost.releaseTimer <= 0 && !ghost.released) {
@@ -346,16 +356,6 @@ export class PacmanScene extends Phaser.Scene {
         ghost.x = this.GHOST_HOUSE.x;
         ghost.y = this.GHOST_HOUSE.y;
         ghost.dir = { x: 0, y: 1 };
-      }
-      return;
-    }
-    if (ghost.eatenTimer > 0) {
-      ghost.eatenTimer -= delta;
-      if (ghost.eatenTimer <= 0) {
-        ghost.mode = 'leaving';
-        ghost.releaseTimer = 100;
-        ghost.released = false;
-        ghost.eatenTimer = 0;
       }
       return;
     }
@@ -468,6 +468,8 @@ export class PacmanScene extends Phaser.Scene {
 
   private drawGhost(ghost: Ghost): void {
     ghost.gfx.clear();
+    if (ghost.eatenTimer > 0) return;
+
     const cx = GRID_X + ghost.x * CELL + CELL / 2;
     const cy = GRID_Y + ghost.y * CELL + CELL / 2;
     const r = CELL * 0.38;
