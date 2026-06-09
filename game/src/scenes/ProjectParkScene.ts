@@ -135,6 +135,20 @@ export class ProjectParkScene extends Phaser.Scene {
       fontSize: '9px', color: '#4488ff', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
+    // Tetris portal
+    const tetrisPX = portalX + 80;
+    const tetrisPortal = this.add.graphics();
+    tetrisPortal.fillStyle(0x4488ff, 0.4);
+    tetrisPortal.fillCircle(tetrisPX, portalY, 16);
+    tetrisPortal.lineStyle(2, 0x4488ff, 0.7);
+    tetrisPortal.strokeCircle(tetrisPX, portalY, 16);
+    this.add.text(tetrisPX, portalY, 'T', {
+      fontSize: '14px', color: '#4488ff', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(tetrisPX, portalY + 22, 'Tetris', {
+      fontSize: '9px', color: '#4488ff', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
     // Player
     this.playerSprite = this.add.sprite(this.px, this.py, 'player_sheet').setDepth(20).play('player_idle_down');
 
@@ -207,6 +221,7 @@ export class ProjectParkScene extends Phaser.Scene {
     let nearProject: Project | null = null;
     let nearReturn = false;
     let nearMatch = false;
+    let nearTetris = false;
 
     for (const b of this.buildings) {
       const dx = this.px - b.bx;
@@ -224,9 +239,11 @@ export class ProjectParkScene extends Phaser.Scene {
       nearReturn = true;
     }
 
-    const nearMatchPortal = (px: number, py: number) => Phaser.Math.Distance.Between(this.px, this.py, px, py) < 25;
+    const nearPortal = (px: number, py: number, dist: number) => Phaser.Math.Distance.Between(this.px, this.py, px, py) < dist;
     const matchPX = portalX - 80;
-    if (nearMatchPortal(matchPX, portalY)) nearMatch = true;
+    const tetrisPX = portalX + 80;
+    if (nearPortal(matchPX, portalY, 25)) nearMatch = true;
+    if (nearPortal(tetrisPX, portalY, 25)) nearTetris = true;
 
     const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
     if (nearProject && interact) {
@@ -244,12 +261,22 @@ export class ProjectParkScene extends Phaser.Scene {
       this.time.delayedCall(200, () => this.scene.start('ProjectMatchScene'));
     }
 
+    if (nearTetris && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => this.scene.start('TetrisProjectScene'));
+    }
+
     if (nearReturn) {
       this.prompt.setText('Press E to return');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearMatch) {
       this.prompt.setText('Press E: Project Match');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearTetris) {
+      this.prompt.setText('Press E: Tetris Projects');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearProject) {

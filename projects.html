@@ -293,35 +293,11 @@
     <div class="section-inner">
       <div class="detail-grid">
 
-        <!-- ══════ PIXELSPRINT ══════ -->
-        <div id="pixelsprint" class="detail-section reveal">
-          <div class="gallery-wrap">
-            <div class="gallery-main" data-gallery="pixelsprint">
-              <img src="assets/img/pixelsprint1.png" alt="PixelSprint">
-            </div>
-            <button class="gallery-arrow gallery-arrow-prev" data-gallery="pixelsprint"><i class="fas fa-chevron-left"></i></button>
-            <button class="gallery-arrow gallery-arrow-next" data-gallery="pixelsprint"><i class="fas fa-chevron-right"></i></button>
-            <div class="gallery-counter" data-gallery="pixelsprint">1 / 2</div>
-            <div class="gallery-thumbs" data-gallery="pixelsprint">
-              <div class="gallery-thumb active" data-index="0"><img src="assets/img/pixelsprint1.png" alt=""></div>
-              <div class="gallery-thumb" data-index="1"><img src="assets/img/pixel2.png" alt=""></div>
-            </div>
-          </div>
-          <div class="detail-section-header">
-            <div class="card-title" data-i18n="proj_pixelsprint_title">PixelSprint</div>
-            <div class="card-desc" data-i18n="proj_pixelsprint_desc">Task management app with sprint planning, boards, and team collaboration.</div>
-          </div>
-          <div class="detail-body">
-            <p data-i18n="proj_detail_pixelsprint">A full-featured task management application inspired by Agile methodologies. PixelSprint allows teams to create sprints, manage tasks across boards, track progress, and collaborate in real-time. Built with Django on the backend with Celery for async task processing, Bulma for styling, and HTMX for seamless interactions.</p>
-            <div class="timeline-tags">
-              <span class="tag">Django</span><span class="tag">Celery</span><span class="tag">Bulma</span>
-              <span class="tag">HTMX</span><span class="tag">Pytest</span><span class="tag">PostgreSQL</span>
-            </div>
-            <div class="detail-links">
-              <a href="https://github.com/tigerlero/PixelSprint" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
-            </div>
-          </div>
+        <!-- PERSONAL PROJECTS -->
+        <div class="section-header reveal" style="margin-top:0;">
+          <span class="section-tag" data-i18n="tag_personal">// personal work</span>
+          <h2><span data-i18n="title_projects">Personal </span><span style="color:var(--accent-blue);">Projects</span></h2>
+          <div class="section-line"></div>
         </div>
 
         <!-- ══════ RePaw ══════ -->
@@ -425,6 +401,37 @@
           </div>
         </div>
 
+        <!-- ══════ PixelSprint ══════ -->
+        <div id="pixelsprint" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="pixelsprint">
+              <img src="assets/img/pixelsprint1.png" alt="PixelSprint">
+            </div>
+            <button class="gallery-arrow gallery-arrow-prev" data-gallery="pixelsprint"><i class="fas fa-chevron-left"></i></button>
+            <button class="gallery-arrow gallery-arrow-next" data-gallery="pixelsprint"><i class="fas fa-chevron-right"></i></button>
+            <div class="gallery-counter" data-gallery="pixelsprint">1 / 2</div>
+            <div class="gallery-thumbs" data-gallery="pixelsprint">
+              <div class="gallery-thumb active" data-index="0"><img src="assets/img/pixelsprint1.png" alt=""></div>
+              <div class="gallery-thumb" data-index="1"><img src="assets/img/pixel2.png" alt=""></div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="proj_pixelsprint_title">PixelSprint</div>
+            <div class="card-desc" data-i18n="proj_pixelsprint_desc">Task management app with sprint planning, boards, and team collaboration.</div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="proj_detail_pixelsprint">A full-featured task management application inspired by Agile methodologies. PixelSprint allows teams to create sprints, manage tasks across boards, track progress, and collaborate in real-time. Built with Django on the backend with Celery for async task processing, Bulma for styling, and HTMX for seamless interactions.</p>
+            <div class="timeline-tags">
+              <span class="tag">Django</span><span class="tag">Celery</span><span class="tag">Bulma</span>
+              <span class="tag">HTMX</span><span class="tag">Pytest</span><span class="tag">PostgreSQL</span>
+            </div>
+            <div class="detail-links">
+              <a href="https://github.com/tigerlero/PixelSprint" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+            </div>
+          </div>
+        </div>
+
         <!-- ══════ Speech Recognition ══════ -->
         <div id="speech" class="detail-section reveal">
           <div class="gallery-wrap">
@@ -454,46 +461,6 @@
             </div>
             <div class="detail-links">
               <a href="https://github.com/tigerlero/FSDD-0-9-Speech-Recognition-" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- GAME DEVELOPMENT PROJECTS -->
-        <div class="section-header reveal" style="margin-top:4rem;">
-          <span class="section-tag" data-i18n="cat_gamedev">Game Development</span>
-          <h2><span data-i18n="title_gamedev">Game </span><span style="color:var(--accent-purple);">Projects</span></h2>
-          <div class="section-line"></div>
-        </div>
-
-        <!-- ══════ PyPong ══════ -->
-        <div id="pypong" class="detail-section reveal">
-          <div class="gallery-wrap">
-            <div class="gallery-main" data-gallery="pypong">
-              <div class="gallery-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
-                <i class="fas fa-table-tennis-paddle-ball"></i>
-              </div>
-            </div>
-            <div class="gallery-counter" data-gallery="pypong">1 / 1</div>
-            <div class="gallery-thumbs" data-gallery="pypong">
-              <div class="gallery-thumb active" data-index="0">
-                <div class="thumb-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
-                  <i class="fas fa-table-tennis-paddle-ball"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="detail-section-header">
-            <div class="card-title" data-i18n="proj_pypong_title">PingPong Game</div>
-            <div class="card-desc" data-i18n="proj_pypong_desc">Classic Pong game with AI and local multiplayer modes.</div>
-          </div>
-          <div class="detail-body">
-            <p data-i18n="proj_detail_pypong">A classic Pong arcade game recreation built with PyGame. Features include single-player mode with an AI opponent, two-player local multiplayer, score tracking, and increasing difficulty. Built as a rapid prototyping challenge completed in under 3 hours.</p>
-            <div class="timeline-tags">
-              <span class="tag">PyGame</span><span class="tag">Python</span><span class="tag">Game Dev</span>
-            </div>
-            <div class="detail-links">
-              <a href="https://github.com/tigerlero/PyPong3hours" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
               <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
@@ -631,6 +598,79 @@
           </div>
         </div>
 
+        <!-- ══════ Misc Projects ══════ -->
+        <div id="misc" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="misc">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+                <i class="fas fa-code"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="misc">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="misc">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
+                  <i class="fas fa-code"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="proj_misc_title">Misc Projects</div>
+            <div class="card-desc" data-i18n="proj_misc_desc">Various academic and experimental projects.</div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="proj_detail_misc">Various academic and experimental projects spanning multiple languages and paradigms including SQL, Java, Kotlin, Prolog, and HTML.</p>
+            <div class="timeline-tags">
+              <span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Prolog</span><span class="tag">HTML</span>
+            </div>
+            <div class="detail-links">
+              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- GAME DEVELOPMENT -->
+        <div class="section-header reveal" style="margin-top:4rem;">
+          <span class="section-tag" data-i18n="cat_gamedev">// game development</span>
+          <h2><span data-i18n="title_gamedev">Game </span><span style="color:var(--accent-purple);">Projects</span></h2>
+          <div class="section-line"></div>
+        </div>
+
+        <!-- ══════ PyPong ══════ -->
+        <div id="pypong" class="detail-section reveal">
+          <div class="gallery-wrap">
+            <div class="gallery-main" data-gallery="pypong">
+              <div class="gallery-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+                <i class="fas fa-table-tennis-paddle-ball"></i>
+              </div>
+            </div>
+            <div class="gallery-counter" data-gallery="pypong">1 / 1</div>
+            <div class="gallery-thumbs" data-gallery="pypong">
+              <div class="gallery-thumb active" data-index="0">
+                <div class="thumb-gradient" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
+                  <i class="fas fa-table-tennis-paddle-ball"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-section-header">
+            <div class="card-title" data-i18n="proj_pypong_title">PingPong Game</div>
+            <div class="card-desc" data-i18n="proj_pypong_desc">Classic Pong game with AI and local multiplayer modes.</div>
+          </div>
+          <div class="detail-body">
+            <p data-i18n="proj_detail_pypong">A classic Pong arcade game recreation built with PyGame. Features include single-player mode with an AI opponent, two-player local multiplayer, score tracking, and increasing difficulty. Built as a rapid prototyping challenge completed in under 3 hours.</p>
+            <div class="timeline-tags">
+              <span class="tag">PyGame</span><span class="tag">Python</span><span class="tag">Game Dev</span>
+            </div>
+            <div class="detail-links">
+              <a href="https://github.com/tigerlero/PyPong3hours" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
+              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
+            </div>
+          </div>
+        </div>
+
         <!-- ══════ AsteroidSpaceGame ══════ -->
         <div id="asteroid" class="detail-section reveal">
           <div class="gallery-wrap">
@@ -686,7 +726,7 @@
             <div class="card-desc">Classic Snake built with Phaser.js — collect 49 skills across 7 categories in a grid-based endless runner.</div>
           </div>
           <div class="detail-body">
-            <p>A fully-featured Snake game implemented in TypeScript using the Phaser game framework. Navigate a growing snake across a 24×18 grid to collect all 49 skill orbs, each color-coded by category (Frontend, Backend, Databases, DevOps, Languages, Game Dev, AI/ML). Features progressive speed increase, category-colored food items, and a victory condition upon collecting all skills. Built as an interactive minigame accessible inside the 2D Bio Explorer world.</p>
+            <p>A fully-featured Snake game implemented in TypeScript using the Phaser game framework. Navigate a growing snake across a 24×18 grid to collect all 49 skill orbs, each color-coded by category (Frontend, Backend, Databases, DevOps, Languages, Game Dev, AI/ML). Features progressive speed increase, category-colored food items, and a victory condition upon collecting all skills.</p>
             <div class="timeline-tags">
               <span class="tag">TypeScript</span><span class="tag">Phaser</span><span class="tag">Game</span>
             </div>
@@ -763,6 +803,13 @@
           </div>
         </div>
 
+        <!-- ANIMATION PROJECTS -->
+        <div class="section-header reveal" style="margin-top:4rem;">
+          <span class="section-tag" data-i18n="cat_animation">// animation</span>
+          <h2><span data-i18n="title_animation">Animation </span><span style="color:var(--accent-green);">Projects</span></h2>
+          <div class="section-line"></div>
+        </div>
+
         <!-- ══════ Flag & Animation Builder ══════ -->
         <div id="flag" class="detail-section reveal">
           <div class="gallery-wrap">
@@ -788,39 +835,6 @@
             <div class="detail-links">
               <a href="https://github.com/tigerlero/flag-and-animation-builder-cpp-opengl" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
               <a href="index.html#animation" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- ══════ Misc Projects ══════ -->
-        <div id="misc" class="detail-section reveal">
-          <div class="gallery-wrap">
-            <div class="gallery-main" data-gallery="misc">
-              <div class="gallery-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
-                <i class="fas fa-code"></i>
-              </div>
-            </div>
-            <div class="gallery-counter" data-gallery="misc">1 / 1</div>
-            <div class="gallery-thumbs" data-gallery="misc">
-              <div class="gallery-thumb active" data-index="0">
-                <div class="thumb-gradient" style="background:linear-gradient(135deg,#667db6,#0082c8,#0082c8,#667db6);">
-                  <i class="fas fa-code"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="detail-section-header">
-            <div class="card-title" data-i18n="proj_misc_title">Misc Projects</div>
-            <div class="card-desc" data-i18n="proj_misc_desc">Various academic and experimental projects.</div>
-          </div>
-          <div class="detail-body">
-            <p data-i18n="proj_detail_misc">Various academic and experimental projects spanning multiple languages and paradigms including SQL, Java, Kotlin, Prolog, and HTML.</p>
-            <div class="timeline-tags">
-              <span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Prolog</span><span class="tag">HTML</span>
-            </div>
-            <div class="detail-links">
-              <a href="https://github.com/tigerlero" target="_blank" rel="noopener" class="btn btn-primary"><i class="fab fa-github"></i> <span data-i18n="btn_view_source">View Source</span></a>
-              <a href="index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></a>
             </div>
           </div>
         </div>
