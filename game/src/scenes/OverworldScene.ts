@@ -54,6 +54,7 @@ export class OverworldScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.npcs = [];
     this.bio = loadBio();
     const { width, height } = this.scale;
 

@@ -2,11 +2,14 @@ import Phaser from 'phaser';
 import { AudioManager } from '../systems/AudioManager';
 
 export class TitleScene extends Phaser.Scene {
+  private started = false;
+
   constructor() {
     super({ key: 'TitleScene' });
   }
 
   create(): void {
+    this.started = false;
     AudioManager.get().init();
     const { width, height } = this.scale;
 
@@ -125,6 +128,8 @@ export class TitleScene extends Phaser.Scene {
 
     // Init audio + BGM on first interaction
     const startAudio = () => {
+      if (this.started) return;
+      this.started = true;
       AudioManager.get().init();
       AudioManager.get().playBgm();
       this.startGame();

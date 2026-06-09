@@ -63,32 +63,47 @@ export class CampusQuizScene extends Phaser.Scene {
     const bio = getBio();
     this.questions = [];
 
-    const shuffleWithAnswer = (question: string, correct: string, distractors: string[]): Question => {
-      const opts = [correct, ...distractors.slice(0, 3)];
+    const shuffleQA = (question: string, correct: string, wrongPool: string[]): Question => {
+      const filtered = wrongPool.filter(w => w !== correct);
+      const shuffled = Phaser.Utils.Array.Shuffle([...filtered]);
+      const distractors = shuffled.slice(0, 3);
+      const opts = [correct, ...distractors];
       while (opts.length < 4) opts.push('None of the above');
       Phaser.Utils.Array.Shuffle(opts);
       return { question, options: opts, correct: opts.indexOf(correct) };
     };
 
+    // Questions about which tech belongs to which company
+    const allCompanies = bio.jobs.map(j => j.company);
     for (const job of bio.jobs) {
-      const others = bio.jobs.filter(j => j.company !== job.company);
-      this.questions.push(shuffleWithAnswer(
-        `Which company employed as ${job.role}?`,
+      if (job.tech.length === 0) continue;
+      const tech = job.tech[Math.floor(Math.random() * job.tech.length)];
+      this.questions.push(shuffleQA(
+        `Which company uses "${tech}" in their stack?`,
         job.company,
-        others.map(j => j.company),
-      ));
-      this.questions.push(shuffleWithAnswer(
-        `What role did they hold at ${job.company}?`,
-        job.role,
-        others.map(j => j.role),
+        allCompanies,
       ));
     }
 
+    // Questions about which project uses which tech
+    const allProjects = bio.projects.map(p => p.title);
+    for (const proj of bio.projects) {
+      if (proj.tech.length === 0) continue;
+      const tech = proj.tech[Math.floor(Math.random() * proj.tech.length)];
+      this.questions.push(shuffleQA(
+        `Which project uses "${tech}"?`,
+        proj.title,
+        allProjects,
+      ));
+    }
+
+    // Education questions
     for (const edu of bio.education) {
-      this.questions.push(shuffleWithAnswer(
+      const otherDegrees = bio.education.filter(e => e.id !== edu.id).map(e => e.degree);
+      this.questions.push(shuffleQA(
         `What degree did they earn at ${edu.school}?`,
         edu.degree,
-        bio.education.filter(e => e.id !== edu.id).map(e => e.degree),
+        otherDegrees,
       ));
     }
 

@@ -154,9 +154,9 @@
     "Backend": ["Django", "Flask", "Express", "Laravel", "PHP", "FastAPI", "Node.js"],
     "Databases": ["PostgreSQL", "MySQL", "MongoDB", "SQLite", "Redis", "Firebase"],
     "DevOps": ["Docker", "Kubernetes", "Linux", "Nginx", "AWS", "GitHub Actions"],
-    "Languages": ["Python", "JavaScript", "TypeScript", "C", "C++", "C#", "Rust", "Java", "Kotlin"],
+    "Languages": ["Python", "JavaScript", "C", "C++", "C#", "Rust", "Java", "Kotlin"],
     "Game Dev": ["Unity", "Unreal Engine 5", "Phaser", "PyGame", "Blender", "OpenGL"],
-    "AI/ML": ["Keras", "TensorFlow", "PyTorch", "scikit-learn", "librosa", "OpenAI"]
+    "AI/ML": ["Keras", "TensorFlow", "PyTorch", "scikit-learn", "librosa", "OpenAI", "NumPy", "Pandas"]
   },
   "education": [
     {

@@ -178,11 +178,12 @@ export class ProjectParkScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(10);
   }
 
-  update(): void {
+  update(_time: number, delta: number): void {
     this.interactBtn.update();
 
     let vx = 0;
     let vy = 0;
+    const dt = delta / 1000;
 
     if (this.isMobile && this.joystick.isActive()) {
       const len = Math.sqrt(this.joystick.dx * this.joystick.dx + this.joystick.dy * this.joystick.dy);
@@ -197,8 +198,8 @@ export class ProjectParkScene extends Phaser.Scene {
       else if (this.keyS.isDown) vy = this.speed;
     }
 
-    this.px += vx / 60;
-    this.py += vy / 60;
+    this.px += vx * dt;
+    this.py += vy * dt;
 
     const { width, height } = this.scale;
     this.px = Phaser.Math.Clamp(this.px, 20, width - 20);

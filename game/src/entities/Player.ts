@@ -42,9 +42,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.shadow.fillEllipse(0, 0, 14, 8);
     this.shadow.setDepth(4);
 
-    const { width, height } = this.scene.scale;
-    this.setPosition(width / 2, height / 2);
-
     const kb = scene.input.keyboard!;
     this.cursors = kb.createCursorKeys();
     this.keyE = kb.addKey(Phaser.Input.Keyboard.KeyCodes.E);

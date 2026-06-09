@@ -49,18 +49,17 @@ export class ProjectMatchScene extends Phaser.Scene {
     let techList = [...techSet];
     Phaser.Utils.Array.Shuffle(techList);
 
-    // Ensure even pairs: pick up to 8 pairs (16 cards max for 4×4)
+    // Duplicate techs so each appears twice (true matching pairs)
     const maxPairs = 8;
-    const pairCount = Math.min(maxPairs, Math.floor(techList.length / 2));
-    techList = techList.slice(0, pairCount * 2);
-
-    // Create card pairs
+    const count = Math.min(maxPairs, techList.length);
+    techList = techList.slice(0, count);
     const pairs: { tech: string; pairId: number }[] = [];
     for (let i = 0; i < techList.length; i++) {
-      pairs.push({ tech: techList[i], pairId: Math.floor(i / 2) });
+      pairs.push({ tech: techList[i], pairId: i });
+      pairs.push({ tech: techList[i], pairId: i });
     }
     Phaser.Utils.Array.Shuffle(pairs);
-    this.totalPairs = pairCount;
+    this.totalPairs = techList.length;
 
     // Layout: 4×4 grid
     const cols = 4;
