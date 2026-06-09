@@ -74,11 +74,6 @@ export class Overworld {
     this.renderer.domElement.addEventListener('mouseup', () => { this.isOrbiting = false; });
     this.renderer.domElement.addEventListener('contextmenu', (e: Event) => e.preventDefault());
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        this.onSceneChange('Pause');
-      }
-    });
 
     // Day/night lights (store refs)
     this.ambientLight = this.scene.children.find(c => c instanceof THREE.AmbientLight) as THREE.AmbientLight;
@@ -252,13 +247,12 @@ export class Overworld {
 
     // Day/night cycle
     this.dayTime += dt * 2;
-    if (this.dayTime > 360) this.dayTime = 0;
     const dayPhase = Math.sin(this.dayTime * Math.PI / 180);
-    const nightFactor = Math.max(-0.3, Math.min(0.3, -dayPhase * 0.3));
-    if (this.ambientLight) this.ambientLight.intensity = 0.4 + nightFactor;
-    if (this.dirLight) this.dirLight.intensity = 1 + nightFactor;
-    if (this.hemiLight) this.hemiLight.intensity = 0.3 + nightFactor * 0.5;
-    const bgBrightness = 0.1 + (dayPhase + 1) * 0.1;
+    const normDay = (dayPhase + 1) / 2;
+    if (this.ambientLight) this.ambientLight.intensity = 0.1 + normDay * 0.35;
+    if (this.dirLight) this.dirLight.intensity = 0.2 + normDay * 0.8;
+    if (this.hemiLight) this.hemiLight.intensity = 0.1 + normDay * 0.25;
+    const bgBrightness = 0.1 + normDay * 0.15;
     this.scene.background = new THREE.Color(bgBrightness * 0.3, bgBrightness * 0.4, bgBrightness * 0.2);
   }
 

@@ -29,9 +29,11 @@ let currentOverworld: Overworld | null = null;
 let currentDetail: any = null;
 let currentTitle: TitleScene3D | null = null;
 let pauseMenu: PauseMenu | null = null;
+let firstScene = true;
 
 async function startScene(key: string): Promise<void> {
-  await fadeOut(250);
+  if (!firstScene) await fadeOut(250);
+  firstScene = false;
   cleanupCurrent();
 
   if (key === 'TitleScene') {
@@ -71,7 +73,6 @@ async function boot(): Promise<void> {
   if (loadingEl) loadingEl.style.display = 'flex';
   await new Promise(r => setTimeout(r, 400));
   if (loadingEl) loadingEl.style.display = 'none';
-  await fadeIn(300);
   startScene('TitleScene');
 }
 

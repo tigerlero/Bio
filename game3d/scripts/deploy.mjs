@@ -5,9 +5,9 @@ import { execSync } from 'child_process';
 const dist = 'dist';
 const dest = '../play3d';
 
-// Patch index.html to remove type="module" for file:// compatibility
+// Patch index.html — replace type="module" with defer for file:// compatibility
 const html = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
-fs.writeFileSync(path.join(dist, 'index.html'), html.replace('<script type="module"', '<script'), 'utf8');
+fs.writeFileSync(path.join(dist, 'index.html'), html.replace('<script type="module"', '<script defer'), 'utf8');
 
 // Remove old destination
 if (fs.existsSync(dest)) {
