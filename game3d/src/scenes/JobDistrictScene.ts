@@ -11,8 +11,8 @@ export class JobDistrictScene3D {
   public camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private player: THREE.Group;
-  private px = 400; private pz = 400;
-  private speed = 80;
+  private px = 600; private pz = 600;
+  private speed = 130;
   private keys: Record<string, boolean> = {};
   private jobs: { data: Job; mesh: THREE.Mesh; x: number; z: number }[] = [];
   private onReturn: () => void;
@@ -31,29 +31,29 @@ export class JobDistrictScene3D {
     this.modal = modal;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x2a2a2a);
-    this.scene.fog = new THREE.Fog(0x2a2a2a, 200, 500);
-    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 800);
+    this.scene.fog = new THREE.Fog(0x2a2a2a, 300, 700);
+    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
     this.labelEl = document.getElementById('interact-prompt')!;
 
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(800, 600), new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.9 }));
-    ground.rotation.x = -Math.PI / 2; ground.position.set(400, 0, 300);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(1200, 900), new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.9 }));
+    ground.rotation.x = -Math.PI / 2; ground.position.set(600, 0, 450);
     this.scene.add(ground);
 
     const bio = getBio();
     const cols = 3;
-    const spacingX = 200;
-    const spacingZ = 160;
-    const startX = 200;
+    const spacingX = 300;
+    const spacingZ = 240;
+    const startX = 250;
 
     this.jobs = [];
     bio.jobs.forEach((j, i) => {
       const col = i % cols;
       const row = Math.floor(i / cols);
       const bx = startX + col * spacingX;
-      const bz = 150 + row * spacingZ;
+      const bz = 200 + row * spacingZ;
 
-      const building = new THREE.Mesh(new THREE.BoxGeometry(45, 35, 35), new THREE.MeshStandardMaterial({ color: 0x556677, roughness: 0.7 }));
-      building.position.set(bx, 17.5, bz); building.castShadow = true;
+      const building = new THREE.Mesh(new THREE.BoxGeometry(55, 45, 45), new THREE.MeshStandardMaterial({ color: 0x556677, roughness: 0.7 }));
+      building.position.set(bx, 22.5, bz); building.castShadow = true;
       this.scene.add(building);
 
       const logoKey = jobLogoMap[j.company];
@@ -62,7 +62,6 @@ export class JobDistrictScene3D {
       const ctx = canvas.getContext('2d')!;
 
       if (logoKey) {
-        // Draw logo placeholder
         ctx.fillStyle = '#ffaa44'; ctx.font = 'bold 14px monospace'; ctx.textAlign = 'center';
         ctx.fillText(j.company, 128, 20);
       } else {
@@ -76,25 +75,24 @@ export class JobDistrictScene3D {
 
       const tex = new THREE.CanvasTexture(canvas);
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
-      sprite.position.set(bx, 44, bz); sprite.scale.set(40, 12, 1);
+      sprite.position.set(bx, 54, bz); sprite.scale.set(50, 14, 1);
       this.scene.add(sprite);
 
       this.jobs.push({ data: j, mesh: building, x: bx, z: bz });
     });
 
-    const portal = new THREE.Mesh(new THREE.CylinderGeometry(12, 12, 2, 12), new THREE.MeshStandardMaterial({ color: 0xff8844, emissive: 0xff8844, emissiveIntensity: 0.3 }));
-    portal.position.set(400, 1, 560);
+    const portal = new THREE.Mesh(new THREE.CylinderGeometry(14, 14, 2, 12), new THREE.MeshStandardMaterial({ color: 0xff8844, emissive: 0xff8844, emissiveIntensity: 0.3 }));
+    portal.position.set(600, 1, 830);
     this.scene.add(portal);
 
     this.player = createPlayer(this.scene, this.px, this.pz);
 
     this.scene.add(new THREE.AmbientLight(0x445555, 0.5));
     const dir = new THREE.DirectionalLight(0xffeedd, 0.8);
-    dir.position.set(200, 300, 200); dir.castShadow = true;
+    dir.position.set(300, 400, 300); dir.castShadow = true;
     this.scene.add(dir);
     this.scene.add(new THREE.HemisphereLight(0x8888bb, 0x444444, 0.3));
 
-    // Right-drag orbit
     this.renderer.domElement.addEventListener('mousedown', (e) => { if (e.button === 2) { this.isOrbiting = true; this.lastMX = e.clientX; } });
     this.renderer.domElement.addEventListener('mousemove', (e) => { if (this.isOrbiting) { this.cameraAngle -= (e.clientX - this.lastMX) * 0.005; this.lastMX = e.clientX; } });
     this.renderer.domElement.addEventListener('mouseup', () => { this.isOrbiting = false; });
@@ -106,31 +104,34 @@ export class JobDistrictScene3D {
 
   update(dt: number): void {
     let vx = 0, vz = 0;
-    if (this.keys['w']) vz = -1;
-    if (this.keys['s']) vz = 1;
-    if (this.keys['a']) vx = -1;
-    if (this.keys['d']) vx = 1;
+    const forward = new THREE.Vector3(-Math.sin(this.cameraAngle), 0, -Math.cos(this.cameraAngle));
+    const right = new THREE.Vector3(Math.cos(this.cameraAngle), 0, -Math.sin(this.cameraAngle));
+
+    if (this.keys['w']) { vx += forward.x; vz += forward.z; }
+    if (this.keys['s']) { vx -= forward.x; vz -= forward.z; }
+    if (this.keys['a']) { vx -= right.x; vz -= right.z; }
+    if (this.keys['d']) { vx += right.x; vz += right.z; }
     if (vx !== 0 || vz !== 0) {
       const len = Math.sqrt(vx * vx + vz * vz);
       vx /= len; vz /= len;
       this.px += vx * this.speed * dt; this.pz += vz * this.speed * dt;
-      this.px = clamp(this.px, 20, 780); this.pz = clamp(this.pz, 20, 580);
+      this.px = clamp(this.px, 30, 1170); this.pz = clamp(this.pz, 30, 870);
       updatePlayerPosition(this.player, this.px, this.pz);
       this.lastDir = Math.atan2(vx, vz);
     }
     updatePlayerRotation(this.player, this.lastDir, dt);
 
-    const target = new THREE.Vector3(this.px, 8, this.pz);
-    const ideal = new THREE.Vector3(this.px + Math.sin(this.cameraAngle) * 100, 60, this.pz + Math.cos(this.cameraAngle) * 100);
+    const target = new THREE.Vector3(this.px, 12, this.pz);
+    const ideal = new THREE.Vector3(this.px + Math.sin(this.cameraAngle) * 150, 80, this.pz + Math.cos(this.cameraAngle) * 150);
     this.camera.position.lerp(ideal, 0.05);
     this.camera.lookAt(target);
 
     let near: Job | null = null;
     let nearPortal = false;
     for (const b of this.jobs) {
-      if (dist(this.px, this.pz, b.x, b.z) < 40) { near = b.data; break; }
+      if (dist(this.px, this.pz, b.x, b.z) < 50) { near = b.data; break; }
     }
-    if (dist(this.px, this.pz, 400, 560) < 35) nearPortal = true;
+    if (dist(this.px, this.pz, 600, 830) < 45) nearPortal = true;
 
     if (this.keys['e']) {
       this.keys['e'] = false;

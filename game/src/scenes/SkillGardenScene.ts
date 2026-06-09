@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { loadBio, getBio } from '../data/bioLoader';
 import { ModalPanel } from '../ui/ModalPanel';
 import { AudioManager } from '../systems/AudioManager';
+import { VirtualJoystick } from '../ui/VirtualJoystick';
+import { InteractionButton } from '../ui/InteractionButton';
 
 const CAT_COLORS: Record<string, number> = {
   'Frontend': 0x44ccff,
@@ -60,6 +62,9 @@ export class SkillGardenScene extends Phaser.Scene {
   private speed = 100;
   private modal: ModalPanel | null = null;
   private prompt!: Phaser.GameObjects.Text;
+  private joystick!: VirtualJoystick;
+  private interactBtn!: InteractionButton;
+  private isMobile = false;
 
   constructor() {
     super({ key: 'SkillGardenScene' });
@@ -162,7 +167,7 @@ export class SkillGardenScene extends Phaser.Scene {
     // Return portal
     const portalX = worldW / 2;
     const portalY = worldH - 40;
-    const portal = this.add.graphics();
+    let portal = this.add.graphics();
     portal.fillStyle(0x44ff88, 0.5);
     portal.fillCircle(portalX, portalY, 18);
     portal.lineStyle(2, 0x44ff88, 0.8);
@@ -172,6 +177,21 @@ export class SkillGardenScene extends Phaser.Scene {
     }).setOrigin(0.5);
     this.add.text(portalX, portalY + 24, 'Return', {
       fontSize: '10px', color: '#44ff88', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
+    // Snake game portal
+    const snakePortalX = worldW / 2 - 80;
+    const snakePortalY = worldH - 40;
+    portal = this.add.graphics();
+    portal.fillStyle(0x44ff44, 0.4);
+    portal.fillCircle(snakePortalX, snakePortalY, 16);
+    portal.lineStyle(2, 0x44ff44, 0.7);
+    portal.strokeCircle(snakePortalX, snakePortalY, 16);
+    this.add.text(snakePortalX, snakePortalY, 'S', {
+      fontSize: '14px', color: '#44ff44', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(snakePortalX, snakePortalY + 22, 'Snake', {
+      fontSize: '9px', color: '#44ff44', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
     // Player
@@ -190,18 +210,38 @@ export class SkillGardenScene extends Phaser.Scene {
     this.py = worldH - 80;
     this.cameras.main.startFollow(this.playerSprite, true, 0.08, 0.08);
 
+    // Mobile controls
+    this.isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    this.joystick = new VirtualJoystick(this);
+    this.interactBtn = new InteractionButton(this);
+    if (this.isMobile) {
+      this.joystick.show();
+      this.interactBtn.show();
+    }
+
     this.prompt = this.add.text(0, 0, '', {
       fontSize: '12px', color: '#ffffff', fontFamily: 'monospace',
     }).setOrigin(0.5).setDepth(30);
   }
 
   update(): void {
+    this.interactBtn.update();
+
     let vx = 0;
     let vy = 0;
-    if (this.keyA.isDown) vx = -this.speed;
-    else if (this.keyD.isDown) vx = this.speed;
-    if (this.keyW.isDown) vy = -this.speed;
-    else if (this.keyS.isDown) vy = this.speed;
+
+    if (this.isMobile && this.joystick.isActive()) {
+      const len = Math.sqrt(this.joystick.dx * this.joystick.dx + this.joystick.dy * this.joystick.dy);
+      if (len > 0.2) {
+        vx = (this.joystick.dx / len) * this.speed;
+        vy = (this.joystick.dy / len) * this.speed;
+      }
+    } else {
+      if (this.keyA.isDown) vx = -this.speed;
+      else if (this.keyD.isDown) vx = this.speed;
+      if (this.keyW.isDown) vy = -this.speed;
+      else if (this.keyS.isDown) vy = this.speed;
+    }
 
     this.px += vx / 60;
     this.py += vy / 60;
@@ -226,6 +266,7 @@ export class SkillGardenScene extends Phaser.Scene {
     // Check skill proximity
     let nearGem: SkillGem | null = null;
     let nearReturn = false;
+    let nearSnake = false;
 
     for (const bed of this.beds) {
       for (const gem of bed.gems) {
@@ -243,17 +284,35 @@ export class SkillGardenScene extends Phaser.Scene {
       nearReturn = true;
     }
 
-    if (nearGem && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    const snakePortalX = portalX - 80;
+    if (Phaser.Math.Distance.Between(this.px, this.py, snakePortalX, portalY) < 35) {
+      nearSnake = true;
+    }
+
+    const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
+    if (nearGem && interact) {
       AudioManager.get().playSfx('interact');
       this.openModal(nearGem);
     }
 
-    if (nearReturn && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (nearReturn && interact) {
       this.returnToWorld();
+    }
+
+    if (nearSnake && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => {
+        this.scene.start('SnakeGameScene');
+      });
     }
 
     if (nearReturn) {
       this.prompt.setText('Press E to return');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearSnake) {
+      this.prompt.setText('Press E: Skill Snake');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearGem) {

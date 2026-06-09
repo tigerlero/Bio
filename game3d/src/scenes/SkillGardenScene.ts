@@ -15,8 +15,8 @@ export class SkillGardenScene3D {
   public camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private player: THREE.Group;
-  private px = 400; private pz = 400;
-  private speed = 80;
+  private px = 600; private pz = 600;
+  private speed = 130;
   private keys: Record<string, boolean> = {};
   private crystals: SkillCrystal[] = [];
   private onReturn: () => void;
@@ -35,19 +35,19 @@ export class SkillGardenScene3D {
     this.modal = modal;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a2a1a);
-    this.scene.fog = new THREE.Fog(0x1a2a1a, 200, 500);
-    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 800);
+    this.scene.fog = new THREE.Fog(0x1a2a1a, 300, 700);
+    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
     this.labelEl = document.getElementById('interact-prompt')!;
 
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(800, 600), new THREE.MeshStandardMaterial({ color: 0x1a2a1a, roughness: 0.9 }));
-    ground.rotation.x = -Math.PI / 2; ground.position.set(400, 0, 300);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(1200, 900), new THREE.MeshStandardMaterial({ color: 0x1a2a1a, roughness: 0.9 }));
+    ground.rotation.x = -Math.PI / 2; ground.position.set(600, 0, 450);
     this.scene.add(ground);
 
     const categories = Object.entries(getBio().skills);
     const catCount = categories.length;
-    const centerX = 400;
-    const centerZ = 250;
-    const radius = 160;
+    const centerX = 600;
+    const centerZ = 350;
+    const radius = 250;
 
     this.crystals = [];
     categories.forEach(([cat, skills], i) => {
@@ -56,15 +56,15 @@ export class SkillGardenScene3D {
       const cz = centerZ + Math.sin(angle) * radius;
       const color = CAT_COLORS[cat] || 0x88aaff;
 
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(5, 8, 4, 8), new THREE.MeshStandardMaterial({ color: 0x444444 }));
-      base.position.set(cx, 2, cz);
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(7, 10, 5, 8), new THREE.MeshStandardMaterial({ color: 0x444444 }));
+      base.position.set(cx, 2.5, cz);
       this.scene.add(base);
 
       const crystal = new THREE.Mesh(
-        new THREE.ConeGeometry(8, 20, 6),
+        new THREE.ConeGeometry(10, 26, 6),
         new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.2, roughness: 0.3 }),
       );
-      crystal.position.set(cx, 16, cz); crystal.castShadow = true;
+      crystal.position.set(cx, 20, cz); crystal.castShadow = true;
       this.scene.add(crystal);
 
       const canvas = document.createElement('canvas');
@@ -76,25 +76,24 @@ export class SkillGardenScene3D {
       ctx.fillText(skills.slice(0, 4).join(', '), 128, 42);
       const tex = new THREE.CanvasTexture(canvas);
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
-      sprite.position.set(cx, 32, cz); sprite.scale.set(40, 8, 1);
+      sprite.position.set(cx, 40, cz); sprite.scale.set(50, 10, 1);
       this.scene.add(sprite);
 
       this.crystals.push({ category: cat, skills, mesh: crystal, x: cx, z: cz });
     });
 
-    const portal = new THREE.Mesh(new THREE.CylinderGeometry(12, 12, 2, 12), new THREE.MeshStandardMaterial({ color: 0x44ff88, emissive: 0x44ff88, emissiveIntensity: 0.3 }));
-    portal.position.set(400, 1, 560);
+    const portal = new THREE.Mesh(new THREE.CylinderGeometry(14, 14, 2, 12), new THREE.MeshStandardMaterial({ color: 0x44ff88, emissive: 0x44ff88, emissiveIntensity: 0.3 }));
+    portal.position.set(600, 1, 830);
     this.scene.add(portal);
 
     this.player = createPlayer(this.scene, this.px, this.pz);
 
     this.scene.add(new THREE.AmbientLight(0x446644, 0.5));
     const dir = new THREE.DirectionalLight(0xffeedd, 0.8);
-    dir.position.set(200, 300, 200); dir.castShadow = true;
+    dir.position.set(300, 400, 300); dir.castShadow = true;
     this.scene.add(dir);
     this.scene.add(new THREE.HemisphereLight(0x88bbff, 0x446644, 0.3));
 
-    // Right-drag orbit
     this.renderer.domElement.addEventListener('mousedown', (e) => { if (e.button === 2) { this.isOrbiting = true; this.lastMX = e.clientX; } });
     this.renderer.domElement.addEventListener('mousemove', (e) => { if (this.isOrbiting) { this.cameraAngle -= (e.clientX - this.lastMX) * 0.005; this.lastMX = e.clientX; } });
     this.renderer.domElement.addEventListener('mouseup', () => { this.isOrbiting = false; });
@@ -106,31 +105,34 @@ export class SkillGardenScene3D {
 
   update(dt: number): void {
     let vx = 0, vz = 0;
-    if (this.keys['w']) vz = -1;
-    if (this.keys['s']) vz = 1;
-    if (this.keys['a']) vx = -1;
-    if (this.keys['d']) vx = 1;
+    const forward = new THREE.Vector3(-Math.sin(this.cameraAngle), 0, -Math.cos(this.cameraAngle));
+    const right = new THREE.Vector3(Math.cos(this.cameraAngle), 0, -Math.sin(this.cameraAngle));
+
+    if (this.keys['w']) { vx += forward.x; vz += forward.z; }
+    if (this.keys['s']) { vx -= forward.x; vz -= forward.z; }
+    if (this.keys['a']) { vx -= right.x; vz -= right.z; }
+    if (this.keys['d']) { vx += right.x; vz += right.z; }
     if (vx !== 0 || vz !== 0) {
       const len = Math.sqrt(vx * vx + vz * vz);
       vx /= len; vz /= len;
       this.px += vx * this.speed * dt; this.pz += vz * this.speed * dt;
-      this.px = clamp(this.px, 20, 780); this.pz = clamp(this.pz, 20, 580);
+      this.px = clamp(this.px, 30, 1170); this.pz = clamp(this.pz, 30, 870);
       updatePlayerPosition(this.player, this.px, this.pz);
       this.lastDir = Math.atan2(vx, vz);
     }
     updatePlayerRotation(this.player, this.lastDir, dt);
 
-    const target = new THREE.Vector3(this.px, 8, this.pz);
-    const ideal = new THREE.Vector3(this.px + Math.sin(this.cameraAngle) * 100, 60, this.pz + Math.cos(this.cameraAngle) * 100);
+    const target = new THREE.Vector3(this.px, 12, this.pz);
+    const ideal = new THREE.Vector3(this.px + Math.sin(this.cameraAngle) * 150, 80, this.pz + Math.cos(this.cameraAngle) * 150);
     this.camera.position.lerp(ideal, 0.05);
     this.camera.lookAt(target);
 
     let near: SkillCrystal | null = null;
     let nearPortal = false;
     for (const c of this.crystals) {
-      if (dist(this.px, this.pz, c.x, c.z) < 40) { near = c; break; }
+      if (dist(this.px, this.pz, c.x, c.z) < 50) { near = c; break; }
     }
-    if (dist(this.px, this.pz, 400, 560) < 35) nearPortal = true;
+    if (dist(this.px, this.pz, 600, 830) < 45) nearPortal = true;
 
     if (this.keys['e']) {
       this.keys['e'] = false;

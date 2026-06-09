@@ -8,11 +8,11 @@ import { Minimap } from '../utils/Minimap';
 interface Zone3D { name: string; x: number; z: number; w: number; h: number; color: number; }
 
 const ZONES: Zone3D[] = [
-  { name: 'Home', x: 300, z: 300, w: 200, h: 200, color: 0x3a6a3a },
-  { name: 'Projects', x: 100, z: 50, w: 300, h: 250, color: 0x2a4a7a },
-  { name: 'Jobs', x: 500, z: 100, w: 300, h: 250, color: 0x7a4a2a },
-  { name: 'Skills', x: 550, z: 400, w: 250, h: 200, color: 0x6a2a7a },
-  { name: 'Education', x: 450, z: 550, w: 250, h: 120, color: 0x7a6a2a },
+  { name: 'Home', x: 600, z: 600, w: 400, h: 400, color: 0x3a6a3a },
+  { name: 'Projects', x: 200, z: 100, w: 600, h: 500, color: 0x2a4a7a },
+  { name: 'Jobs', x: 1000, z: 200, w: 600, h: 500, color: 0x7a4a2a },
+  { name: 'Skills', x: 1100, z: 800, w: 500, h: 400, color: 0x6a2a7a },
+  { name: 'Education', x: 900, z: 1100, w: 500, h: 240, color: 0x7a6a2a },
 ];
 
 export class Overworld {
@@ -25,8 +25,8 @@ export class Overworld {
   private interactPromptEl: HTMLElement;
   private zoneLabelTimer: number | null = null;
   private cameraAngle = 0;
-  private cameraDist = 120;
-  private cameraHeight = 80;
+  private cameraDist = 200;
+  private cameraHeight = 120;
   private isOrbiting = false;
   private lastMX = 0;
   private targetLookAt = new THREE.Vector3();
@@ -44,23 +44,26 @@ export class Overworld {
   ) {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x1a2a1a);
-    this.scene.fog = new THREE.Fog(0x1a2a1a, 400, 800);
+    this.scene.fog = new THREE.Fog(0x1a2a1a, 600, 1200);
 
-    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1500);
-    this.camera.position.set(400, 200, 500);
-    this.camera.lookAt(400, 0, 350);
+    this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+    this.camera.position.set(900, 300, 1000);
+    this.camera.lookAt(900, 0, 700);
 
     this.zoneLabelEl = document.getElementById('zone-label')!;
     this.interactPromptEl = document.getElementById('interact-prompt')!;
 
     this.buildWorld();
-    this.player = new Player(this.scene, 400, 350);
+    this.player = new Player(this.scene, 900, 700);
+    this.player.worldMinX = 20;
+    this.player.worldMaxX = 1780;
+    this.player.worldMinZ = 20;
+    this.player.worldMaxZ = 1380;
     this.spawnNPCs();
 
     this.minimap = new Minimap();
     this.minimap.setZones(ZONES);
 
-    // Mouse orbit
     this.renderer.domElement.addEventListener('mousedown', (e: MouseEvent) => {
       if (e.button === 2) { this.isOrbiting = true; this.lastMX = e.clientX; }
     });
@@ -74,24 +77,20 @@ export class Overworld {
     this.renderer.domElement.addEventListener('mouseup', () => { this.isOrbiting = false; });
     this.renderer.domElement.addEventListener('contextmenu', (e: Event) => e.preventDefault());
 
-
-    // Day/night lights (store refs)
     this.ambientLight = this.scene.children.find(c => c instanceof THREE.AmbientLight) as THREE.AmbientLight;
     this.dirLight = this.scene.children.find(c => c instanceof THREE.DirectionalLight) as THREE.DirectionalLight;
     this.hemiLight = this.scene.children.find(c => c instanceof THREE.HemisphereLight) as THREE.HemisphereLight;
   }
 
   private buildWorld(): void {
-    // Ground
-    const groundGeo = new THREE.PlaneGeometry(900, 700);
+    const groundGeo = new THREE.PlaneGeometry(1800, 1400);
     const groundMat = new THREE.MeshStandardMaterial({ color: 0x2d5a27, roughness: 0.9 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
-    ground.position.set(450, 0, 350);
+    ground.position.set(900, 0, 700);
     ground.receiveShadow = true;
     this.scene.add(ground);
 
-    // Zone highlights
     for (const z of ZONES) {
       const zoneGeo = new THREE.PlaneGeometry(z.w - 4, z.h - 4);
       const zoneMat = new THREE.MeshStandardMaterial({ color: z.color, transparent: true, opacity: 0.15, roughness: 0.8 });
@@ -125,40 +124,43 @@ export class Overworld {
       this.scene.add(sprite);
     }
 
-    // Boundary walls (invisible)
     const wallMat = new THREE.MeshBasicMaterial({ visible: false });
-    const wallGeo = new THREE.BoxGeometry(900, 20, 2);
+    const wallGeoH = new THREE.BoxGeometry(1800, 20, 2);
+    const wallGeoV = new THREE.BoxGeometry(2, 20, 1400);
     const walls = [
-      { x: 450, z: -1 }, { x: 450, z: 701 },
-      { x: -1, z: 350 }, { x: 901, z: 350 },
+      { geo: wallGeoH, x: 900, z: -1 }, { geo: wallGeoH, x: 900, z: 1401 },
+      { geo: wallGeoV, x: -1, z: 700 }, { geo: wallGeoV, x: 1801, z: 700 },
     ];
     for (const w of walls) {
-      const wall = new THREE.Mesh(wallGeo, wallMat);
+      const wall = new THREE.Mesh(w.geo, wallMat);
       wall.position.set(w.x, 10, w.z);
       this.scene.add(wall);
     }
 
-    // Trees
-    const treePositions = [[50,50],[80,120],[700,50],[750,80],[50,600],[120,650],[750,600],[820,650],[400,50],[450,50]];
+    const treePositions = [
+      [50,50],[80,120],[150,300],[200,500],[700,50],[750,80],[1100,50],[1150,80],
+      [50,1100],[120,1150],[50,1300],[150,1350],[1700,50],[1750,120],[1700,1300],[1750,1350],
+      [1600,600],[1650,800],[900,50],[950,50],[50,700],[100,750],
+      [1700,700],[1750,750],[900,1350],[950,1350],
+    ];
     for (const [tx, tz] of treePositions) {
       const t = this.createTree(tx, tz);
       this.scene.add(t);
     }
 
-    // Lights
     const ambient = new THREE.AmbientLight(0x446644, 0.4);
     this.scene.add(ambient);
     const dir = new THREE.DirectionalLight(0xffeedd, 1);
-    dir.position.set(200, 300, 200);
+    dir.position.set(400, 400, 400);
     dir.castShadow = true;
-    dir.shadow.mapSize.width = 1024;
-    dir.shadow.mapSize.height = 1024;
+    dir.shadow.mapSize.width = 2048;
+    dir.shadow.mapSize.height = 2048;
     dir.shadow.camera.near = 10;
-    dir.shadow.camera.far = 600;
-    dir.shadow.camera.left = -400;
-    dir.shadow.camera.right = 400;
-    dir.shadow.camera.top = 400;
-    dir.shadow.camera.bottom = -400;
+    dir.shadow.camera.far = 800;
+    dir.shadow.camera.left = -800;
+    dir.shadow.camera.right = 800;
+    dir.shadow.camera.top = 800;
+    dir.shadow.camera.bottom = -800;
     this.scene.add(dir);
     const hemi = new THREE.HemisphereLight(0x88bbff, 0x446644, 0.3);
     this.scene.add(hemi);
@@ -198,12 +200,12 @@ export class Overworld {
 
     for (let i = 0; i < bio.projects.length; i++) {
       const p = bio.projects[i];
-      this.npcs.push(new NPC(this.scene, p.position.x, p.position.y, 0x4488aa, p.title, `project_${p.id}`, 'project', p, i < 3 ? 30 : 0));
+      this.npcs.push(new NPC(this.scene, p.position.x, p.position.y, 0x4488aa, p.title, `project_${p.id}`, 'project', p, i < 3 ? 60 : 0));
     }
 
     for (let i = 0; i < bio.jobs.length; i++) {
       const j = bio.jobs[i];
-      this.npcs.push(new NPC(this.scene, j.position.x, j.position.y, 0xaa7744, j.company, `job_${j.id}`, 'job', j, i < 2 ? 25 : 0, jobLogoMap[j.company]));
+      this.npcs.push(new NPC(this.scene, j.position.x, j.position.y, 0xaa7744, j.company, `job_${j.id}`, 'job', j, i < 2 ? 50 : 0, jobLogoMap[j.company]));
     }
 
     for (const edu of bio.education) {
@@ -218,8 +220,7 @@ export class Overworld {
     this.camera.getWorldDirection(camDir);
     this.player.update(dt, camDir);
 
-    // Third-person camera
-    const target = new THREE.Vector3(this.player.x, 8, this.player.z);
+    const target = new THREE.Vector3(this.player.x, 12, this.player.z);
     const idealPos = new THREE.Vector3(
       target.x + Math.sin(this.cameraAngle) * this.cameraDist,
       target.y + this.cameraHeight,
@@ -228,24 +229,19 @@ export class Overworld {
     this.camera.position.lerp(idealPos, 0.05);
     this.camera.lookAt(target);
 
-    // Update NPCs
     for (const npc of this.npcs) {
       npc.update(this.camera, this.renderer);
     }
 
-    // Zone detection
     this.checkZone();
 
-    // Interaction
     if (this.player.isInteractPressed()) {
       this.player.consumeInteract();
       this.checkInteraction();
     }
 
-    // Minimap
     this.minimap.update(this.player.x, this.player.z);
 
-    // Day/night cycle
     this.dayTime += dt * 2;
     const dayPhase = Math.sin(this.dayTime * Math.PI / 180);
     const normDay = (dayPhase + 1) / 2;
@@ -290,7 +286,7 @@ export class Overworld {
     };
 
     let closest: NPC | null = null;
-    let minDist = 40;
+    let minDist = 50;
     for (const npc of this.npcs) {
       const dx = this.player.x - npc.mesh.position.x;
       const dz = this.player.z - npc.mesh.position.z;

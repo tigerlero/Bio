@@ -11,6 +11,7 @@ export class NPC {
   private visitedEl: HTMLElement | null = null;
   private bodyY = 0;
   private bobDir = 1;
+  private bobParts: THREE.Mesh[] = [];
   private walkPhase = 0;
   private pathOrigin: { x: number; z: number };
   private walkRange: number;
@@ -48,20 +49,24 @@ export class NPC {
       const box = new THREE.Mesh(geo, mat);
       box.position.y = 15;
       box.castShadow = true;
+      box.userData.baseY = 15;
       this.mesh.add(box);
+      this.bobParts.push(box);
     } else {
-      const geo = new THREE.CylinderGeometry(6, 7, 20, 8);
-      const mat = new THREE.MeshStandardMaterial({ color });
-      const body = new THREE.Mesh(geo, mat);
-      body.position.y = 10;
-      body.castShadow = true;
-      this.mesh.add(body);
-      const headGeo = new THREE.SphereGeometry(5, 8, 8);
-      const headMat = new THREE.MeshStandardMaterial({ color: 0xffcc88 });
-      const head = new THREE.Mesh(headGeo, headMat);
-      head.position.y = 22;
+      const bodyMat = new THREE.MeshStandardMaterial({ color });
+      const torso = new THREE.Mesh(new THREE.CapsuleGeometry(5, 12, 8, 8), bodyMat);
+      torso.position.y = 11;
+      torso.castShadow = true;
+      torso.userData.baseY = 11;
+      this.mesh.add(torso);
+      this.bobParts.push(torso);
+
+      const head = new THREE.Mesh(new THREE.SphereGeometry(4.5, 8, 8), new THREE.MeshStandardMaterial({ color: 0xffcc88 }));
+      head.position.y = 24;
       head.castShadow = true;
+      head.userData.baseY = 24;
       this.mesh.add(head);
+      this.bobParts.push(head);
     }
 
     const shadowGeo = new THREE.CircleGeometry(10, 12);
@@ -73,7 +78,6 @@ export class NPC {
 
     scene.add(this.mesh);
 
-    // Label container
     this.labelEl = document.createElement('div');
     this.labelEl.style.cssText = 'position:absolute;color:#fff;font-family:monospace;font-size:11px;text-shadow:0 0 4px #000;pointer-events:none;text-align:center;';
 
@@ -88,7 +92,6 @@ export class NPC {
     this.labelEl.style.whiteSpace = 'nowrap';
     document.body.appendChild(this.labelEl);
 
-    // "NEW" badge
     if (!this.visited) {
       this.visitedEl = document.createElement('div');
       this.visitedEl.textContent = 'NEW';
@@ -113,12 +116,9 @@ export class NPC {
   update(camera: THREE.Camera, renderer: THREE.WebGLRenderer): void {
     this.bodyY += 0.02 * this.bobDir;
     if (Math.abs(this.bodyY) > 2) this.bobDir *= -1;
-    const children = this.mesh.children;
-    for (let i = 0; i < children.length - 1; i++) {
-      const c = children[i];
-      if (c.type === 'Mesh' && c !== children[children.length - 1]) {
-        (c as THREE.Mesh).position.y += this.bodyY * 0.01;
-      }
+    const bob = this.bodyY * 0.2;
+    for (const part of this.bobParts) {
+      part.position.y = (part.userData.baseY || 0) + bob;
     }
 
     if (this.walkRange > 0) {
@@ -128,7 +128,6 @@ export class NPC {
       this.mesh.position.z = this.pathOrigin.z + Math.cos(this.walkPhase * 0.7) * this.walkRange * 0.5;
     }
 
-    // Billboard label
     const pos = new THREE.Vector3();
     this.mesh.getWorldPosition(pos);
     pos.y += 30;

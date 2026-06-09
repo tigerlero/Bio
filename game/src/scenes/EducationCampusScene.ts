@@ -3,6 +3,8 @@ import { loadBio, getBio } from '../data/bioLoader';
 import type { Education } from '../data/bio';
 import { ModalPanel } from '../ui/ModalPanel';
 import { AudioManager } from '../systems/AudioManager';
+import { VirtualJoystick } from '../ui/VirtualJoystick';
+import { InteractionButton } from '../ui/InteractionButton';
 
 export class EducationCampusScene extends Phaser.Scene {
   private bio = loadBio();
@@ -19,6 +21,9 @@ export class EducationCampusScene extends Phaser.Scene {
   private py = 500;
   private speed = 100;
   private modal: ModalPanel | null = null;
+  private joystick!: VirtualJoystick;
+  private interactBtn!: InteractionButton;
+  private isMobile = false;
 
   constructor() {
     super({ key: 'EducationCampusScene' });
@@ -113,6 +118,15 @@ export class EducationCampusScene extends Phaser.Scene {
     this.px = width / 2;
     this.py = height * 0.7;
 
+    // Mobile controls
+    this.isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    this.joystick = new VirtualJoystick(this);
+    this.interactBtn = new InteractionButton(this);
+    if (this.isMobile) {
+      this.joystick.show();
+      this.interactBtn.show();
+    }
+
     // Prompt
     this.prompt = this.add.text(0, 0, '', {
       fontSize: '12px', color: '#ffffff', fontFamily: 'monospace',
@@ -122,12 +136,23 @@ export class EducationCampusScene extends Phaser.Scene {
   private prompt!: Phaser.GameObjects.Text;
 
   update(): void {
+    this.interactBtn.update();
+
     let vx = 0;
     let vy = 0;
-    if (this.keyA.isDown) vx = -this.speed;
-    else if (this.keyD.isDown) vx = this.speed;
-    if (this.keyW.isDown) vy = -this.speed;
-    else if (this.keyS.isDown) vy = this.speed;
+
+    if (this.isMobile && this.joystick.isActive()) {
+      const len = Math.sqrt(this.joystick.dx * this.joystick.dx + this.joystick.dy * this.joystick.dy);
+      if (len > 0.2) {
+        vx = (this.joystick.dx / len) * this.speed;
+        vy = (this.joystick.dy / len) * this.speed;
+      }
+    } else {
+      if (this.keyA.isDown) vx = -this.speed;
+      else if (this.keyD.isDown) vx = this.speed;
+      if (this.keyW.isDown) vy = -this.speed;
+      else if (this.keyS.isDown) vy = this.speed;
+    }
 
     this.px += vx / 60;
     this.py += vy / 60;
@@ -171,12 +196,13 @@ export class EducationCampusScene extends Phaser.Scene {
       nearReturn = true;
     }
 
-    if (nearBuilding && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
+    if (nearBuilding && interact) {
       AudioManager.get().playSfx('interact');
       this.openModal(nearBuilding);
     }
 
-    if (nearReturn && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (nearReturn && interact) {
       this.returnToWorld();
     }
 

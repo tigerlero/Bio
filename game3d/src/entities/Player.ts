@@ -4,17 +4,17 @@ export class Player {
   public mesh: THREE.Group;
   public x = 400;
   public z = 350;
-  public speed = 80;
-  public worldMinX = 10;
-  public worldMaxX = 890;
-  public worldMinZ = 10;
-  public worldMaxZ = 690;
-  private body: THREE.Mesh;
-  private head: THREE.Mesh;
+  public speed = 140;
+  public worldMinX = 20;
+  public worldMaxX = 1780;
+  public worldMinZ = 20;
+  public worldMaxZ = 1380;
+  private bodyParts: THREE.Mesh[] = [];
+  private bodyY = 0;
+  private bobDir = 1;
   private direction = new THREE.Vector3(0, 0, -1);
   private targetRotation = 0;
   private keys: Record<string, boolean> = {};
-  private dustParticles: THREE.Points | null = null;
   private dustTimer = 0;
 
   constructor(private scene: THREE.Scene, spawnX: number, spawnZ: number) {
@@ -24,27 +24,59 @@ export class Player {
     this.mesh.position.set(this.x, 0, this.z);
     this.mesh.castShadow = true;
 
-    const bodyGeo = new THREE.CylinderGeometry(6, 7, 16, 8);
     const bodyMat = new THREE.MeshStandardMaterial({ color: 0x3366cc });
-    this.body = new THREE.Mesh(bodyGeo, bodyMat);
-    this.body.position.y = 8;
-    this.body.castShadow = true;
-    this.mesh.add(this.body);
+    const skinMat = new THREE.MeshStandardMaterial({ color: 0xffcc88 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x224488 });
 
-    const headGeo = new THREE.SphereGeometry(5, 8, 8);
-    const headMat = new THREE.MeshStandardMaterial({ color: 0xffcc88 });
-    this.head = new THREE.Mesh(headGeo, headMat);
-    this.head.position.y = 20;
-    this.head.castShadow = true;
-    this.mesh.add(this.head);
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(6, 14, 8, 8), bodyMat);
+    torso.position.y = 13;
+    torso.castShadow = true;
+    this.mesh.add(torso);
+    torso.userData.baseY = 13;
+    this.bodyParts.push(torso);
+
+    const head = new THREE.Mesh(new THREE.SphereGeometry(5, 8, 8), skinMat);
+    head.position.y = 31;
+    head.castShadow = true;
+    this.mesh.add(head);
+
+    const armGeo = new THREE.CylinderGeometry(1.5, 1.5, 14, 6);
+    const lArm = new THREE.Mesh(armGeo, darkMat);
+    lArm.position.set(-9, 18, 0);
+    lArm.castShadow = true;
+    this.mesh.add(lArm);
+    lArm.userData.baseY = 18;
+    this.bodyParts.push(lArm);
+
+    const rArm = new THREE.Mesh(armGeo, darkMat);
+    rArm.position.set(9, 18, 0);
+    rArm.castShadow = true;
+    this.mesh.add(rArm);
+    rArm.userData.baseY = 18;
+    this.bodyParts.push(rArm);
+
+    const legGeo = new THREE.CylinderGeometry(2, 2, 12, 6);
+    const lLeg = new THREE.Mesh(legGeo, darkMat);
+    lLeg.position.set(-3, 6, 0);
+    lLeg.castShadow = true;
+    this.mesh.add(lLeg);
+    lLeg.userData.baseY = 6;
+    this.bodyParts.push(lLeg);
+
+    const rLeg = new THREE.Mesh(legGeo, darkMat);
+    rLeg.position.set(3, 6, 0);
+    rLeg.castShadow = true;
+    this.mesh.add(rLeg);
+    rLeg.userData.baseY = 6;
+    this.bodyParts.push(rLeg);
 
     const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
     const eyeGeo = new THREE.SphereGeometry(1.2, 6, 6);
     const lEye = new THREE.Mesh(eyeGeo, eyeMat);
-    lEye.position.set(-2.5, 20.5, 4.5);
+    lEye.position.set(-2.5, 32, 4.5);
     this.mesh.add(lEye);
     const rEye = new THREE.Mesh(eyeGeo, eyeMat);
-    rEye.position.set(2.5, 20.5, 4.5);
+    rEye.position.set(2.5, 32, 4.5);
     this.mesh.add(rEye);
 
     const shadowGeo = new THREE.CircleGeometry(8, 12);
@@ -89,12 +121,18 @@ export class Player {
       this.z = Math.max(this.worldMinZ, Math.min(this.worldMaxZ, this.z));
       this.targetRotation = Math.atan2(vx, vz);
 
-      // Footstep dust
       this.dustTimer += dt;
       if (this.dustTimer > 0.3) {
         this.dustTimer = 0;
         this.emitDust();
       }
+    }
+
+    this.bodyY += 0.03 * this.bobDir;
+    if (Math.abs(this.bodyY) > 1.5) this.bobDir *= -1;
+    const bob = this.bodyY * 0.25;
+    for (const part of this.bodyParts) {
+      part.position.y = (part.userData.baseY || 0) + bob;
     }
 
     let diff = this.targetRotation - this.mesh.rotation.y;

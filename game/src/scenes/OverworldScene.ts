@@ -23,11 +23,11 @@ interface ZoneRect {
 }
 
 const ZONES: ZoneRect[] = [
-  { name: 'Home', x: 300, y: 300, w: 200, h: 200, color: 0xffffff },
-  { name: 'Projects', x: 100, y: 50, w: 300, h: 250, color: 0x4488ff },
-  { name: 'Jobs', x: 500, y: 100, w: 300, h: 250, color: 0x44cc44 },
-  { name: 'Skills', x: 500, y: 400, w: 300, h: 250, color: 0xcc44ff },
-  { name: 'Education', x: 50, y: 400, w: 300, h: 250, color: 0xffaa44 },
+  { name: 'Home', x: 600, y: 600, w: 400, h: 400, color: 0xffffff },
+  { name: 'Projects', x: 200, y: 100, w: 600, h: 500, color: 0x4488ff },
+  { name: 'Jobs', x: 1000, y: 200, w: 600, h: 500, color: 0x44cc44 },
+  { name: 'Skills', x: 1000, y: 800, w: 600, h: 500, color: 0xcc44ff },
+  { name: 'Education', x: 100, y: 800, w: 600, h: 500, color: 0xffaa44 },
 ];
 
 export class OverworldScene extends Phaser.Scene {
@@ -58,12 +58,12 @@ export class OverworldScene extends Phaser.Scene {
     const { width, height } = this.scale;
 
     // World bounds (larger than screen)
-    this.physics.world.setBounds(0, 0, 900, 700);
+    this.physics.world.setBounds(0, 0, 1800, 1400);
 
     // Draw ground
     const ground = this.add.graphics();
     ground.fillStyle(0x2d5a27);
-    ground.fillRect(0, 0, 900, 700);
+    ground.fillRect(0, 0, 1800, 1400);
 
     // Draw zone areas with grass patterns
     for (const zone of ZONES) {
@@ -99,8 +99,8 @@ export class OverworldScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(60).setAlpha(0);
 
     // Player (load saved position)
-    const savedX = SaveSystem.load('player_x', 400);
-    const savedY = SaveSystem.load('player_y', 350);
+    const savedX = SaveSystem.load('player_x', 900);
+    const savedY = SaveSystem.load('player_y', 700);
     this.player = new Player(this, savedX, savedY);
 
     // NPCs
@@ -128,7 +128,7 @@ export class OverworldScene extends Phaser.Scene {
     this.nightOverlay.setScrollFactor(0);
 
     // Minimap
-    this.minimap = new Minimap(this, ZONES, 900, 700);
+    this.minimap = new Minimap(this, ZONES, 1800, 1400);
 
     // Key bindings
     this.keyM = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.M);
@@ -147,7 +147,7 @@ export class OverworldScene extends Phaser.Scene {
     this.pauseMenu = new PauseMenu(this);
 
     // Camera
-    this.cameras.main.setBounds(0, 0, 900, 700);
+    this.cameras.main.setBounds(0, 0, 1800, 1400);
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
     this.cameras.main.setBackgroundColor('#1a2a1a');
   }
@@ -212,9 +212,13 @@ export class OverworldScene extends Phaser.Scene {
     const deco = this.add.graphics();
     // Trees
     const treePositions = [
-      [50, 50], [80, 120], [700, 50], [750, 80],
-      [50, 600], [120, 650], [750, 600], [820, 650],
-      [400, 50], [450, 50],
+      [50, 50], [80, 120], [150, 300], [200, 500],
+      [700, 50], [750, 80], [1100, 50], [1150, 80],
+      [50, 1100], [120, 1150], [50, 1300], [150, 1350],
+      [1700, 50], [1750, 120], [1700, 1300], [1750, 1350],
+      [1600, 600], [1650, 800], [900, 50], [950, 50],
+      [50, 700], [100, 750], [1700, 700], [1750, 750],
+      [900, 1350], [950, 1350],
     ];
     for (const [tx, ty] of treePositions) {
       const tree = this.add.image(tx, ty, 'tree').setDepth(2);
@@ -232,6 +236,7 @@ export class OverworldScene extends Phaser.Scene {
     // Rocks
     const rockPositions = [
       [300, 150], [550, 500], [200, 400], [600, 200],
+      [1300, 300], [1500, 1000], [300, 1200], [1400, 1300],
     ];
     for (const [rx, ry] of rockPositions) {
       this.add.image(rx, ry, 'rock').setDepth(2);
@@ -241,6 +246,9 @@ export class OverworldScene extends Phaser.Scene {
     const flowerPositions = [
       [150, 200], [250, 100], [450, 200], [350, 500],
       [650, 300], [700, 450], [150, 550], [300, 620],
+      [1200, 200], [1300, 350], [1500, 500], [1400, 700],
+      [1100, 900], [1200, 1100], [1300, 1300], [300, 900],
+      [500, 1100], [700, 1300], [900, 1100], [1700, 800],
     ];
     for (const [fx, fy] of flowerPositions) {
       const flower = this.add.image(fx, fy, 'flower').setDepth(1);
@@ -258,23 +266,23 @@ export class OverworldScene extends Phaser.Scene {
     // Paths (simple lines)
     deco.lineStyle(12, 0x8b7355, 0.3);
     deco.beginPath();
-    deco.moveTo(300, 400);
-    deco.lineTo(200, 200);
+    deco.moveTo(600, 800);
+    deco.lineTo(500, 350);
     deco.strokePath();
 
     deco.beginPath();
-    deco.moveTo(300, 400);
-    deco.lineTo(650, 250);
+    deco.moveTo(600, 800);
+    deco.lineTo(1300, 450);
     deco.strokePath();
 
     deco.beginPath();
-    deco.moveTo(300, 400);
-    deco.lineTo(650, 500);
+    deco.moveTo(600, 800);
+    deco.lineTo(1300, 1050);
     deco.strokePath();
 
     deco.beginPath();
-    deco.moveTo(300, 400);
-    deco.lineTo(200, 530);
+    deco.moveTo(600, 800);
+    deco.lineTo(400, 1050);
     deco.strokePath();
   }
 
@@ -310,8 +318,10 @@ export class OverworldScene extends Phaser.Scene {
 
     // Skill gems (one per category, placed at fixed positions)
     const skillPositions = [
-      { x: 560, y: 440 }, { x: 640, y: 470 },
-      { x: 720, y: 440 }, { x: 660, y: 520 },
+      { x: 1080, y: 860 }, { x: 1200, y: 900 },
+      { x: 1320, y: 860 }, { x: 1240, y: 1000 },
+      { x: 1120, y: 1000 }, { x: 1400, y: 960 },
+      { x: 1160, y: 1080 },
     ];
     let si = 0;
     for (const category of Object.keys(this.bio.skills)) {

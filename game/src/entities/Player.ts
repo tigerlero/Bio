@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { AudioManager } from '../systems/AudioManager';
 
 const TILE_SIZE = 32;
-const MOVE_SPEED = 120;
+const MOVE_SPEED = 200;
 
 export enum PlayerState {
   IDLE = 'idle',
