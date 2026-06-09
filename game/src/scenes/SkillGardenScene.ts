@@ -192,6 +192,21 @@ export class SkillGardenScene extends Phaser.Scene {
       fontSize: '9px', color: '#44ff44', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
+    // Skill Pacman portal
+    const pacPortalX = worldW / 2 + 80;
+    const pacPortalY = worldH - 40;
+    portal = this.add.graphics();
+    portal.fillStyle(0xffff44, 0.4);
+    portal.fillCircle(pacPortalX, pacPortalY, 16);
+    portal.lineStyle(2, 0xffff44, 0.7);
+    portal.strokeCircle(pacPortalX, pacPortalY, 16);
+    this.add.text(pacPortalX, pacPortalY, 'P', {
+      fontSize: '14px', color: '#ffff44', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(pacPortalX, pacPortalY + 22, 'Pacman', {
+      fontSize: '9px', color: '#ffff44', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
     // Bug Breaker portal
     const bugPortalX = worldW / 2 - 160;
     const bugPortalY = worldH - 40;
@@ -303,6 +318,12 @@ export class SkillGardenScene extends Phaser.Scene {
       nearSnake = true;
     }
 
+    const pacPortalX = portalX + 80;
+    let nearPac = false;
+    if (Phaser.Math.Distance.Between(this.px, this.py, pacPortalX, portalY) < 35) {
+      nearPac = true;
+    }
+
     const bugPortalX = portalX - 160;
     let nearBug = false;
     if (Phaser.Math.Distance.Between(this.px, this.py, bugPortalX, portalY) < 35) {
@@ -327,6 +348,14 @@ export class SkillGardenScene extends Phaser.Scene {
       });
     }
 
+    if (nearPac && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => {
+        this.scene.start('PacmanScene');
+      });
+    }
+
     if (nearBug && interact) {
       AudioManager.get().stopBgm(0.2);
       this.cameras.main.fadeOut(200, 0, 0, 0);
@@ -341,6 +370,10 @@ export class SkillGardenScene extends Phaser.Scene {
       this.prompt.setVisible(true);
     } else if (nearSnake) {
       this.prompt.setText('Press E: Skill Snake');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearPac) {
+      this.prompt.setText('Press E: Skill Pacman');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearBug) {

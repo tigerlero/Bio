@@ -396,6 +396,14 @@
       "category": "Minigame"
     },
     {
+      "id": "skill-pacman",
+      "title": "Skill Pacman",
+      "description": "Pacman-style maze game where you collect 49 color-coded skill dots across a 28x20 grid while evading 4 job-themed ghosts (Frontend, Backend, Databases, DevOps). Features power pellets for ghost-eating, distinct ghost AI per role, animated mouth, score popups, and 3 lives. Collect all skills to win! Built with Phaser.js and TypeScript.",
+      "tech": ["TypeScript", "Phaser.js", "Arcade"],
+      "playUrl": "play/?game=pacman",
+      "category": "Minigame"
+    },
+    {
       "id": "pingpong",
       "title": "PingPong Game",
       "description": "Classic Pong game built with Python and PyGame. Features AI opponent with adjustable difficulty, local 2-player multiplayer mode, score tracking, and sound effects.",

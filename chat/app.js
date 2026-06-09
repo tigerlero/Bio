@@ -465,7 +465,7 @@ addIntent({
 addIntent({
   id: 'games',
   labels: ['Games'],
-  keywords: ['games', 'minigames', 'mini games', 'game dev', 'snake', 'flappy', 'tetris', 'breakout', 'quiz', 'match', 'base ops', 'bug breaker', 'bio explorer', 'play', 'game project', 'παιχνίδια', 'παιχνίδι', 'minigames'],
+  keywords: ['games', 'minigames', 'mini games', 'game dev', 'snake', 'flappy', 'tetris', 'breakout', 'quiz', 'match', 'base ops', 'bug breaker', 'bio explorer', 'play', 'game project', 'pacman', 'παιχνίδια', 'παιχνίδι', 'minigames'],
   patterns: [/what\s+games/i, /what\s+(minigames|mini-games)/i, /^(games|minigames)/i],
   priority: 4,
   response: (profile) => {
