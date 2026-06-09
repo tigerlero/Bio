@@ -259,9 +259,10 @@ export class DonkeyKongScene extends Phaser.Scene {
         if (p.y <= topY + 4) {
           this.climbing = false;
           this.currentLadder = null;
+          body.checkCollision.none = false;
           body.setVelocityY(0);
           body.allowGravity = true;
-          p.y = topY;
+          p.y = topY - 12;
         }
       } else if (climbDown) {
         body.setVelocityY(120);
@@ -269,6 +270,7 @@ export class DonkeyKongScene extends Phaser.Scene {
         if (p.y >= this.currentLadder.bottomY - 4) {
           this.climbing = false;
           this.currentLadder = null;
+          body.checkCollision.none = false;
           body.setVelocityY(0);
           body.allowGravity = true;
         }
@@ -281,6 +283,7 @@ export class DonkeyKongScene extends Phaser.Scene {
       if (!climbUp && !climbDown && stepOff) {
         this.climbing = false;
         this.currentLadder = null;
+        body.checkCollision.none = false;
         body.allowGravity = true;
       }
       return;
@@ -300,6 +303,7 @@ export class DonkeyKongScene extends Phaser.Scene {
           this.climbing = true;
           this.currentLadder = ladder;
           body.allowGravity = false;
+          body.checkCollision.none = true;
           body.setVelocity(0, -120);
           p.x = ladder.x + ladder.w / 2;
           break;
@@ -431,6 +435,7 @@ export class DonkeyKongScene extends Phaser.Scene {
     this.climbing = false;
     this.currentLadder = null;
     const body = this.playerBody.body as Phaser.Physics.Arcade.Body;
+    body.checkCollision.none = false;
     body.allowGravity = true;
     AudioManager.get().playSfx('interact');
     this.playerBody.setPosition(80, ROW_YS[0] - PLAYER_H);
