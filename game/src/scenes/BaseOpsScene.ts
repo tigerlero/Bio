@@ -17,6 +17,7 @@ export class BaseOpsScene extends Phaser.Scene {
   private fatigue = 0;
   private cycleCount = 0;
   private phaseComplete = false;
+  private gameOver = false;
 
   // Persistent text objects
   private statusText!: Phaser.GameObjects.Text;
@@ -52,6 +53,8 @@ export class BaseOpsScene extends Phaser.Scene {
   private targets: { x: number; y: number; isTarget: boolean; marked: boolean }[] = [];
   private reconScore = 0;
   private reconTotal = 0;
+  private reconActive = false;
+  private reconTimer!: Phaser.Time.TimerEvent;
 
   // Basketball
   private powerBar!: Phaser.GameObjects.Graphics;
@@ -129,11 +132,32 @@ export class BaseOpsScene extends Phaser.Scene {
     this.moraleText.setText(`Morale: ${this.morale}%`);
     this.fatigueText.setText(`Fatigue: ${this.fatigue}%`);
 
+    // Game over check
+    if (!this.gameOver && (this.morale <= 0 || this.fatigue >= 100)) {
+      this.gameOver = true;
+      this.showGameOver();
+      return;
+    }
+
     const phase = PHASES[this.phaseIndex].name;
     if (phase === 'camera') this.updateCamera(delta);
     else if (phase === 'patrol') this.updatePatrol(delta);
     else if (phase === 'recon') this.updateRecon();
     else if (phase === 'basketball') this.updateBasketball(delta);
+  }
+
+  private showGameOver(): void {
+    this.cleanupPhaseListeners();
+    this.clearPhase();
+    const reason = this.morale <= 0 ? 'Morale depleted — you gave up.' : 'Fatigue maxed — you collapsed.';
+    this.briefingText.setText(
+      `═ DISCHARGED ═\n\n${reason}\n\nScore: ${this.score}\nDay: ${this.cycleCount + 1}\n\nClick or press E to return to base`
+    );
+    this.briefingText.setAlpha(1);
+    this.promptText.setText('');
+    this.addPhaseListener('pointerdown', () => this.returnToDistrict());
+    const keyE = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    this.addPhaseKey(keyE, () => this.returnToDistrict());
   }
 
   private startPhase(): void {
@@ -156,9 +180,38 @@ export class BaseOpsScene extends Phaser.Scene {
     if (this.phaseIndex >= PHASES.length) {
       this.phaseIndex = 0;
       this.cycleCount++;
-      if (this.cycleCount >= 2) { this.returnToDistrict(); return; }
+      if (this.cycleCount >= 2) { this.showFinalSummary(); return; }
     }
     this.startPhase();
+  }
+
+  private showFinalSummary(): void {
+    this.cleanupPhaseListeners();
+    this.clearPhase();
+    const totalScore = this.score;
+    const grade = totalScore > 400 ? 'A' : totalScore > 300 ? 'B' : totalScore > 200 ? 'C' : totalScore > 100 ? 'D' : 'F';
+    const lines = [
+      '═ MISSION COMPLETE ═',
+      '',
+      `Final Score: ${totalScore}`,
+      `Grade: ${grade}`,
+      `Final Morale: ${this.morale}%`,
+      `Final Fatigue: ${this.fatigue}%`,
+      '',
+      grade === 'A' ? 'Outstanding performance, soldier.' :
+      grade === 'B' ? 'Solid work. Room for improvement.' :
+      grade === 'C' ? 'Adequate. Push harder next time.' :
+      grade === 'D' ? 'Below standard. Report for retraining.' :
+      'Discharged. Consider a different career path.',
+      '',
+      'Click or press E to return to base',
+    ];
+    this.briefingText.setText(lines.join('\n'));
+    this.briefingText.setAlpha(1);
+    this.promptText.setText('');
+    this.addPhaseListener('pointerdown', () => this.returnToDistrict());
+    const keyE = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    this.addPhaseKey(keyE, () => this.returnToDistrict());
   }
 
   private cleanupPhaseListeners(): void {
@@ -256,6 +309,8 @@ export class BaseOpsScene extends Phaser.Scene {
           }
           this.anomalyIndex = -1;
           this.camRound++;
+          this.anomalyTimer = 0;
+          this.nextAnomalyAt = 2000 + Math.random() * 2500;
           if (this.camRound >= 8) this.endCamera();
           break;
         }
@@ -315,6 +370,8 @@ export class BaseOpsScene extends Phaser.Scene {
         this.showFeedback('✗ MISSED ANOMALY', '#ff6644');
         this.anomalyIndex = -1;
         this.camRound++;
+        this.anomalyTimer = 0;
+        this.nextAnomalyAt = 2000 + Math.random() * 2500;
         if (this.camRound >= 8) this.endCamera();
       }
     } else {
@@ -330,6 +387,7 @@ export class BaseOpsScene extends Phaser.Scene {
   }
 
   private endCamera(): void {
+    if (!this.camActive) return;
     this.camActive = false;
     this.score += this.camScore;
     this.showFeedback(`CAMERA ROOM COMPLETE\n+${this.camScore} pts`, '#88ffaa');
@@ -504,6 +562,7 @@ export class BaseOpsScene extends Phaser.Scene {
     const { width, height } = this.scale;
     this.reconScore = 0;
     this.reconTotal = 0;
+    this.reconActive = true;
     this.targets = [];
     this.reconGfx.clear();
     this.crosshair.clear();
@@ -527,6 +586,7 @@ export class BaseOpsScene extends Phaser.Scene {
     this.promptText.setText('Move mouse, click to mark');
 
     this.addPhaseListener('pointerdown', (p: Phaser.Input.Pointer) => {
+      if (!this.reconActive) return;
       for (const t of this.targets) {
         if (!t.marked && Phaser.Math.Distance.Between(p.x, p.y, t.x, t.y) < 20) {
           t.marked = true;
@@ -545,7 +605,7 @@ export class BaseOpsScene extends Phaser.Scene {
     this.time.addEvent({
       delay: 1800, loop: true,
       callback: () => {
-        if (this.reconTotal >= 12) return;
+        if (!this.reconActive || this.reconTotal >= 12) return;
         this.targets.push({
           x: 60 + Math.random() * (width - 120),
           y: 80 + Math.random() * (height - 160),
@@ -592,6 +652,8 @@ export class BaseOpsScene extends Phaser.Scene {
   }
 
   private endRecon(): void {
+    if (!this.reconActive) return;
+    this.reconActive = false;
     this.score += this.reconScore;
     this.morale = Math.min(100, this.morale + 3);
     this.showFeedback(`RECON COMPLETE\n+${this.reconScore} pts`, '#88ffaa');
