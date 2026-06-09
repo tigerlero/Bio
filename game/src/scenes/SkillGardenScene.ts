@@ -192,6 +192,21 @@ export class SkillGardenScene extends Phaser.Scene {
       fontSize: '9px', color: '#44ff44', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
+    // Bug Breaker portal
+    const bugPortalX = worldW / 2 - 160;
+    const bugPortalY = worldH - 40;
+    portal = this.add.graphics();
+    portal.fillStyle(0xff6644, 0.4);
+    portal.fillCircle(bugPortalX, bugPortalY, 16);
+    portal.lineStyle(2, 0xff6644, 0.7);
+    portal.strokeCircle(bugPortalX, bugPortalY, 16);
+    this.add.text(bugPortalX, bugPortalY, 'B', {
+      fontSize: '14px', color: '#ff6644', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(bugPortalX, bugPortalY + 22, 'Bugs', {
+      fontSize: '9px', color: '#ff6644', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
     // Player
     this.playerSprite = this.add.sprite(this.px, this.py, 'player_sheet').setDepth(20).play('player_idle_down');
 
@@ -288,6 +303,12 @@ export class SkillGardenScene extends Phaser.Scene {
       nearSnake = true;
     }
 
+    const bugPortalX = portalX - 160;
+    let nearBug = false;
+    if (Phaser.Math.Distance.Between(this.px, this.py, bugPortalX, portalY) < 35) {
+      nearBug = true;
+    }
+
     const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
     if (nearGem && interact) {
       AudioManager.get().playSfx('interact');
@@ -306,12 +327,24 @@ export class SkillGardenScene extends Phaser.Scene {
       });
     }
 
+    if (nearBug && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => {
+        this.scene.start('BugBreakerScene');
+      });
+    }
+
     if (nearReturn) {
       this.prompt.setText('Press E to return');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearSnake) {
       this.prompt.setText('Press E: Skill Snake');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearBug) {
+      this.prompt.setText('Press E: Bug Breaker');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearGem) {

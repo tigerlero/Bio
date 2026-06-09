@@ -10,6 +10,7 @@ const GRID_Y = 36;
 const COLORS: number[] = [
   0x00ffff, 0xffff00, 0xaa44ff, 0x44ff44, 0xff4444, 0x4488ff, 0xff8844,
 ];
+const ICON_KEYS = ['icon_frontend', 'icon_backend', 'icon_databases', 'icon_devops', 'icon_languages', 'icon_gamedev', 'icon_aiml'];
 const NAMES = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
 const SHAPES: number[][][] = [
   [[1,1,1,1]],
@@ -39,6 +40,8 @@ export class TetrisProjectScene extends Phaser.Scene {
   private levelText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
   private keys: Record<string, Phaser.Input.Keyboard.Key> = {};
+  private cellIcons: Phaser.GameObjects.Image[] = [];
+  private iconIndex = 0;
 
   constructor() {
     super({ key: 'TetrisProjectScene' });
@@ -62,6 +65,14 @@ export class TetrisProjectScene extends Phaser.Scene {
     this.boardGfx = this.add.graphics().setDepth(1);
     this.pieceGfx = this.add.graphics().setDepth(2);
     this.nextGfx = this.add.graphics().setDepth(3);
+
+    // Pre-create icon image pool for skill logos on blocks
+    this.cellIcons = [];
+    for (let i = 0; i < COLS * ROWS + 28; i++) {
+      const img = this.add.image(0, 0, 'icon_frontend').setDepth(4).setVisible(false);
+      img.setDisplaySize(CELL - 6, CELL - 6);
+      this.cellIcons.push(img);
+    }
 
     // Grid lines
     const gridGfx = this.add.graphics().setDepth(0);
@@ -251,10 +262,16 @@ export class TetrisProjectScene extends Phaser.Scene {
 
   private render(): void {
     this.boardGfx.clear();
+    this.iconIndex = 0;
     for (let x = 0; x < COLS; x++) {
       for (let y = 0; y < ROWS; y++) {
         if (this.board[x][y] !== -1) {
-          this.drawCell(this.boardGfx, GRID_X + x * CELL, GRID_Y + y * CELL, this.board[x][y], 0.8);
+          const t = this.board[x][y];
+          this.drawCell(this.boardGfx, GRID_X + x * CELL, GRID_Y + y * CELL, t, 0.8);
+          const img = this.cellIcons[this.iconIndex++];
+          img.setTexture(ICON_KEYS[t]);
+          img.setPosition(GRID_X + x * CELL + CELL / 2, GRID_Y + y * CELL + CELL / 2);
+          img.setVisible(true);
         }
       }
     }
@@ -264,10 +281,20 @@ export class TetrisProjectScene extends Phaser.Scene {
       for (let r = 0; r < this.piece.shape.length; r++) {
         for (let c = 0; c < this.piece.shape[r].length; c++) {
           if (this.piece.shape[r][c]) {
-            this.drawCell(this.pieceGfx, GRID_X + (this.piece.x + c) * CELL, GRID_Y + (this.piece.y + r) * CELL, this.piece.type, 1);
+            const t = this.piece.type;
+            this.drawCell(this.pieceGfx, GRID_X + (this.piece.x + c) * CELL, GRID_Y + (this.piece.y + r) * CELL, t, 1);
+            const img = this.cellIcons[this.iconIndex++];
+            img.setTexture(ICON_KEYS[t]);
+            img.setPosition(GRID_X + (this.piece.x + c) * CELL + CELL / 2, GRID_Y + (this.piece.y + r) * CELL + CELL / 2);
+            img.setVisible(true);
           }
         }
       }
+    }
+
+    // Hide unused icon images
+    for (let i = this.iconIndex; i < this.cellIcons.length; i++) {
+      this.cellIcons[i].setVisible(false);
     }
 
     this.nextGfx.clear();

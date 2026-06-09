@@ -22,6 +22,7 @@ export class TitleScene extends Phaser.Scene {
       flappy: 'FlappyJobScene',
       tetris: 'TetrisProjectScene',
       baseops: 'BaseOpsScene',
+      bugbreaker: 'BugBreakerScene',
     };
     const gameParam = params.get('game');
     if (gameParam && sceneMap[gameParam]) {
@@ -118,6 +119,7 @@ export class TitleScene extends Phaser.Scene {
       { label: '✦ Flappy Job', scene: 'FlappyJobScene' },
       { label: '✦ Tetris Projects', scene: 'TetrisProjectScene' },
       { label: '✦ Base Ops', scene: 'BaseOpsScene' },
+      { label: '✦ Bug Breaker', scene: 'BugBreakerScene' },
     ];
     games.forEach((g, i) => {
       const txt = this.add.text(width / 2, height * (0.76 + i * 0.035), g.label, {
