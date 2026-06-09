@@ -13,6 +13,25 @@ export class TitleScene extends Phaser.Scene {
     AudioManager.get().init();
     const { width, height } = this.scale;
 
+    // Direct-launch via ?game=xxx URL parameter
+    const params = new URLSearchParams(window.location.search);
+    const sceneMap: Record<string, string> = {
+      snake: 'SnakeGameScene',
+      match: 'ProjectMatchScene',
+      quiz: 'CampusQuizScene',
+      flappy: 'FlappyJobScene',
+      tetris: 'TetrisProjectScene',
+      baseops: 'BaseOpsScene',
+    };
+    const gameParam = params.get('game');
+    if (gameParam && sceneMap[gameParam]) {
+      AudioManager.get().init();
+      this.time.delayedCall(100, () => {
+        this.scene.start(sceneMap[gameParam]);
+      });
+      return;
+    }
+
     // Background
     this.cameras.main.setBackgroundColor('#0a1a0a');
 

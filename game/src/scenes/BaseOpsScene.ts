@@ -42,7 +42,7 @@ export class BaseOpsScene extends Phaser.Scene {
   private px = 0; private py = 0;
   private patrolGfx!: Phaser.GameObjects.Graphics;
   private patrolKeys: Record<string, Phaser.Input.Keyboard.Key> = {};
-  private enemies: { x: number; y: number; dir: number; coneAngle: number }[] = [];
+  private enemies: { x: number; y: number; dir: number; coneAngle: number; facing: number }[] = [];
   private visibility = 0;
   private patrolComplete = false;
 
@@ -418,11 +418,11 @@ export class BaseOpsScene extends Phaser.Scene {
     terrain.fillStyle(0x1a2a1a, 1);
     terrain.fillRect(0, 60, width, height - 60);
     const covers = [
-      { x: 100, y: 120, w: 60, h: 40 },
-      { x: 280, y: 150, w: 50, h: 60 },
-      { x: 420, y: 100, w: 70, h: 35 },
-      { x: 180, y: 220, w: 40, h: 50 },
-      { x: 380, y: 200, w: 60, h: 45 },
+      { x: 100, y: height - 220, w: 60, h: 40 },
+      { x: 300, y: height - 280, w: 50, h: 60 },
+      { x: 430, y: height - 160, w: 70, h: 35 },
+      { x: 220, y: height - 120, w: 40, h: 30 },
+      { x: 380, y: height - 220, w: 60, h: 45 },
     ];
     for (const cv of covers) {
       terrain.fillStyle(0x0d1a0d, 0.6);
@@ -439,10 +439,10 @@ export class BaseOpsScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(1);
 
     this.enemies = [
-      { x: 150, y: 130, dir: 1, coneAngle: 0.6 },
-      { x: 300, y: 180, dir: -1, coneAngle: 0.5 },
-      { x: 200, y: 250, dir: 1, coneAngle: 0.7 },
-      { x: 400, y: 140, dir: -1, coneAngle: 0.4 },
+      { x: 180, y: height - 180, dir: 1, coneAngle: 0.7, facing: Math.PI / 4 },
+      { x: 350, y: height - 150, dir: -1, coneAngle: 0.6, facing: 3 * Math.PI / 4 },
+      { x: 250, y: height - 250, dir: 1, coneAngle: 0.5, facing: 0 },
+      { x: 450, y: height - 200, dir: -1, coneAngle: 0.7, facing: Math.PI / 2 },
     ];
 
     this.statusText.setText('Reach extraction — avoid enemy vision cones');
@@ -484,7 +484,7 @@ export class BaseOpsScene extends Phaser.Scene {
     let detected = false;
     for (const e of this.enemies) {
       const dist = Phaser.Math.Distance.Between(this.px, this.py, e.x, e.y);
-      const facingAngle = e.dir > 0 ? 0 : Math.PI;
+      const facingAngle = e.facing;
       // Draw cone regardless
       this.patrolGfx.fillStyle(0xff4444, 0.06);
       this.patrolGfx.beginPath();

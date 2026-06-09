@@ -64,7 +64,7 @@ export class CampusQuizScene extends Phaser.Scene {
     this.questions = [];
 
     const shuffleQA = (question: string, correct: string, wrongPool: string[]): Question => {
-      const filtered = wrongPool.filter(w => w !== correct);
+      const filtered = [...new Set(wrongPool.filter(w => w !== correct))];
       const shuffled = Phaser.Utils.Array.Shuffle([...filtered]);
       const distractors = shuffled.slice(0, 3);
       const opts = [correct, ...distractors];
@@ -73,19 +73,20 @@ export class CampusQuizScene extends Phaser.Scene {
       return { question, options: opts, correct: opts.indexOf(correct) };
     };
 
-    // Questions about which tech belongs to which company
-    const allCompanies = bio.jobs.map(j => j.company);
+    // Questions about job highlights (which company matches which work description)
+    const allCompanies = [...new Set(bio.jobs.map(j => j.company))];
     for (const job of bio.jobs) {
-      if (job.tech.length === 0) continue;
-      const tech = job.tech[Math.floor(Math.random() * job.tech.length)];
+      if (job.highlights.length === 0) continue;
+      const hl = job.highlights[Math.floor(Math.random() * job.highlights.length)];
+      const clue = hl.length > 55 ? hl.substring(0, 52) + '...' : hl;
       this.questions.push(shuffleQA(
-        `Which company uses "${tech}" in their stack?`,
+        `"${clue}" — which company?`,
         job.company,
         allCompanies,
       ));
     }
 
-    // Questions about which project uses which tech
+    // Questions about which project uses which tech (projects have tech field)
     const allProjects = bio.projects.map(p => p.title);
     for (const proj of bio.projects) {
       if (proj.tech.length === 0) continue;
@@ -103,7 +104,7 @@ export class CampusQuizScene extends Phaser.Scene {
       this.questions.push(shuffleQA(
         `What degree did they earn at ${edu.school}?`,
         edu.degree,
-        otherDegrees,
+        [...new Set(otherDegrees)],
       ));
     }
 
