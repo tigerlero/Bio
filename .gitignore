@@ -2,4 +2,5 @@
 .kiro/
 game/node_modules/
 game/dist/
+game3d/node_modules/
 *.md

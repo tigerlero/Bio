@@ -16,31 +16,22 @@
   <!-- NAVBAR -->
   <nav id="navbar">
     <a href="#hero" class="nav-logo">PE</a>
-    <ul class="nav-links">
-      <li><a href="#hero"><i class="fas fa-home"></i></a></li>
-      <li><a href="#skills" data-i18n="nav_skills">Skills</a></li>
-      <li><a href="#experience" data-i18n="nav_experience">Experience</a></li>
-      <li><a href="#freelance" data-i18n="nav_freelance">Freelance</a></li>
-      <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
-      <li><a href="#education" data-i18n="nav_education">Education</a></li>
-      <li><a href="#teaching" data-i18n="nav_teaching">Teaching</a></li>
-      <li><a href="pricing.html" data-i18n="nav_pricing">Pricing</a></li>
-      <li><a href="play/" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer</a></li>
-    </ul>
-    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
-      <option value="en">EN</option>
-      <option value="el">EL</option>
-      <option value="it">IT</option>
-      <option value="tr">TR</option>
-      <option value="ro">RO</option>
-      <option value="sq">SQ</option>
-      <option value="bg">BG</option>
-      <option value="es">ES</option>
-      <option value="fr">FR</option>
-    </select>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+        <option value="en">EN</option>
+        <option value="el">EL</option>
+        <option value="it">IT</option>
+        <option value="tr">TR</option>
+        <option value="ro">RO</option>
+        <option value="sq">SQ</option>
+        <option value="bg">BG</option>
+        <option value="es">ES</option>
+        <option value="fr">FR</option>
+      </select>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
   <div class="mobile-menu" id="mobile-menu">
     <a href="#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
@@ -50,7 +41,23 @@
     <a href="#education" class="mobile-link" data-i18n="nav_education">Education</a>
     <a href="#teaching" class="mobile-link" data-i18n="nav_teaching">Teaching</a>
     <a href="pricing.html" class="mobile-link" data-i18n="nav_pricing">Pricing</a>
-    <a href="play/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer</a>
+    <a href="play/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 2D</a>
+    <a href="play3d/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 3D</a>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <a href="#hero" class="sidebar-item" title="Home"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="#skills" class="sidebar-item" title="Skills"><i class="fas fa-code"></i><span data-i18n="nav_skills">Skills</span></a>
+    <a href="#experience" class="sidebar-item" title="Experience"><i class="fas fa-briefcase"></i><span data-i18n="nav_experience">Experience</span></a>
+    <a href="#freelance" class="sidebar-item" title="Freelance"><i class="fas fa-laptop-code"></i><span data-i18n="nav_freelance">Freelance</span></a>
+    <a href="#projects" class="sidebar-item" title="Projects"><i class="fas fa-folder-open"></i><span data-i18n="nav_projects">Projects</span></a>
+    <a href="#education" class="sidebar-item" title="Education"><i class="fas fa-graduation-cap"></i><span data-i18n="nav_education">Education</span></a>
+    <a href="#teaching" class="sidebar-item" title="Teaching"><i class="fas fa-chalkboard-teacher"></i><span data-i18n="nav_teaching">Teaching</span></a>
+    <div class="sidebar-divider"></div>
+    <a href="pricing.html" class="sidebar-item" title="Pricing"><i class="fas fa-tag"></i><span data-i18n="nav_pricing">Pricing</span></a>
+    <a href="play/" class="sidebar-item" title="Bio Explorer (2D)" style="color:var(--accent-purple);"><i class="fas fa-gamepad"></i><span>✦ Bio Explorer 2D</span></a>
+    <a href="play3d/" class="sidebar-item" title="Bio Explorer (3D)" style="color:var(--accent-purple);"><i class="fas fa-cube"></i><span>✦ Bio Explorer 3D</span></a>
   </div>
 
   <!-- HERO -->

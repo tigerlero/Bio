@@ -1,0 +1,155 @@
+{
+  "name": "Panagiotis Efstathiadis",
+  "title": "Computer Scientist & Fullstack Engineer",
+  "projects": [
+    {
+      "id": "repaw",
+      "title": "RePaw",
+      "description": "Django REST API and webapp about dogs — connecting dog owners with services, walkers, and pet stores. Features mobile-friendly interface and comprehensive API.",
+      "tech": ["Django REST", "Python", "Mobile"],
+      "link": "https://github.com/tigerlero/RePaw",
+      "position": { "x": 120, "y": 140 }
+    },
+    {
+      "id": "finance",
+      "title": "Finance Accounts",
+      "description": "Personal finance tracker with transaction management, category analytics, and spending visualization dashboards built with Django.",
+      "tech": ["Django", "Python", "Analytics"],
+      "link": "https://github.com/tigerlero/financialDjango",
+      "position": { "x": 220, "y": 180 }
+    },
+    {
+      "id": "ur8",
+      "title": "UR8 — YouTube Clone",
+      "description": "Full YouTube clone with video streaming, channels, user subscriptions, comment system, and admin panel. Built with FFmpeg for video processing.",
+      "tech": ["FFmpeg", "PostgreSQL", "Redis", "Bootstrap"],
+      "link": "https://github.com/tigerlero/UR8",
+      "position": { "x": 320, "y": 140 }
+    },
+    {
+      "id": "pixelsprint",
+      "title": "PixelSprint",
+      "description": "Task management application with sprint planning, Kanban boards, team collaboration, Celery async tasks, and comprehensive Pytest test suite.",
+      "tech": ["Django", "Celery", "Bulma", "HTMX", "Pytest"],
+      "link": "https://github.com/tigerlero/PixelSprint",
+      "position": { "x": 180, "y": 220 }
+    },
+    {
+      "id": "speech",
+      "title": "Speech Recognition 0-9",
+      "description": "Machine learning model that recognizes spoken digits 0-9 using audio feature extraction (MFCC) and neural networks via Keras/TensorFlow.",
+      "tech": ["Python", "Keras", "scikit-learn", "librosa", "pyaudio"],
+      "link": "https://github.com/tigerlero/FSDD-0-9-Speech-Recognition-",
+      "position": { "x": 360, "y": 210 }
+    },
+    {
+      "id": "rustix",
+      "title": "Rustix Engine",
+      "description": "Game development engine written in Rust with WebAssembly support. Features a custom ECS architecture and WebGL renderer.",
+      "tech": ["Rust", "WASM", "WebGL"],
+      "link": "https://github.com/tigerlero/Rustix",
+      "position": { "x": 280, "y": 100 }
+    }
+  ],
+  "jobs": [
+    {
+      "id": "valmore",
+      "company": "Valmore-Neogen",
+      "role": "Fullstack Developer",
+      "period": "2023 — Present",
+      "highlights": [
+        "Building and maintaining fullstack web applications across multiple client projects",
+        "Handling both frontend (React, Vue) and backend (PHP, Express) responsibilities",
+        "Containerized deployments with Docker"
+      ],
+      "position": { "x": 720, "y": 180 }
+    },
+    {
+      "id": "expresstransfers",
+      "company": "ExpressTransfers",
+      "role": "Fullstack Developer",
+      "period": "2026 — Present",
+      "highlights": [
+        "Developing a transfer booking platform with Stripe payment integration",
+        "Interactive Leaflet maps for route visualization",
+        "Containerized deployment with Docker"
+      ],
+      "position": { "x": 660, "y": 250 }
+    },
+    {
+      "id": "evalion",
+      "company": "Evalion-SHL",
+      "role": "Fullstack Developer",
+      "period": "2025",
+      "highlights": [
+        "Developed enterprise-grade web applications using Laravel + Vue stack",
+        "End-to-end testing with Playwright",
+        "Containerized environments with Laravel Sail"
+      ],
+      "position": { "x": 750, "y": 310 }
+    },
+    {
+      "id": "infologic",
+      "company": "Infologic-Weblogic",
+      "role": "Fullstack Developer",
+      "period": "2022 — 2023",
+      "highlights": [
+        "Built a React-based CRM with AI chatbot powered by LLama2",
+        "Developed booking web apps and REST APIs",
+        "Built template component answer systems"
+      ],
+      "position": { "x": 680, "y": 170 }
+    },
+    {
+      "id": "newdeal",
+      "company": "Newdeal Real Estates",
+      "role": "Fullstack Developer & IT",
+      "period": "2022",
+      "highlights": [
+        "Full-stack development and IT support for real estate platform",
+        "SEO optimization and analytics setup",
+        "CRM management and WordPress/Laravel development"
+      ],
+      "position": { "x": 720, "y": 380 }
+    },
+    {
+      "id": "datawise",
+      "company": "Datawise",
+      "role": "Frontend / Fullstack Developer",
+      "period": "2021 — 2022",
+      "highlights": [
+        "Developed React and Node.js applications with Material UI",
+        "Moodle e-learning integrations",
+        "Java-based tool development"
+      ],
+      "position": { "x": 650, "y": 440 }
+    }
+  ],
+  "skills": {
+    "Frontend": ["React", "Vue", "Angular", "TypeScript", "SCSS", "Tailwind", "MUI", "HTMX"],
+    "Backend": ["Django", "Flask", "Express", "Laravel", "PHP", "FastAPI", "Node.js"],
+    "Databases": ["PostgreSQL", "MySQL", "MongoDB", "SQLite", "Redis", "Firebase"],
+    "DevOps": ["Docker", "Kubernetes", "Linux", "Nginx", "AWS", "GitHub Actions"],
+    "Languages": ["Python", "JavaScript", "TypeScript", "C", "C++", "C#", "Rust", "Java", "Kotlin"],
+    "Game Dev": ["Unity", "Unreal Engine 5", "Phaser", "PyGame", "Blender", "OpenGL"],
+    "AI/ML": ["Keras", "TensorFlow", "PyTorch", "scikit-learn", "librosa", "OpenAI"]
+  },
+  "education": [
+    {
+      "id": "unipi",
+      "degree": "B.Sc. Computer Science",
+      "school": "University of Piraeus (UNIPI)",
+      "year": 2020,
+      "description": "Graduated with a focus on software engineering, distributed systems, and game development. Thesis on speech recognition using neural networks.",
+      "position": { "x": 140, "y": 490 }
+    },
+    {
+      "id": "ecdl",
+      "degree": "ECDL Expert Certification",
+      "school": "European Computer Driving Licence",
+      "year": 2015,
+      "description": "Expert level certification covering Office Suite, Operating Systems, and PC Hardware fundamentals.",
+      "position": { "x": 260, "y": 540 }
+    }
+  ]
+}
