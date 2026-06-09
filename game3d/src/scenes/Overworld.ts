@@ -7,12 +7,19 @@ import { Minimap } from '../utils/Minimap';
 
 interface Zone3D { name: string; x: number; z: number; w: number; h: number; color: number; }
 
+interface CoffeeShop3D { name: string; x: number; z: number; tagline: string; }
+const COFFEE_SHOPS: CoffeeShop3D[] = [
+  { name: 'Central Perk ☕', x: 950, z: 700, tagline: 'Where everybody knows your code!' },
+  { name: 'Code Brew ☕', x: 1750, z: 700, tagline: 'Brewing the perfect espresso!' },
+  { name: 'Study Bean ☕', x: 950, z: 1250, tagline: 'Fuel for your algorithms!' },
+];
+
 const ZONES: Zone3D[] = [
-  { name: 'Home', x: 600, z: 600, w: 400, h: 400, color: 0x3a6a3a },
-  { name: 'Projects', x: 200, z: 100, w: 600, h: 500, color: 0x2a4a7a },
-  { name: 'Jobs', x: 1000, z: 200, w: 600, h: 500, color: 0x7a4a2a },
-  { name: 'Skills', x: 1100, z: 800, w: 500, h: 400, color: 0x6a2a7a },
-  { name: 'Education', x: 900, z: 1100, w: 500, h: 240, color: 0x7a6a2a },
+  { name: 'Home', x: 1050, z: 750, w: 500, h: 400, color: 0x3a6a3a },
+  { name: 'Projects', x: 100, z: 100, w: 700, h: 550, color: 0x2a4a7a },
+  { name: 'Jobs', x: 1800, z: 100, w: 700, h: 550, color: 0x7a4a2a },
+  { name: 'Education', x: 100, z: 1350, w: 700, h: 550, color: 0x7a6a2a },
+  { name: 'Skills', x: 1800, z: 1350, w: 700, h: 550, color: 0x6a2a7a },
 ];
 
 export class Overworld {
@@ -54,11 +61,11 @@ export class Overworld {
     this.interactPromptEl = document.getElementById('interact-prompt')!;
 
     this.buildWorld();
-    this.player = new Player(this.scene, 900, 700);
+    this.player = new Player(this.scene, 1300, 950);
     this.player.worldMinX = 20;
-    this.player.worldMaxX = 1780;
+    this.player.worldMaxX = 2580;
     this.player.worldMinZ = 20;
-    this.player.worldMaxZ = 1380;
+    this.player.worldMaxZ = 1980;
     this.spawnNPCs();
 
     this.minimap = new Minimap();
@@ -83,13 +90,28 @@ export class Overworld {
   }
 
   private buildWorld(): void {
-    const groundGeo = new THREE.PlaneGeometry(1800, 1400);
+    const groundGeo = new THREE.PlaneGeometry(2600, 2000);
     const groundMat = new THREE.MeshStandardMaterial({ color: 0x2d5a27, roughness: 0.9 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
-    ground.position.set(900, 0, 700);
+    ground.position.set(1300, 0, 1000);
     ground.receiveShadow = true;
     this.scene.add(ground);
+
+    // Street network (wide paths between zones)
+    const streetMat = new THREE.MeshStandardMaterial({ color: 0x7a6a4a, roughness: 1, transparent: true, opacity: 0.45 });
+    // Main horizontal street
+    const hr = new THREE.Mesh(new THREE.PlaneGeometry(2600, 48), streetMat);
+    hr.rotation.x = -Math.PI / 2; hr.position.set(1300, 0.2, 712); this.scene.add(hr);
+    // Bottom horizontal street
+    const hr2 = new THREE.Mesh(new THREE.PlaneGeometry(2600, 48), streetMat);
+    hr2.rotation.x = -Math.PI / 2; hr2.position.set(1300, 0.2, 1336); this.scene.add(hr2);
+    // Left vertical street
+    const vl = new THREE.Mesh(new THREE.PlaneGeometry(48, 2000), streetMat);
+    vl.rotation.x = -Math.PI / 2; vl.position.set(862, 0.2, 1000); this.scene.add(vl);
+    // Right vertical street
+    const vr = new THREE.Mesh(new THREE.PlaneGeometry(48, 2000), streetMat);
+    vr.rotation.x = -Math.PI / 2; vr.position.set(1738, 0.2, 1000); this.scene.add(vr);
 
     for (const z of ZONES) {
       const zoneGeo = new THREE.PlaneGeometry(z.w - 4, z.h - 4);
@@ -124,12 +146,35 @@ export class Overworld {
       this.scene.add(sprite);
     }
 
+    // Coffee shop zone markers (small colored squares)
+    const coffeeColors = [0x6f4e37, 0x8b5e3c, 0xa0522d];
+    for (let i = 0; i < COFFEE_SHOPS.length; i++) {
+      const cs = COFFEE_SHOPS[i];
+      const cMat = new THREE.MeshStandardMaterial({ color: coffeeColors[i], transparent: true, opacity: 0.3, roughness: 0.8 });
+      const cMesh = new THREE.Mesh(new THREE.PlaneGeometry(48, 48), cMat);
+      cMesh.rotation.x = -Math.PI / 2;
+      cMesh.position.set(cs.x, 0.3, cs.z);
+      this.scene.add(cMesh);
+      const cupCanvas = document.createElement('canvas');
+      cupCanvas.width = 128; cupCanvas.height = 64;
+      const ctx2 = cupCanvas.getContext('2d')!;
+      ctx2.fillStyle = 'rgba(0,0,0,0)'; ctx2.fillRect(0, 0, 128, 64);
+      ctx2.fillStyle = '#eebb88'; ctx2.font = '32px monospace'; ctx2.textAlign = 'center';
+      ctx2.fillText('☕ ' + cs.name.replace(' ☕',''), 64, 40);
+      const cupTex = new THREE.CanvasTexture(cupCanvas);
+      const cupSpriteMat = new THREE.SpriteMaterial({ map: cupTex, transparent: true, depthTest: false });
+      const cupSprite = new THREE.Sprite(cupSpriteMat);
+      cupSprite.position.set(cs.x, 10, cs.z);
+      cupSprite.scale.set(30, 12, 1);
+      this.scene.add(cupSprite);
+    }
+
     const wallMat = new THREE.MeshBasicMaterial({ visible: false });
-    const wallGeoH = new THREE.BoxGeometry(1800, 20, 2);
-    const wallGeoV = new THREE.BoxGeometry(2, 20, 1400);
+    const wallGeoH = new THREE.BoxGeometry(2600, 20, 2);
+    const wallGeoV = new THREE.BoxGeometry(2, 20, 2000);
     const walls = [
-      { geo: wallGeoH, x: 900, z: -1 }, { geo: wallGeoH, x: 900, z: 1401 },
-      { geo: wallGeoV, x: -1, z: 700 }, { geo: wallGeoV, x: 1801, z: 700 },
+      { geo: wallGeoH, x: 1300, z: -1 }, { geo: wallGeoH, x: 1300, z: 2001 },
+      { geo: wallGeoV, x: -1, z: 1000 }, { geo: wallGeoV, x: 2601, z: 1000 },
     ];
     for (const w of walls) {
       const wall = new THREE.Mesh(w.geo, wallMat);
@@ -138,10 +183,22 @@ export class Overworld {
     }
 
     const treePositions = [
-      [50,50],[80,120],[150,300],[200,500],[700,50],[750,80],[1100,50],[1150,80],
-      [50,1100],[120,1150],[50,1300],[150,1350],[1700,50],[1750,120],[1700,1300],[1750,1350],
-      [1600,600],[1650,800],[900,50],[950,50],[50,700],[100,750],
-      [1700,700],[1750,750],[900,1350],[950,1350],
+      [50,50],[80,120],[150,300],[200,500],[450,50],[500,80],[550,50],
+      [850,80],[850,120],[900,50],[1100,50],[1150,80],[1200,50],
+      [1400,100],[1450,300],[1500,500],[1550,200],[1600,100],
+      [1800,50],[1850,80],[1900,50],[1950,120],[2000,50],
+      [2150,80],[2200,50],[2300,120],[2400,50],[2500,80],
+      [50,650],[100,680],[150,620],[200,660],[250,640],
+      [2350,650],[2400,680],[2450,620],[2500,660],
+      [50,1380],[100,1420],[150,1360],[200,1400],
+      [2350,1380],[2400,1420],[2450,1360],[2500,1400],
+      [50,1800],[80,1850],[150,1900],[200,1950],[450,1920],
+      [850,1850],[900,1900],[1100,1950],[1150,1880],
+      [1400,1920],[1450,1900],[1500,1850],[1550,1950],
+      [1800,1800],[1850,1880],[1900,1920],[1950,1900],
+      [2150,1950],[2200,1880],[2300,1850],[2400,1900],[2500,1920],
+      [1100,1200],[1150,1250],[1200,1180],[1250,1220],
+      [1100,1350],[1150,1380],[1200,1330],[1250,1370],
     ];
     for (const [tx, tz] of treePositions) {
       const t = this.createTree(tx, tz);
@@ -210,6 +267,20 @@ export class Overworld {
 
     for (const edu of bio.education) {
       this.npcs.push(new NPC(this.scene, edu.position.x, edu.position.y, 0xccaa44, edu.degree, `education_${edu.id}`, 'education', edu));
+    }
+
+    // Coffee shops
+    for (const cs of COFFEE_SHOPS) {
+      const fake: any = {
+        id: `coffee_${cs.name.replace(/[^a-z]/gi, '_').toLowerCase()}`,
+        degree: '☕ Freddo Espresso',
+        company: cs.name,
+        role: 'Barista',
+        period: 'Always open',
+        highlights: [cs.tagline],
+        position: { x: cs.x, y: cs.z },
+      };
+      this.npcs.push(new NPC(this.scene, cs.x, cs.z, 0x6f4e37, cs.name, `coffee_${cs.name}`, 'coffee', fake));
     }
   }
 
@@ -311,6 +382,22 @@ export class Overworld {
     npc.markVisited();
     const type = npc.type;
     const data = npc.data;
+    if (type === 'coffee') {
+      this.dialogue.show([
+        `☕ Welcome to ${npc.npcName}!`,
+        'Fresh freddo espresso — €2.50',
+        'Press E to buy ☕',
+      ], npc.npcName, null, () => {
+        this.dialogue.show([
+          '☕ Enjoy your freddo espresso!',
+          'You feel energized and ready to code!',
+          '+50% speed boost for 10 seconds!',
+        ], npc.npcName, null, () => {
+          this.player.coffeeBoostTimer = 10;
+        });
+      });
+      return;
+    }
     let html = '';
     if (type === 'project') {
       html = `# ${data.title}\n${data.description}\n\nTech: ${data.tech.join(', ')}\n\nLink: ${data.link}`;

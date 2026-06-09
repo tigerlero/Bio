@@ -19,6 +19,14 @@ const ROWS = [
   { label: 'ASYNC BUGS', color: 0x4488ff, bugs: ['Uncaught Promise', 'Hoisting', 'Type Coercion', 'Floating Point'] },
 ];
 
+const BALl_R = 6;
+const PADDLE_W = 80;
+const PADDLE_H = 10;
+const PADDLE_TOP = 556;
+const PADDLE_CLAMP = 44;
+
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
 export class BugBreakerScene extends Phaser.Scene {
   private paddle!: Phaser.GameObjects.Graphics;
   private ball!: Phaser.GameObjects.Graphics;
@@ -27,6 +35,7 @@ export class BugBreakerScene extends Phaser.Scene {
   private lives = 3;
   private keys: Record<string, Phaser.Input.Keyboard.Key> = {};
   private px = 400;
+  private paddleTarget = 400;
   private bx = 400;
   private by = 540;
   private bvx = 200;
@@ -37,6 +46,7 @@ export class BugBreakerScene extends Phaser.Scene {
   private scoreText!: Phaser.GameObjects.Text;
   private livesText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
+  private fsBtn!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: 'BugBreakerScene' });
@@ -50,6 +60,7 @@ export class BugBreakerScene extends Phaser.Scene {
     this.gameOver = false;
     this.win = false;
     this.px = 400;
+    this.paddleTarget = 400;
     this.bx = 400;
     this.by = 540;
     this.bvx = 200;
@@ -58,6 +69,14 @@ export class BugBreakerScene extends Phaser.Scene {
     const { width, height } = this.scale;
     this.cameras.main.fadeIn(200, 0, 0, 0);
     this.cameras.main.setBackgroundColor('#0a0f1a');
+
+    // Fullscreen button
+    this.fsBtn = this.add.text(width - 10, 10, '⛶', {
+      fontSize: '16px', color: '#6688aa', fontFamily: 'monospace',
+    }).setOrigin(1, 0).setDepth(100).setInteractive({ useHandCursor: true });
+    this.fsBtn.on('pointerdown', () => { this.scale.startFullscreen(); });
+    this.fsBtn.on('pointerover', () => this.fsBtn.setColor('#88ccff'));
+    this.fsBtn.on('pointerout', () => this.fsBtn.setColor('#6688aa'));
 
     // Title
     this.add.text(width / 2, 14, '✦ BUG BREAKER ✦', {
@@ -133,9 +152,12 @@ export class BugBreakerScene extends Phaser.Scene {
     kb.on('keydown-SPACE', () => this.launch());
     this.input.on('pointerdown', () => this.launch());
     this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
-      if (!this.gameOver && !this.win) {
-        this.px = Phaser.Math.Clamp(p.x, 40, width - 40);
-      }
+      if (this.gameOver || this.win) return;
+      if (p.x < 0 || p.x > width || p.y < 0 || p.y > height) return;
+      this.paddleTarget = Phaser.Math.Clamp(p.x, PADDLE_CLAMP, width - PADDLE_CLAMP);
+    });
+    this.input.on('pointerout', () => {
+      this.paddleTarget = this.px;
     });
   }
 
@@ -143,15 +165,16 @@ export class BugBreakerScene extends Phaser.Scene {
     if (this.gameOver || this.win) return;
 
     const { width, height } = this.scale;
-    const dt = delta / 1000;
+    const dt = Math.min(delta / 1000, 0.05);
 
-    // Keyboard paddle
+    // Smooth paddle movement
     if (this.keys['left'].isDown || this.keys['a'].isDown) {
-      this.px = Phaser.Math.Clamp(this.px - 300 * dt, 40, width - 40);
+      this.paddleTarget = Phaser.Math.Clamp(this.px - 300 * dt, PADDLE_CLAMP, width - PADDLE_CLAMP);
     }
     if (this.keys['right'].isDown || this.keys['d'].isDown) {
-      this.px = Phaser.Math.Clamp(this.px + 300 * dt, 40, width - 40);
+      this.paddleTarget = Phaser.Math.Clamp(this.px + 300 * dt, PADDLE_CLAMP, width - PADDLE_CLAMP);
     }
+    this.px = lerp(this.px, this.paddleTarget, Math.min(1, 12 * dt));
 
     // Ball follows paddle before launch
     if (!this.launched) {
@@ -161,20 +184,25 @@ export class BugBreakerScene extends Phaser.Scene {
       this.bx += this.bvx * dt;
       this.by += this.bvy * dt;
 
+      // Cap ball speed
+      const speed = Math.sqrt(this.bvx * this.bvx + this.bvy * this.bvy);
+      if (speed > 450) {
+        this.bvx = (this.bvx / speed) * 450;
+        this.bvy = (this.bvy / speed) * 450;
+      }
+
       // Wall bounce
-      if (this.bx < 6) { this.bx = 6; this.bvx = Math.abs(this.bvx); }
-      if (this.bx > width - 6) { this.bx = width - 6; this.bvx = -Math.abs(this.bvx); }
+      if (this.bx < BALl_R) { this.bx = BALl_R; this.bvx = Math.abs(this.bvx); }
+      if (this.bx > width - BALl_R) { this.bx = width - BALl_R; this.bvx = -Math.abs(this.bvx); }
       if (this.by < 30) { this.by = 30; this.bvy = Math.abs(this.bvy); }
 
       // Paddle bounce
-      const paddleW = 80;
-      const paddleTop = 556;
-      if (this.bvy > 0 && this.by > paddleTop - 4 && this.by < paddleTop + 8 &&
-          this.bx > this.px - paddleW / 2 - 6 && this.bx < this.px + paddleW / 2 + 6) {
-        const hitRatio = (this.bx - this.px) / (paddleW / 2);
-        this.bvx = hitRatio * 300;
+      if (this.bvy > 0 && this.by > PADDLE_TOP - BALl_R && this.by < PADDLE_TOP + 8 &&
+          this.bx > this.px - PADDLE_W / 2 - BALl_R && this.bx < this.px + PADDLE_W / 2 + BALl_R) {
+        const hitRatio = Phaser.Math.Clamp((this.bx - this.px) / (PADDLE_W / 2), -1, 1);
+        this.bvx = hitRatio * 320;
         this.bvy = -Math.abs(this.bvy);
-        this.by = paddleTop - 4;
+        this.by = PADDLE_TOP - BALl_R;
         AudioManager.get().playSfx('hover');
       }
 
@@ -195,16 +223,15 @@ export class BugBreakerScene extends Phaser.Scene {
       // Block collision
       for (const block of this.blocks) {
         if (!block.alive) continue;
-        if (this.bx + 5 > block.x - block.w / 2 && this.bx - 5 < block.x + block.w / 2 &&
-            this.by + 5 > block.y && this.by - 5 < block.y + block.h) {
+        if (this.bx + BALl_R > block.x - block.w / 2 && this.bx - BALl_R < block.x + block.w / 2 &&
+            this.by + BALl_R > block.y && this.by - BALl_R < block.y + block.h) {
           block.alive = false;
           block.gfx.setVisible(false);
           block.label.setVisible(false);
-          // Determine bounce direction
-          const overlapLeft = (this.bx + 5) - (block.x - block.w / 2);
-          const overlapRight = (block.x + block.w / 2) - (this.bx - 5);
-          const overlapTop = (this.by + 5) - block.y;
-          const overlapBottom = (block.y + block.h) - (this.by - 5);
+          const overlapLeft = (this.bx + BALl_R) - (block.x - block.w / 2);
+          const overlapRight = (block.x + block.w / 2) - (this.bx - BALl_R);
+          const overlapTop = (this.by + BALl_R) - block.y;
+          const overlapBottom = (block.y + block.h) - (this.by - BALl_R);
           const minOverlapX = Math.min(overlapLeft, overlapRight);
           const minOverlapY = Math.min(overlapTop, overlapBottom);
           if (minOverlapX < minOverlapY) {
@@ -229,14 +256,14 @@ export class BugBreakerScene extends Phaser.Scene {
     // Draw paddle
     this.paddle.clear();
     this.paddle.fillStyle(0x4488ff, 0.9);
-    this.paddle.fillRoundedRect(this.px - 40, 556, 80, 10, 4);
+    this.paddle.fillRoundedRect(this.px - PADDLE_W / 2, PADDLE_TOP, PADDLE_W, PADDLE_H, 4);
     this.paddle.fillStyle(0x66aaff, 0.3);
-    this.paddle.fillRoundedRect(this.px - 38, 558, 76, 4, 2);
+    this.paddle.fillRoundedRect(this.px - PADDLE_W / 2 + 2, PADDLE_TOP + 2, PADDLE_W - 4, 4, 2);
 
     // Draw ball
     this.ball.clear();
     this.ball.fillStyle(0xffffff, 1);
-    this.ball.fillCircle(this.bx, this.by, 6);
+    this.ball.fillCircle(this.bx, this.by, BALl_R);
     this.ball.fillStyle(0x88ccff, 0.4);
     this.ball.fillCircle(this.bx - 1, this.by - 1, 3);
   }

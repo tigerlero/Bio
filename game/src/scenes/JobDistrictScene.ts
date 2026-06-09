@@ -65,6 +65,7 @@ export class JobDistrictScene extends Phaser.Scene {
       'Evalion-SHL': 'logo_evalion',
       'Newdeal Real Estates': 'logo_newdeal',
       'Datawise': 'logo_datawise',
+      'Algorithmics': 'logo_algorithmics',
     };
 
     this.buildings = [];

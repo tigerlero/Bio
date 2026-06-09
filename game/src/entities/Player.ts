@@ -22,6 +22,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private lastDir: string = 'down';
   private shadow: Phaser.GameObjects.Graphics;
   private footstepTimer = 0;
+  coffeeBoostTimer = 0;
   joystickDx = 0;
   joystickDy = 0;
   joystickActive = false;
@@ -90,11 +91,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  update(): void {
+  update(delta?: number): void {
     if (this.state === PlayerState.IN_MENU || this.state === PlayerState.INTERACTING) {
       this.setVelocity(0, 0);
       return;
     }
+
+    // Coffee boost timer
+    if (this.coffeeBoostTimer > 0 && delta) {
+      this.coffeeBoostTimer -= delta / 1000;
+    }
+
+    let speed = MOVE_SPEED;
+    if (this.coffeeBoostTimer > 0) speed = Math.round(MOVE_SPEED * 1.5);
 
     let vx = 0;
     let vy = 0;
@@ -104,8 +113,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.joystickActive) {
       const len = Math.sqrt(this.joystickDx * this.joystickDx + this.joystickDy * this.joystickDy);
       if (len > 0.2) {
-        vx = this.joystickDx / len * MOVE_SPEED;
-        vy = this.joystickDy / len * MOVE_SPEED;
+        vx = this.joystickDx / len * speed;
+        vy = this.joystickDy / len * speed;
         moving = true;
         if (Math.abs(vx) > Math.abs(vy)) {
           dir = vx < 0 ? 'left' : 'right';
@@ -119,11 +128,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       const up = this.cursors.up.isDown || this.keyW.isDown;
       const down = this.cursors.down.isDown || this.keyS.isDown;
 
-      if (left) { vx = -MOVE_SPEED; dir = 'left'; moving = true; }
-      else if (right) { vx = MOVE_SPEED; dir = 'right'; moving = true; }
+      if (left) { vx = -speed; dir = 'left'; moving = true; }
+      else if (right) { vx = speed; dir = 'right'; moving = true; }
 
-      if (up) { vy = -MOVE_SPEED; dir = 'up'; moving = true; }
-      else if (down) { vy = MOVE_SPEED; dir = 'down'; moving = true; }
+      if (up) { vy = -speed; dir = 'up'; moving = true; }
+      else if (down) { vy = speed; dir = 'down'; moving = true; }
     }
 
     this.setVelocity(vx, vy);

@@ -147,6 +147,19 @@
         "Java-based tool development"
       ],
       "position": { "x": 650, "y": 440 }
+    },
+    {
+      "id": "algorithmics",
+      "company": "Algorithmics",
+      "role": "Coding Instructor",
+      "period": "2024 — 2025",
+      "highlights": [
+        "Taught Python, Scratch, and MIT App Inventor to children aged 6-18",
+        "Developed lesson plans and learning materials for coding courses",
+        "Mentored students through project-based learning modules",
+        "Conducted workshops on algorithms, logic, and computational thinking"
+      ],
+      "position": { "x": 700, "y": 480 }
     }
   ],
   "skills": {

@@ -23,11 +23,18 @@ interface ZoneRect {
 }
 
 const ZONES: ZoneRect[] = [
-  { name: 'Home', x: 600, y: 600, w: 400, h: 400, color: 0xffffff },
-  { name: 'Projects', x: 200, y: 100, w: 600, h: 500, color: 0x4488ff },
-  { name: 'Jobs', x: 1000, y: 200, w: 600, h: 500, color: 0x44cc44 },
-  { name: 'Skills', x: 1000, y: 800, w: 600, h: 500, color: 0xcc44ff },
-  { name: 'Education', x: 100, y: 800, w: 600, h: 500, color: 0xffaa44 },
+  { name: 'Home', x: 1050, y: 750, w: 500, h: 400, color: 0xffffff },
+  { name: 'Projects', x: 100, y: 100, w: 700, h: 550, color: 0x4488ff },
+  { name: 'Jobs', x: 1800, y: 100, w: 700, h: 550, color: 0x44cc44 },
+  { name: 'Education', x: 100, y: 1350, w: 700, h: 550, color: 0xffaa44 },
+  { name: 'Skills', x: 1800, y: 1350, w: 700, h: 550, color: 0xcc44ff },
+];
+
+interface CoffeeShopData { name: string; x: number; y: number; tagline: string; }
+const COFFEE_SHOPS: CoffeeShopData[] = [
+  { name: 'Central Perk ☕', x: 950, y: 700, tagline: 'Where everybody knows your code!' },
+  { name: 'Code Brew ☕', x: 1750, y: 700, tagline: 'Brewing the perfect espresso!' },
+  { name: 'Study Bean ☕', x: 950, y: 1250, tagline: 'Fuel for your algorithms!' },
 ];
 
 export class OverworldScene extends Phaser.Scene {
@@ -59,19 +66,59 @@ export class OverworldScene extends Phaser.Scene {
     const { width, height } = this.scale;
 
     // World bounds (larger than screen)
-    this.physics.world.setBounds(0, 0, 1800, 1400);
+    this.physics.world.setBounds(0, 0, 2600, 2000);
 
     // Draw ground
     const ground = this.add.graphics();
     ground.fillStyle(0x2d5a27);
-    ground.fillRect(0, 0, 1800, 1400);
+    ground.fillRect(0, 0, 2600, 2000);
 
-    // Draw zone areas with grass patterns
+    // Draw street network (wide paths between zones)
+    const streetColor = 0x7a6a4a;
+    const streetAlpha = 0.45;
+    const streetW = 24;
+    ground.fillStyle(streetColor, streetAlpha);
+
+    // Main horizontal street (above Home)
+    ground.fillRect(0, 688, 2600, 48);
+    // Left vertical street (between Projects/Education and Home)
+    ground.fillRect(838, 0, 48, 2000);
+    // Right vertical street (between Jobs/Skills and Home)
+    ground.fillRect(1714, 0, 48, 2000);
+    // Bottom horizontal street (below Home)
+    ground.fillRect(0, 1312, 2600, 48);
+
+    // Street markings (center dashes)
+    ground.fillStyle(0xddd4b0, 0.2);
+    for (let x = 0; x < 2600; x += 60) {
+      ground.fillRect(x + 14, 704, 8, 2);
+    }
+    for (let x = 0; x < 2600; x += 60) {
+      ground.fillRect(x + 14, 1328, 8, 2);
+    }
+    for (let y = 0; y < 2000; y += 60) {
+      ground.fillRect(854, y + 14, 2, 8);
+    }
+    for (let y = 0; y < 2000; y += 60) {
+      ground.fillRect(1730, y + 14, 2, 8);
+    }
+
+    // Draw zone areas
     for (const zone of ZONES) {
       ground.fillStyle(zone.color, 0.15);
       ground.fillRect(zone.x, zone.y, zone.w, zone.h);
       ground.lineStyle(2, zone.color, 0.4);
       ground.strokeRect(zone.x, zone.y, zone.w, zone.h);
+    }
+
+    // Coffee shop zones (small colored squares with awning)
+    const coffeeColors = [0x6f4e37, 0x8b5e3c, 0xa0522d];
+    for (let i = 0; i < COFFEE_SHOPS.length; i++) {
+      const cs = COFFEE_SHOPS[i];
+      ground.fillStyle(coffeeColors[i], 0.3);
+      ground.fillRect(cs.x - 24, cs.y - 24, 48, 48);
+      ground.lineStyle(2, coffeeColors[i], 0.5);
+      ground.strokeRect(cs.x - 24, cs.y - 24, 48, 48);
     }
 
     // Decorative elements
@@ -129,7 +176,7 @@ export class OverworldScene extends Phaser.Scene {
     this.nightOverlay.setScrollFactor(0);
 
     // Minimap
-    this.minimap = new Minimap(this, ZONES, 1800, 1400);
+    this.minimap = new Minimap(this, ZONES, 2600, 2000);
 
     // Key bindings
     this.keyM = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.M);
@@ -148,7 +195,7 @@ export class OverworldScene extends Phaser.Scene {
     this.pauseMenu = new PauseMenu(this);
 
     // Camera
-    this.cameras.main.setBounds(0, 0, 1800, 1400);
+    this.cameras.main.setBounds(0, 0, 2600, 2000);
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
     this.cameras.main.setBackgroundColor('#1a2a1a');
   }
@@ -178,7 +225,7 @@ export class OverworldScene extends Phaser.Scene {
       this.player.interactionPressed = true;
     }
 
-    this.player.update();
+    this.player.update(delta);
 
     this.pauseMenu.update();
 
@@ -211,33 +258,39 @@ export class OverworldScene extends Phaser.Scene {
 
   private addDecorations(): void {
     const deco = this.add.graphics();
-    // Trees
+    // Trees around the expanded world
     const treePositions = [
-      [50, 50], [80, 120], [150, 300], [200, 500],
-      [700, 50], [750, 80], [1100, 50], [1150, 80],
-      [50, 1100], [120, 1150], [50, 1300], [150, 1350],
-      [1700, 50], [1750, 120], [1700, 1300], [1750, 1350],
-      [1600, 600], [1650, 800], [900, 50], [950, 50],
-      [50, 700], [100, 750], [1700, 700], [1750, 750],
-      [900, 1350], [950, 1350],
+      [50,50],[80,120],[150,300],[200,500],[450,50],[500,80],[550,50],
+      [850,80],[850,120],[900,50],[1100,50],[1150,80],[1200,50],
+      [1400,100],[1450,300],[1500,500],[1550,200],[1600,100],
+      [1800,50],[1850,80],[1900,50],[1950,120],[2000,50],
+      [2150,80],[2200,50],[2300,120],[2400,50],[2500,80],
+      [50,650],[100,680],[150,620],[200,660],[250,640],
+      [2350,650],[2400,680],[2450,620],[2500,660],
+      [50,1380],[100,1420],[150,1360],[200,1400],
+      [2350,1380],[2400,1420],[2450,1360],[2500,1400],
+      [50,1800],[80,1850],[150,1900],[200,1950],[450,1920],
+      [850,1850],[900,1900],[1100,1950],[1150,1880],
+      [1400,1920],[1450,1900],[1500,1850],[1550,1950],
+      [1800,1800],[1850,1880],[1900,1920],[1950,1900],
+      [2150,1950],[2200,1880],[2300,1850],[2400,1900],[2500,1920],
+      [1100,1200],[1150,1250],[1200,1180],[1250,1220],
+      [1100,1350],[1150,1380],[1200,1330],[1250,1370],
     ];
     for (const [tx, ty] of treePositions) {
-      const tree = this.add.image(tx, ty, 'tree').setDepth(2);
+      const t = this.add.image(tx, ty, 'tree').setDepth(2);
       this.tweens.add({
-        targets: tree,
-        x: tx + 2,
-        duration: 2000 + Math.random() * 1500,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
-        delay: Math.random() * 2000,
+        targets: t, x: tx + 2, duration: 2000 + Math.random() * 1500,
+        yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: Math.random() * 2000,
       });
     }
 
     // Rocks
     const rockPositions = [
-      [300, 150], [550, 500], [200, 400], [600, 200],
-      [1300, 300], [1500, 1000], [300, 1200], [1400, 1300],
+      [300,150],[550,500],[200,400],[600,200],[1300,300],
+      [400,1200],[600,1400],[200,1100],[1400,400],[1600,600],
+      [2400,300],[2500,500],[2350,1000],[2450,1200],
+      [100,1650],[300,1750],[500,1850],[2300,1700],[2450,1800],
     ];
     for (const [rx, ry] of rockPositions) {
       this.add.image(rx, ry, 'rock').setDepth(2);
@@ -245,46 +298,79 @@ export class OverworldScene extends Phaser.Scene {
 
     // Flowers
     const flowerPositions = [
-      [150, 200], [250, 100], [450, 200], [350, 500],
-      [650, 300], [700, 450], [150, 550], [300, 620],
-      [1200, 200], [1300, 350], [1500, 500], [1400, 700],
-      [1100, 900], [1200, 1100], [1300, 1300], [300, 900],
-      [500, 1100], [700, 1300], [900, 1100], [1700, 800],
+      [200,200],[350,300],[450,150],[550,250],[650,350],[750,200],
+      [200,900],[300,850],[400,950],[500,900],[200,1000],
+      [1850,200],[1950,300],[2050,150],[2150,250],[2250,350],[2350,200],
+      [1850,900],[1950,850],[2050,950],[2150,900],
+      [200,1550],[300,1650],[450,1750],[550,1600],[650,1800],[750,1700],
+      [1850,1550],[1950,1650],[2050,1750],[2150,1600],[2250,1800],[2350,1700],
+      [1100,600],[1150,650],[1200,550],[1250,600],
+      [1100,1400],[1150,1450],[1200,1350],[1250,1400],
+      [1500,700],[1550,750],[1600,700],[1650,750],
+      [1500,1250],[1550,1300],[1600,1250],[1650,1300],
     ];
     for (const [fx, fy] of flowerPositions) {
-      const flower = this.add.image(fx, fy, 'flower').setDepth(1);
+      const f = this.add.image(fx, fy, 'flower').setDepth(1);
       this.tweens.add({
-        targets: flower,
-        x: fx + 1.5,
-        duration: 1200 + Math.random() * 800,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut',
-        delay: Math.random() * 1000,
+        targets: f, x: fx + 1.5, duration: 1200 + Math.random() * 800,
+        yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: Math.random() * 1000,
       });
     }
 
-    // Paths (simple lines)
-    deco.lineStyle(12, 0x8b7355, 0.3);
-    deco.beginPath();
-    deco.moveTo(600, 800);
-    deco.lineTo(500, 350);
-    deco.strokePath();
+    // Sidewalk edges along streets
+    deco.lineStyle(2, 0x998866, 0.3);
+    // Main horizontal edges
+    deco.beginPath(); deco.moveTo(0, 688); deco.lineTo(838, 688); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 688); deco.lineTo(2600, 688); deco.strokePath();
+    deco.beginPath(); deco.moveTo(0, 736); deco.lineTo(838, 736); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 736); deco.lineTo(2600, 736); deco.strokePath();
+    // Vertical left edges
+    deco.beginPath(); deco.moveTo(838, 0); deco.lineTo(838, 688); deco.strokePath();
+    deco.beginPath(); deco.moveTo(838, 736); deco.lineTo(838, 1312); deco.strokePath();
+    deco.beginPath(); deco.moveTo(838, 1360); deco.lineTo(838, 2000); deco.strokePath();
+    deco.beginPath(); deco.moveTo(886, 0); deco.lineTo(886, 688); deco.strokePath();
+    deco.beginPath(); deco.moveTo(886, 736); deco.lineTo(886, 1312); deco.strokePath();
+    deco.beginPath(); deco.moveTo(886, 1360); deco.lineTo(886, 2000); deco.strokePath();
+    // Vertical right edges
+    deco.beginPath(); deco.moveTo(1714, 0); deco.lineTo(1714, 688); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1714, 736); deco.lineTo(1714, 1312); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1714, 1360); deco.lineTo(1714, 2000); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 0); deco.lineTo(1762, 688); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 736); deco.lineTo(1762, 1312); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 1360); deco.lineTo(1762, 2000); deco.strokePath();
+    // Bottom horizontal edges
+    deco.beginPath(); deco.moveTo(0, 1312); deco.lineTo(838, 1312); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 1312); deco.lineTo(2600, 1312); deco.strokePath();
+    deco.beginPath(); deco.moveTo(0, 1360); deco.lineTo(838, 1360); deco.strokePath();
+    deco.beginPath(); deco.moveTo(1762, 1360); deco.lineTo(2600, 1360); deco.strokePath();
 
-    deco.beginPath();
-    deco.moveTo(600, 800);
-    deco.lineTo(1300, 450);
-    deco.strokePath();
-
-    deco.beginPath();
-    deco.moveTo(600, 800);
-    deco.lineTo(1300, 1050);
-    deco.strokePath();
-
-    deco.beginPath();
-    deco.moveTo(600, 800);
-    deco.lineTo(400, 1050);
-    deco.strokePath();
+    // Coffee shop name labels
+    const fsLabel = this.add.graphics().setDepth(5);
+    for (const cs of COFFEE_SHOPS) {
+      const nameLabel = this.add.text(cs.x, cs.y - 40, cs.name, {
+        fontSize: '11px', color: '#eebb88', fontFamily: 'monospace', fontStyle: 'bold',
+        stroke: '#000000', strokeThickness: 3,
+      }).setOrigin(0.5).setDepth(10);
+      this.tweens.add({
+        targets: nameLabel, y: cs.y - 44, duration: 1500, yoyo: true, repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      // Coffee cup icon
+      const cup = this.add.text(cs.x, cs.y, '☕', {
+        fontSize: '20px',
+      }).setOrigin(0.5).setDepth(10);
+      this.tweens.add({
+        targets: cup, y: cs.y + 2, scale: { from: 1, to: 1.15 },
+        duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+      });
+      // Small awning graphic
+      fsLabel.fillStyle(0x6f4e37, 0.5);
+      fsLabel.fillRect(cs.x - 30, cs.y - 28, 60, 6);
+      fsLabel.fillStyle(0xd4a574, 0.4);
+      for (let sx = cs.x - 28; sx < cs.x + 28; sx += 8) {
+        fsLabel.fillTriangle(sx, cs.y - 28, sx + 4, cs.y - 28, sx + 2, cs.y - 22);
+      }
+    }
   }
 
   private spawnNPCs(): void {
@@ -317,12 +403,12 @@ export class OverworldScene extends Phaser.Scene {
       this.spawnNPC(edu.position.x, edu.position.y, 'book', edu.degree, 'education', edu);
     }
 
-    // Skill gems (one per category, placed at fixed positions)
+    // Skill gems (one per category, placed in Skills zone)
     const skillPositions = [
-      { x: 1080, y: 860 }, { x: 1200, y: 900 },
-      { x: 1320, y: 860 }, { x: 1240, y: 1000 },
-      { x: 1120, y: 1000 }, { x: 1400, y: 960 },
-      { x: 1160, y: 1080 },
+      { x: 1900, y: 1450 }, { x: 2050, y: 1480 },
+      { x: 2200, y: 1450 }, { x: 2100, y: 1580 },
+      { x: 1950, y: 1600 }, { x: 2300, y: 1500 },
+      { x: 2020, y: 1700 },
     ];
     let si = 0;
     for (const category of Object.keys(this.bio.skills)) {
@@ -338,6 +424,19 @@ export class OverworldScene extends Phaser.Scene {
       };
       this.spawnNPC(pos.x, pos.y, 'gem', category, 'skill', fakeEdu);
       si++;
+    }
+
+    // Coffee shops
+    for (const cs of COFFEE_SHOPS) {
+      const fakeEdu: Education = {
+        id: `coffee_${cs.name.replace(/[^a-z]/gi, '_').toLowerCase()}`,
+        degree: '☕ Freddo Espresso',
+        school: cs.name,
+        year: 2024,
+        description: cs.tagline,
+        position: { x: cs.x, y: cs.y },
+      };
+      this.spawnNPC(cs.x, cs.y, 'building', cs.name, 'coffee', fakeEdu, 0);
     }
   }
 
@@ -548,6 +647,36 @@ export class OverworldScene extends Phaser.Scene {
 
     if (type === 'skill') {
       this.emitSparkles(npc.x, npc.y);
+    }
+
+    if (type === 'coffee') {
+      this.dialogue.show([
+        `☕ Welcome to ${name}!`,
+        'Fresh freddo espresso — €2.50',
+        'Press E to buy ☕',
+      ], name, undefined, () => {
+        this.dialogue.show([
+          '☕ Enjoy your freddo espresso!',
+          'You feel energized and ready to code!',
+          '+50% speed boost for 10 seconds!',
+        ], name, undefined, () => {
+          this.player.coffeeBoostTimer = 10;
+          // Visual coffee cup above player
+          const cupIcon = this.add.text(0, 0, '☕', {
+            fontSize: '18px',
+          }).setOrigin(0.5).setDepth(30);
+          cupIcon.setPosition(this.player.x, this.player.y - 40);
+          this.tweens.add({
+            targets: cupIcon,
+            props: { alpha: { value: 0 }, y: { value: this.player.y - 80 } },
+            onUpdate: () => {
+              cupIcon.setPosition(this.player.x, cupIcon.y);
+            },
+            onComplete: () => cupIcon.destroy(),
+          });
+        });
+      });
+      return;
     }
 
     const greeting = `Hello! Let me tell you about this ${type}...`;

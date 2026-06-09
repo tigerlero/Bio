@@ -4,7 +4,7 @@ import type { Job } from '../data/bio';
 import { AudioManager } from '../systems/AudioManager';
 import { createPlayer, updatePlayerPosition, updatePlayerRotation } from '../utils/PlayerFactory';
 
-const jobLogoMap: Record<string, string> = { 'Valmore-Neogen': 'valmore', 'ExpressTransfers': 'expresstransfers', 'Evalion-SHL': 'evalion', 'Newdeal Real Estates': 'newdeal', 'Datawise': 'datawise' };
+const jobLogoMap: Record<string, string> = { 'Valmore-Neogen': 'valmore', 'ExpressTransfers': 'expresstransfers', 'Evalion-SHL': 'evalion', 'Newdeal Real Estates': 'newdeal', 'Datawise': 'datawise', 'Algorithmics': 'algorithmics' };
 
 export class JobDistrictScene3D {
   public scene: THREE.Scene;

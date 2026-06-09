@@ -18,7 +18,16 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
-    #game { width: 100%; height: 100%; }
+    #game { width: 100%; height: 100%; position: relative; }
+    #fs-btn {
+      position: absolute; top: 8px; right: 8px; z-index: 9999;
+      background: rgba(20,40,60,0.6); border: 1px solid rgba(100,140,180,0.4);
+      color: #88aacc; font-size: 18px; font-family: monospace;
+      width: 34px; height: 34px; line-height: 34px; text-align: center;
+      cursor: pointer; border-radius: 4px; user-select: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    #fs-btn:hover { background: rgba(40,80,120,0.8); color: #bbddff; }
     /* High-contrast mode */
     .bio-high-contrast #game canvas { filter: contrast(1.5) brightness(1.1); }
     .bio-high-contrast .modal-content {
@@ -30,6 +39,17 @@
 </head>
 <body>
   <div id="game" role="application" aria-label="Bio Explorer Game - 2D open world portfolio game. Navigate with WASD or arrow keys. Press E to interact."></div>
+  <button id="fs-btn" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
+  <script>
+    document.getElementById('fs-btn').addEventListener('click', function() {
+      const el = document.documentElement;
+      if (!document.fullscreenElement) {
+        el.requestFullscreen().catch(function(){});
+      } else {
+        document.exitFullscreen().catch(function(){});
+      }
+    });
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

@@ -24,6 +24,12 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 600,
   parent: 'game',
   backgroundColor: '#0a1a0a',
+  render: {
+    antialias: true,
+    pixelArt: false,
+    antialiasGL: true,
+    transparent: false,
+  },
   physics: {
     default: 'arcade',
     arcade: {
@@ -34,6 +40,11 @@ const config: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
+    expandParent: true,
+  },
+  fps: {
+    target: 60,
+    forceSetTimeOut: false,
   },
   scene: [BootScene, TitleScene, OverworldScene, EducationCampusScene, ProjectParkScene, JobDistrictScene, SkillGardenScene, SnakeGameScene, ProjectMatchScene, CampusQuizScene, FlappyJobScene, TetrisProjectScene, BaseOpsScene, BugBreakerScene],
 };

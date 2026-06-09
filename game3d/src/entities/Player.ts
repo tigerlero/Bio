@@ -5,10 +5,12 @@ export class Player {
   public x = 400;
   public z = 350;
   public speed = 140;
+  public baseSpeed = 140;
+  public coffeeBoostTimer = 0;
   public worldMinX = 20;
-  public worldMaxX = 1780;
+  public worldMaxX = 2580;
   public worldMinZ = 20;
-  public worldMaxZ = 1380;
+  public worldMaxZ = 1980;
   private bodyParts: THREE.Mesh[] = [];
   private bodyY = 0;
   private bobDir = 1;
@@ -99,6 +101,13 @@ export class Player {
   }
 
   update(dt: number, cameraDir: THREE.Vector3): boolean {
+    if (this.coffeeBoostTimer > 0) {
+      this.coffeeBoostTimer -= dt;
+      this.speed = this.baseSpeed * 1.5;
+    } else {
+      this.speed = this.baseSpeed;
+    }
+
     let vx = 0;
     let vz = 0;
 

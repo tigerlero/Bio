@@ -141,6 +141,22 @@ export class BootScene extends Phaser.Scene {
       gemCanvas.refresh();
     }
 
+    // Algorithmics logo (procedural)
+    const algoLogo = this.textures.createCanvas('logo_algorithmics', 64, 64);
+    if (algoLogo) {
+      const actx = algoLogo.getContext();
+      actx.fillStyle = '#00aaff';
+      actx.fillRect(0, 0, 64, 64);
+      actx.fillStyle = '#ffffff';
+      actx.font = 'bold 10px monospace';
+      actx.textAlign = 'center';
+      actx.fillText('ALGO', 32, 26);
+      actx.fillText('RITHM', 32, 40);
+      actx.font = 'bold 8px monospace';
+      actx.fillText('ICS', 32, 54);
+      algoLogo.refresh();
+    }
+
     // Rock texture for obstacles
     const rockCanvas = this.textures.createCanvas('rock', 24, 18);
     if (rockCanvas) {
