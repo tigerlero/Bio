@@ -237,6 +237,21 @@ export class SkillGardenScene extends Phaser.Scene {
       fontSize: '9px', color: '#ff8844', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
+    // Donkey Kong portal
+    const dkPortalX = worldW / 2 - 240;
+    const dkPortalY = worldH - 40;
+    portal = this.add.graphics();
+    portal.fillStyle(0xff4444, 0.4);
+    portal.fillCircle(dkPortalX, dkPortalY, 16);
+    portal.lineStyle(2, 0xff4444, 0.7);
+    portal.strokeCircle(dkPortalX, dkPortalY, 16);
+    this.add.text(dkPortalX, dkPortalY, 'D', {
+      fontSize: '14px', color: '#ff4444', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(dkPortalX, dkPortalY + 22, 'Donkey', {
+      fontSize: '9px', color: '#ff4444', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
     // Player
     this.playerSprite = this.add.sprite(this.px, this.py, 'player_sheet').setDepth(20).play('player_idle_down');
 
@@ -351,6 +366,12 @@ export class SkillGardenScene extends Phaser.Scene {
       nearMario = true;
     }
 
+    const dkPortalX = portalX - 240;
+    let nearDK = false;
+    if (Phaser.Math.Distance.Between(this.px, this.py, dkPortalX, portalY) < 35) {
+      nearDK = true;
+    }
+
     const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
     if (nearGem && interact) {
       AudioManager.get().playSfx('interact');
@@ -393,6 +414,14 @@ export class SkillGardenScene extends Phaser.Scene {
       });
     }
 
+    if (nearDK && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => {
+        this.scene.start('DonkeyKongScene');
+      });
+    }
+
     if (nearReturn) {
       this.prompt.setText('Press E to return');
       this.prompt.setPosition(this.px, this.py - 16);
@@ -411,6 +440,10 @@ export class SkillGardenScene extends Phaser.Scene {
       this.prompt.setVisible(true);
     } else if (nearMario) {
       this.prompt.setText('Press E: Dev Mario');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearDK) {
+      this.prompt.setText('Press E: Donkey Kong');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearGem) {

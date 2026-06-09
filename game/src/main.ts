@@ -15,6 +15,7 @@ import { BaseOpsScene } from './scenes/BaseOpsScene';
 import { BugBreakerScene } from './scenes/BugBreakerScene';
 import { PacmanScene } from './scenes/PacmanScene';
 import { DevMarioScene } from './scenes/DevMarioScene';
+import { DonkeyKongScene } from './scenes/DonkeyKongScene';
 import { SettingsManager } from './systems/SettingsManager';
 
 // Apply saved settings on load
@@ -48,7 +49,7 @@ const config: Phaser.Types.Core.GameConfig = {
     target: 60,
     forceSetTimeOut: false,
   },
-  scene: [BootScene, TitleScene, OverworldScene, EducationCampusScene, ProjectParkScene, JobDistrictScene, SkillGardenScene, SnakeGameScene, ProjectMatchScene, CampusQuizScene, FlappyJobScene, TetrisProjectScene, BaseOpsScene, BugBreakerScene, PacmanScene, DevMarioScene],
+  scene: [BootScene, TitleScene, OverworldScene, EducationCampusScene, ProjectParkScene, JobDistrictScene, SkillGardenScene, SnakeGameScene, ProjectMatchScene, CampusQuizScene, FlappyJobScene, TetrisProjectScene, BaseOpsScene, BugBreakerScene, PacmanScene, DevMarioScene, DonkeyKongScene],
 };
 
 const game = new Phaser.Game(config);

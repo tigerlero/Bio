@@ -412,6 +412,14 @@
       "category": "Minigame"
     },
     {
+      "id": "donkey-kong",
+      "title": "Donkey Kong (Bug Tower)",
+      "description": "Donkey Kong-style vertical climber — a Tester at the top of Bug Tower throws bugs down at you as you climb 6 levels of platforms connected by ladders. Dodge, jump, and collect coins to reach the top and survive the bug onslaught! Built with Phaser.js and TypeScript.",
+      "tech": ["TypeScript", "Phaser.js", "Arcade", "Platformer"],
+      "playUrl": "play/?game=dk",
+      "category": "Minigame"
+    },
+    {
       "id": "pingpong",
       "title": "PingPong Game",
       "description": "Classic Pong game built with Python and PyGame. Features AI opponent with adjustable difficulty, local 2-player multiplayer mode, score tracking, and sound effects.",
