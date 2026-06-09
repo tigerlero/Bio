@@ -190,6 +190,20 @@
         "Customizable parameters: wind, gravity, fabric stiffness, and grid resolution",
         "OpenGL rendering pipeline with shader-based lighting"
       ]
+    },
+    {
+      "id": "misc-projects",
+      "title": "Misc Projects",
+      "description": "Various academic and experimental projects spanning multiple languages and paradigms including SQL, Java, Kotlin, Prolog, and HTML. Covers assignments, mini-tools, and explorations from university coursework and personal experimentation.",
+      "tech": ["SQL", "Java", "Kotlin", "Prolog", "HTML"],
+      "link": "https://github.com/tigerlero",
+      "highlights": [
+        "SQL database design and query optimization projects",
+        "Java console applications and object-oriented design exercises",
+        "Kotlin Android development experiments",
+        "Prolog logic programming and knowledge base systems",
+        "HTML/CSS static website prototypes"
+      ]
     }
   ],
   "freelance": [
@@ -400,19 +414,6 @@
   ],
   "experience": [
     {
-      "company": "ExpressTransfers",
-      "role": "Fullstack Developer",
-      "period": "2026 — Present",
-      "type": "Remote",
-      "highlights": [
-        "Developing a transfer booking platform with Stripe payment integration",
-        "Interactive Leaflet maps for route visualization and fare estimation",
-        "Containerized deployment with Docker and CI/CD pipelines",
-        "WordPress backend with custom plugin development"
-      ],
-      "tags": ["WordPress", "Docker", "Stripe", "Django", "Leaflet"]
-    },
-    {
       "company": "Valmore-Neogen",
       "role": "Fullstack Developer",
       "period": "2023 — Present",
@@ -425,6 +426,19 @@
         "Managing MongoDB databases and optimizing query performance"
       ],
       "tags": ["React", "Vue", "PHP", "Express", "Docker", "MongoDB"]
+    },
+    {
+      "company": "ExpressTransfers",
+      "role": "Fullstack Developer",
+      "period": "2026 — Present",
+      "type": "Remote",
+      "highlights": [
+        "Developing a transfer booking platform with Stripe payment integration",
+        "Interactive Leaflet maps for route visualization and fare estimation",
+        "Containerized deployment with Docker and CI/CD pipelines",
+        "WordPress backend with custom plugin development"
+      ],
+      "tags": ["WordPress", "Docker", "Stripe", "Django", "Leaflet"]
     },
     {
       "company": "Evalion-SHL",

@@ -44,6 +44,30 @@ const CONFIG = Object.freeze({
 });
 
 // ============================================================
+// LOCALISATION / i18n
+// Detect language from the site's global i18n system.
+// Falls back to 'en' if localStorage is unavailable.
+// ============================================================
+(function detectLang() {
+  try {
+    const lang = localStorage.getItem('lang') || 'en';
+    const allLangs = (typeof window._L !== 'undefined' && window._L) ||
+      ['en', 'el', 'it', 'tr', 'ro', 'sq', 'bg', 'es', 'fr'];
+    const idx = Math.max(0, allLangs.indexOf(lang));
+    window.__CHAT_LANG = lang;
+    window.__CHAT_LANG_IDX = idx;
+  } catch {
+    window.__CHAT_LANG = 'en';
+    window.__CHAT_LANG_IDX = 0;
+  }
+})();
+
+/** Translate helper: returns Greek text when site language is Greek, else English. */
+function __tr(en, el) {
+  return window.__CHAT_LANG_IDX === 1 ? el : en;
+}
+
+// ============================================================
 // INTENT DEFINITIONS
 // Each intent declares:
 //   id         — unique key
@@ -85,40 +109,50 @@ addIntent({
   response: (profile, ctx) => {
     const name = profile.meta.name.split(' ')[0];
     const hour = new Date().getHours();
-    const timeGreeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    const timeGreeting = hour < 12 ? (window.__CHAT_LANG_IDX === 1 ? 'Καλημέρα' : 'Good morning') : hour < 18 ? (window.__CHAT_LANG_IDX === 1 ? 'Καλησπέρα' : 'Good afternoon') : (window.__CHAT_LANG_IDX === 1 ? 'Καλησπέρα' : 'Good evening');
     const visited = ctx.getHistory().length > 2;
     if (visited) {
-      return `${timeGreeting}! Welcome back! I'm still here to help you learn more about ${name}. What would you like to know? ☕`;
+      return __tr(
+        `${timeGreeting}! Welcome back! I'm still here to help you learn more about ${name}. What would you like to know? ☕`,
+        `${timeGreeting}! Καλώς ήρθες ξανά! Είμαι εδώ για να σε βοηθήσω να μάθεις περισσότερα για τον ${name}. Τι θα ήθελες να μάθεις; ☕`
+      );
     }
-    return `${timeGreeting}! I'm the ${CONFIG.BOT_NAME}. Ask me anything about ${name}'s skills, projects, experience, or education!`;
+    return __tr(
+      `${timeGreeting}! I'm the ${CONFIG.BOT_NAME}. Ask me anything about ${name}'s skills, projects, experience, or education!`,
+      `${timeGreeting}! Είμαι το ${CONFIG.BOT_NAME}. Ρώτα με ό,τι θες για τις δεξιότητες, τα projects, την εμπειρία ή την εκπαίδευση του ${name}!`
+    );
   },
 });
 
 addIntent({
   id: 'about_me',
   labels: ['About Me'],
-  keywords: ['about', 'who', 'yourself', 'tell', 'bio', 'introduction', 'introduce', 'background', 'summary', 'about you', 'who are you', 'tell me about'],
+  keywords: ['about', 'who', 'yourself', 'tell', 'bio', 'introduction', 'introduce', 'background', 'summary', 'about you', 'who are you', 'tell me about', 'ποιος', 'σχετικά', 'βιογραφικό', 'ποιος είσαι', 'πες μου'],
   patterns: [/^(who|what)\s+(is|are)\s+(you|this)/i, /tell\s+(me\s+)?about/i, /^(about|introduce)\s/i],
   priority: 5,
   response: (profile) => {
-    return `**${profile.meta.name}**\n\n${profile.bio.summary}\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`;
+    const name = profile.meta.name;
+    return __tr(
+      `**${name}**\n\n${profile.bio.summary}\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\nΟ ${name.split(' ')[0]} είναι επιστήμονας υπολογιστών και fullstack μηχανικός από την Ελλάδα. Έχει B.Sc. στην Πληροφορική από το Πανεπιστήμιο Πειραιώς και έχει εργαστεί σε startups, εταιρείες και enterprise projects. Διδάσκει προγραμματισμό σε παιδιά στην Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`
+    );
   },
 });
 
 addIntent({
   id: 'skills',
   labels: ['Skills'],
-  keywords: ['skills', 'technologies', 'languages', 'frameworks', 'tools', 'tech stack', 'stack', 'know', 'proficient', 'expertise', 'capable', 'what can you', 'competencies'],
+  keywords: ['skills', 'technologies', 'languages', 'frameworks', 'tools', 'tech stack', 'stack', 'know', 'proficient', 'expertise', 'capable', 'what can you', 'competencies', 'δεξιότητες', 'γλώσσες', 'τεχνολογίες', 'ξέρεις', 'τι ξέρεις', 'ικανότητες'],
   patterns: [/what\s+(technologies|tools|stacks|skills)/i, /tech\s+stack/i, /what\s+(do\s+)?(you\s+)?know/i],
   priority: 4,
   response: (profile) => {
     const cats = Object.entries(profile.skills);
-    let reply = `**Technical Skills** — ${profile.meta.name.split(' ')[0]} is proficient across ${cats.length} categories:\n\n`;
-    for (const [cat, items] of cats) {
-      reply += `▸ **${cat}**: ${items.join(', ')}\n`;
-    }
-    reply += `\nThat's ${cats.reduce((s, [, items]) => s + items.length, 0)}+ individual skills!`;
-    return reply;
+    const name = profile.meta.name.split(' ')[0];
+    const total = cats.reduce((s, [, items]) => s + items.length, 0);
+    return __tr(
+      `**Technical Skills** — ${name} is proficient across ${cats.length} categories:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nThat's ${total}+ individual skills!`,
+      `**Τεχνικές Δεξιότητες** — Ο ${name} γνωρίζει ${cats.length} κατηγορίες:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nΣύνολο ${total}+ δεξιότητες!`
+    );
   },
 });
 
@@ -130,7 +164,10 @@ addIntent({
   priority: 3,
   response: (profile) => {
     const fe = profile.skills.Frontend || [];
-    return `**Frontend Skills**\n\n${fe.join(', ')}\n\nHe's comfortable with modern SPA frameworks, responsive design, and component libraries like Material UI and Tailwind CSS.`;
+    return __tr(
+      `**Frontend Skills**\n\n${fe.join(', ')}\n\nHe's comfortable with modern SPA frameworks, responsive design, and component libraries like Material UI and Tailwind CSS.`,
+      `**Frontend Δεξιότητες**\n\n${fe.join(', ')}\n\nΆνετος με σύγχρονα SPA frameworks, responsive design και βιβλιοθήκες components όπως Material UI και Tailwind CSS.`
+    );
   },
 });
 
@@ -142,31 +179,33 @@ addIntent({
   priority: 3,
   response: (profile) => {
     const be = profile.skills.Backend || [];
-    return `**Backend Skills**\n\n${be.join(', ')}\n\nExperience spans Python (Django, Flask, FastAPI), PHP (Laravel), and Node.js (Express) ecosystems.`;
+    return __tr(
+      `**Backend Skills**\n\n${be.join(', ')}\n\nExperience spans Python (Django, Flask, FastAPI), PHP (Laravel), and Node.js (Express) ecosystems.`,
+      `**Backend Δεξιότητες**\n\n${be.join(', ')}\n\nΕμπειρία σε Python (Django, Flask, FastAPI), PHP (Laravel) και Node.js (Express).`
+    );
   },
 });
 
 addIntent({
   id: 'projects',
   labels: ['Projects'],
-  keywords: ['projects', 'portfolio', 'built', 'created', 'developed', 'made', 'applications', 'apps', 'work', 'showcase', 'what have you', 'what did you'],
+  keywords: ['projects', 'portfolio', 'built', 'created', 'developed', 'made', 'applications', 'apps', 'work', 'showcase', 'what have you', 'what did you', 'έργα', 'projects', 'εργασίες', 'δημιούργησες', 'έχεις φτιάξει'],
   patterns: [/what\s+(projects|apps|applications|things)\s/i, /show\s+(me\s+)?(your\s+)?(projects|work)/i, /^projects/i],
   priority: 4,
   response: (profile) => {
     const projects = profile.projects || [];
-    let reply = `**Projects** (${projects.length} total):\n\n`;
-    for (const p of projects) {
-      reply += `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n`;
-      reply += `  _Tech: ${p.tech.join(', ')}_\n\n`;
-    }
+    const reply = __tr(
+      `**Projects** (${projects.length} total):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Tech: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Projects** (σύνολο ${projects.length}):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Τεχνολογίες: ${p.tech.join(', ')}_`).join('\n\n')}`
+    );
     return reply.trim();
   },
 });
 
 addIntent({
   id: 'project_detail',
-  labels: [],
-  keywords: ['project', 'tell me about', 'detail'],
+  labels: ['Bio Explorer 2D', 'Bio Explorer 3D', 'RePaw', 'UR8', 'Pixel Sprint', 'Rustix', 'Speech Recognition', 'PhotoFavorites', 'Kivy Downloader', 'Tournaments', 'CryptDB', 'Flag Builder', 'PingPong', 'Asteroid', 'Snake', 'Flappy', 'Tetris', 'Quiz', 'Match', 'Base Ops', 'Bug Breaker', 'CareBeat', 'DrakosDesign', 'IslandBookings', 'MariaKostoula', 'AuraLibre'],
+  keywords: ['project', 'tell me about', 'detail', 'bio explorer', 'repaw', 'rustix', 'pixelsprint', 'speech', 'photofavorites', 'kivy', 'tournaments', 'snake', 'flappy', 'tetris', 'asteroid', 'cryptdb'],
   patterns: [/^(bio explorer|repaw|ur8|pixelsprint|rustix|speech|snake|photofavorites|kivy|tournaments|cryptdb|flag|pingpong|asteroid|carebeat|drakos|islandbookings|mariakostoula|laralibre)/i],
   priority: 6,
   response: (profile, ctx, raw) => {
@@ -185,10 +224,11 @@ addIntent({
     if (!best || bestScore < 0.3) return null;
     let reply = `**${best.title}**\n\n${best.description}\n\n`;
     if (best.highlights) {
-      reply += `**Key highlights:**\n`;
+      reply += __tr(`**Key highlights:**\n`, `**Κύρια σημεία:**\n`);
       for (const h of best.highlights) reply += `• ${h}\n`;
     }
-    reply += `\n🔗 [View on GitHub](${best.link})`;
+    reply += `\n🔗 ${__tr('View on GitHub', 'Προβολή στο GitHub')}`;
+    if (best.link) reply += `: [${best.link}](${best.link})`;
     return reply;
   },
 });
@@ -196,20 +236,15 @@ addIntent({
 addIntent({
   id: 'experience',
   labels: ['Experience'],
-  keywords: ['experience', 'work', 'job', 'career', 'employment', 'worked', 'professional', 'history', 'background', 'where did you', 'companies'],
+  keywords: ['experience', 'work', 'job', 'career', 'employment', 'worked', 'professional', 'history', 'background', 'where did you', 'companies', 'εμπειρία', 'εργασία', 'δουλειά', 'επαγγελματική', 'που δούλεψες'],
   patterns: [/where\s+(have|did)\s+(you\s+)?(worked|work)/i, /work\s+(history|experience)/i, /^experience/i],
   priority: 4,
   response: (profile) => {
     const jobs = profile.experience || [];
-    let reply = `**Professional Experience** — ${jobs.length} positions:\n\n`;
-    for (const j of jobs) {
-      reply += `▸ **${j.role}** @ ${j.company}\n`;
-      reply += `  ${j.period} · ${j.type}\n`;
-      for (const h of j.highlights.slice(0, 2)) {
-        reply += `  • ${h}\n`;
-      }
-      reply += '\n';
-    }
+    const reply = __tr(
+      `**Professional Experience** — ${jobs.length} positions:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Επαγγελματική Εμπειρία** — ${jobs.length} θέσεις:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`
+    );
     return reply.trim();
   },
 });
@@ -217,17 +252,15 @@ addIntent({
 addIntent({
   id: 'education',
   labels: ['Education'],
-  keywords: ['education', 'studied', 'degree', 'university', 'school', 'learned', 'college', 'academic', 'graduated', 'bachelor', 'certification', 'ecdl', 'unipi'],
+  keywords: ['education', 'studied', 'degree', 'university', 'school', 'learned', 'college', 'academic', 'graduated', 'bachelor', 'certification', 'ecdl', 'unipi', 'εκπαίδευση', 'σπουδές', 'πανεπιστήμιο', 'πτυχίο', 'σχολή'],
   patterns: [/where\s+(did\s+)?(you\s+)?(study|go\s+to\s+school)/i, /academic\s+(background|history)/i, /^education/i],
   priority: 4,
   response: (profile) => {
     const edu = profile.education || [];
-    let reply = `**Education**\n\n`;
-    for (const e of edu) {
-      reply += `▸ **${e.degree}**\n`;
-      reply += `  ${e.school} · ${e.year}\n`;
-      reply += `  ${e.description}\n\n`;
-    }
+    const reply = __tr(
+      `**Education**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Εκπαίδευση**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`
+    );
     return reply.trim();
   },
 });
@@ -240,7 +273,11 @@ addIntent({
   priority: 5,
   response: (profile) => {
     const gh = profile.social.github;
-    return `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${profile.meta.name.split(' ')[0]} has ${profile.projects.length} public repositories covering web apps, game engines, ML models, and tools. Open-source contributions are always welcome! 👨‍💻`;
+    const name = profile.meta.name.split(' ')[0];
+    return __tr(
+      `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} has ${profile.projects.length} public repositories covering web apps, game engines, ML models, and tools. Open-source contributions are always welcome! 👨‍💻`,
+      `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\nΟ ${name} έχει ${profile.projects.length} δημόσια repositories με web apps, game engines, ML μοντέλα και εργαλεία. Open-source συνεισφορές πάντα ευπρόσδεκτες! 👨‍💻`
+    );
   },
 });
 
@@ -252,140 +289,143 @@ addIntent({
   priority: 3,
   response: (profile) => {
     const li = profile.social.linkedin;
-    return `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConnect with ${profile.meta.name.split(' ')[0]} on LinkedIn for professional networking and collaboration opportunities.`;
+    const name = profile.meta.name.split(' ')[0];
+    return __tr(
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConnect with ${name} on LinkedIn for professional networking and collaboration opportunities.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nΣυνδεθείτε με τον ${name} στο LinkedIn για επαγγελματική δικτύωση και συνεργασίες.`
+    );
   },
 });
 
 addIntent({
   id: 'contact',
   labels: ['Contact'],
-  keywords: ['contact', 'reach', 'email', 'phone', 'call', 'message', 'get in touch', 'how to', 'hire', 'available'],
+  keywords: ['contact', 'reach', 'email', 'phone', 'call', 'message', 'get in touch', 'how to', 'hire', 'available', 'επικοινωνία', 'τηλέφωνο', 'email', 'στοιχεία'],
   patterns: [/how\s+(can\s+i|to)\s+(contact|reach|get)/i, /^(email|phone|contact)/i],
   priority: 4,
   response: (profile) => {
     const c = profile.contact;
-    return `**Contact Information**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Phone**: ${c.phone}\n📍 **Location**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${profile.social.github.url})\n▸ [LinkedIn](${profile.social.linkedin.url})\n▸ [WhatsApp](${profile.social.whatsapp.url})`;
+    const gh = profile.social.github.url;
+    const li = profile.social.linkedin.url;
+    const wa = profile.social.whatsapp.url;
+    return __tr(
+      `**Contact Information**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Phone**: ${c.phone}\n📍 **Location**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Στοιχεία Επικοινωνίας**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Τηλέφωνο**: ${c.phone}\n📍 **Τοποθεσία**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`
+    );
   },
 });
 
 addIntent({
   id: 'interests',
   labels: ['Interests'],
-  keywords: ['interests', 'hobbies', 'passionate', 'free time', 'fun', 'like to', 'enjoy'],
+  keywords: ['interests', 'hobbies', 'passionate', 'free time', 'fun', 'like to', 'enjoy', 'ενδιαφέροντα', 'χόμπι', 'ελεύθερος χρόνος'],
   patterns: [/what\s+(are\s+)?(your\s+)?(interests|hobbies)/i, /what\s+(do\s+)?(you\s+)?(do\s+)?(for\s+)?fun/i],
   priority: 3,
   response: (profile) => {
     const interests = profile.interests || [];
-    let reply = `**Interests & Hobbies**\n\n`;
-    for (const item of interests) {
-      reply += `▸ ${item}\n`;
-    }
-    return reply.trim();
+    const body = interests.map(i => `▸ ${i}`).join('\n');
+    return __tr(
+      `**Interests & Hobbies**\n\n${body}`,
+      `**Ενδιαφέροντα & Χόμπι**\n\n${body}`
+    );
   },
 });
 
 addIntent({
   id: 'help',
   labels: ['Help'],
-  keywords: ['help', 'what can you do', 'commands', 'options', 'menu', 'capabilities', 'can you', 'what do you'],
+  keywords: ['help', 'what can you do', 'commands', 'options', 'menu', 'capabilities', 'can you', 'what do you', 'βοήθεια', 'τι μπορείς', 'βοήθ', 'επιλογές'],
   patterns: [/^(help|menu|options|commands)/i, /what\s+(can|do)\s+(you|i)\s+(do|ask)/i],
   priority: 1,
   response: () => {
-    let reply = `**I can help you learn about the portfolio!** Try asking:\n\n`;
-    for (const s of CONFIG.SUGGESTIONS) {
-      reply += `▸ *"${s}"*\n`;
-    }
-    reply += `\nOr ask about specific projects (e.g., "Tell me about RePaw"), skills (e.g., "What frontend frameworks?"), freelance work, teaching, pricing, or games!`;
-    return reply;
+    const suggestions = CONFIG.SUGGESTIONS.map(s => `▸ *"${s}"*`).join('\n');
+    return __tr(
+      `**I can help you learn about the portfolio!** Try asking:\n\n${suggestions}\n\nOr ask about specific projects (e.g., "Tell me about RePaw"), skills (e.g., "What frontend frameworks?"), freelance work, teaching, pricing, or games!`,
+      `**Μπορώ να σε βοηθήσω να μάθεις για το portfolio!** Δοκίμασε να ρωτήσεις:\n\n${suggestions}\n\nΉ ρώτα για συγκεκριμένα projects (π.χ. "Πες μου για το RePaw"), δεξιότητες, freelance εργασία, διδασκαλία, τιμές ή παιχνίδια!`
+    );
   },
 });
 
 addIntent({
   id: 'thanks',
   labels: [],
-  keywords: ['thanks', 'thank', 'thx', 'ty', 'appreciate', 'cool', 'nice', 'awesome', 'great'],
+  keywords: ['thanks', 'thank', 'thx', 'ty', 'appreciate', 'cool', 'nice', 'awesome', 'great', 'ευχαριστώ', 'σε ευχαριστώ'],
   patterns: [],
   priority: 1,
   response: () => {
-    const replies = [
-      "You're welcome! 😊 Feel free to ask anything else!",
-      "Happy to help! 🙌 Let me know if you need more info.",
-      "Anytime! 😄 Want to explore more about the portfolio?",
-      "Glad I could help! 🚀",
-    ];
-    return replies[Math.floor(Math.random() * replies.length)];
+    if (window.__CHAT_LANG_IDX === 1) {
+      const greekReplies = ["Παρακαλώ! 😊 Ρώτα με ό,τι άλλο θες!", "Χαρά μου! 🙌 Πες μου αν θες κι άλλες πληροφορίες.", "Όποτε θες! 😄 Θέλεις να εξερευνήσεις κι άλλο το portfolio;", "Χάρηκα που βοήθησα! 🚀"];
+      return greekReplies[Math.floor(Math.random() * greekReplies.length)];
+    }
+    const enReplies = ["You're welcome! 😊 Feel free to ask anything else!", "Happy to help! 🙌 Let me know if you need more info.", "Anytime! 😄 Want to explore more about the portfolio?", "Glad I could help! 🚀"];
+    return enReplies[Math.floor(Math.random() * enReplies.length)];
   },
 });
 
 addIntent({
   id: 'bye',
   labels: [],
-  keywords: ['bye', 'goodbye', 'see you', 'later', 'cya', 'farewell', 'take care', 'peace'],
+  keywords: ['bye', 'goodbye', 'see you', 'later', 'cya', 'farewell', 'take care', 'peace', 'αντίο', 'γεια', 'τα λέμε'],
   patterns: [],
   priority: 1,
   response: () => {
-    return "Goodbye! Thanks for visiting the portfolio. Feel free to come back anytime! 👋";
+    return __tr(
+      "Goodbye! Thanks for visiting the portfolio. Feel free to come back anytime! 👋",
+      "Αντίο! Ευχαριστώ για την επίσκεψη στο portfolio. Μπορείς να επιστρέψεις όποτε θες! 👋"
+    );
   },
 });
 
 addIntent({
   id: 'freelance',
   labels: ['Freelance'],
-  keywords: ['freelance', 'freelancer', 'independent', 'client', 'contract', 'gig', 'side project', 'consulting', 'carebeat', 'drakosdesign', 'islandbookings', 'mariakostoula', 'laralibre', 'enosi'],
+  keywords: ['freelance', 'freelancer', 'independent', 'client', 'contract', 'gig', 'side project', 'consulting', 'carebeat', 'drakosdesign', 'islandbookings', 'mariakostoula', 'laralibre', 'enosi', 'ελεύθερος επαγγελματίας', 'freelance projects', 'συνεργάτες'],
   patterns: [/freelance/i, /what\s+(freelance|client|contract)\s+(work|projects)/i],
   priority: 4,
   response: (profile) => {
     const fl = profile.freelance || [];
-    let reply = `**Freelance Projects** (${fl.length} total):\n\n`;
-    for (const p of fl) {
-      reply += `▸ **[${p.project}]** — ${p.period}\n`;
-      reply += `  ${p.description.split('.')[0]}.\n`;
-      reply += `  _${p.tech.join(', ')}_\n\n`;
-    }
-    reply += 'Want pricing details? Ask about "Pricing"!';
-    return reply.trim();
+    const body = fl.map(p => `▸ **[${p.project}]** — ${p.period}\n  ${p.description.split('.')[0]}.\n  _${p.tech.join(', ')}_`).join('\n\n');
+    const footer = __tr('\n\nWant pricing details? Ask about "Pricing"!', '\n\nΘέλεις λεπτομέρειες τιμολόγησης; Ρώτα "Pricing"!');
+    return __tr(
+      `**Freelance Projects** (${fl.length} total):\n\n${body}${footer}`,
+      `**Freelance Projects** (σύνολο ${fl.length}):\n\n${body}${footer}`
+    );
   },
 });
 
 addIntent({
   id: 'teaching',
   labels: ['Teaching'],
-  keywords: ['teaching', 'tutoring', 'tutor', 'teacher', 'instructor', 'lesson', 'course', 'class', 'student', 'educate', 'algorithmics', 'ecdl', 'workshop'],
+  keywords: ['teaching', 'tutoring', 'tutor', 'teacher', 'instructor', 'lesson', 'course', 'class', 'student', 'educate', 'algorithmics', 'ecdl', 'workshop', 'διδασκαλία', 'μάθημα', 'φροντιστήριο', 'δάσκαλος', 'μαθητής', 'μαθήματα'],
   patterns: [/teaching|tutoring/i, /what\s+(do\s+)?(you\s+)?teach/i, /can\s+(you\s+)?teach/i],
   priority: 4,
   response: (profile) => {
     const teach = profile.teaching || [];
-    let reply = `**Teaching & Tutoring Experience**\n\n`;
-    for (const t of teach) {
-      reply += `▸ **${t.role}**${t.location ? ` @ ${t.location}` : ''}${t.period ? ` (${t.period})` : ''}\n`;
-      reply += `  ${t.description}\n`;
-      reply += `  _Subjects: ${t.subjects.join(', ')}_\n\n`;
-    }
-    reply += '💡 Ask about "Pricing" for tutoring rates!';
-    return reply.trim();
+    const body = teach.map(t => `▸ **${t.role}**${t.location ? ` @ ${t.location}` : ''}${t.period ? ` (${t.period})` : ''}\n  ${t.description}\n  _${__tr('Subjects', 'Μαθήματα')}: ${t.subjects.join(', ')}_`).join('\n\n');
+    const footer = __tr('\n\n💡 Ask about "Pricing" for tutoring rates!', '\n\n💡 Ρώτα "Pricing" για τιμές μαθημάτων!');
+    return __tr(
+      `**Teaching & Tutoring Experience**\n\n${body}${footer}`,
+      `**Διδασκαλία & Φροντιστήριο**\n\n${body}${footer}`
+    );
   },
 });
 
 addIntent({
   id: 'pricing',
   labels: ['Pricing'],
-  keywords: ['pricing', 'price', 'cost', 'rate', 'fee', 'how much', 'charge', 'budget', '€', 'eur', 'euro', 'dollar', 'hire', 'services', 'offer'],
+  keywords: ['pricing', 'price', 'cost', 'rate', 'fee', 'how much', 'charge', 'budget', '€', 'eur', 'euro', 'dollar', 'hire', 'services', 'offer', 'τιμές', 'τιμολόγηση', 'κόστος', 'πόσο', 'χρεώνεις', 'πακέτα'],
   patterns: [/how\s+much\s+(do\s+)?(you\s+)?(charge|cost)/i, /what\s+(are\s+)?(your\s+)?(rates|prices)/i, /^(pricing|rates|cost)/i],
   priority: 4,
   response: (profile) => {
     const svc = profile.pricing.services || [];
-    const tutor = profile.pricing.tutoring || {};
-    let reply = `**Service Pricing** (EUR — starting prices):\n\n`;
-    for (const s of svc) {
+    const body = svc.map(s => {
       const basic = s.tiers.find(t => t.name === 'Basic');
-      reply += `▸ **${s.category}** — from €${basic ? basic.priceEUR : 'varies'}\n`;
-    }
-    reply += `\n**Tutoring** (per 1-1.5h session):\n`;
-    reply += `▸ Coding & Programming: €20 remote / €25 in-person\n`;
-    reply += `▸ MS Office, Windows/Linux: €10 remote / €15 in-person\n`;
-    reply += `▸ Video, Image, Sound Editing: €15 remote / €20 in-person\n`;
-    reply += `\n💡 Each service has Basic, Standard, and Premium tiers. Ask about a specific category for details!`;
-    return reply;
+      return `▸ **${s.category}** — ${__tr('from', 'από')} €${basic ? basic.priceEUR : 'varies'}`;
+    }).join('\n');
+    return __tr(
+      `**Service Pricing** (EUR — starting prices):\n\n${body}\n\n**Tutoring** (per 1-1.5h session):\n▸ Coding & Programming: €20 remote / €25 in-person\n▸ MS Office, Windows/Linux: €10 remote / €15 in-person\n▸ Video, Image, Sound Editing: €15 remote / €20 in-person\n\n💡 Each service has Basic, Standard, and Premium tiers. Ask about a specific category for details!`,
+      `**Τιμολόγηση Υπηρεσιών** (EUR — αρχικές τιμές):\n\n${body}\n\n**Φροντιστήριο** (ανά 1-1.5 ώρα):\n▸ Coding & Programming: €20 εξ αποστάσεως / €25 δια ζώσης\n▸ MS Office, Windows/Linux: €10 εξ αποστάσεως / €15 δια ζώσης\n▸ Video, Image, Sound Editing: €15 εξ αποστάσεως / €20 δια ζώσης\n\n💡 Κάθε υπηρεσία έχει Basic, Standard και Premium πακέτα. Ρώτα για συγκεκριμένη κατηγορία!`
+    );
   },
 });
 
@@ -411,7 +451,8 @@ addIntent({
       matched = svc.find(s => s.category === 'Game Development');
     }
     if (!matched) return null;
-    let reply = `**${matched.category}** — Pricing Details\n\n${matched.description}\n\n`;
+    const title = __tr(`${matched.category} — Pricing Details`, `${matched.category} — Λεπτομέρειες Τιμολόγησης`);
+    let reply = `**${title}**\n\n${matched.description}\n\n`;
     for (const tier of matched.tiers) {
       reply += `▸ **${tier.name}** — **€${tier.priceEUR}** / \$${tier.priceUSD} / £${tier.priceGBP}\n`;
       for (const f of tier.features) reply += `  • ${f}\n`;
@@ -424,20 +465,21 @@ addIntent({
 addIntent({
   id: 'games',
   labels: ['Games'],
-  keywords: ['games', 'minigames', 'mini games', 'game dev', 'snake', 'flappy', 'tetris', 'breakout', 'quiz', 'match', 'base ops', 'bug breaker', 'bio explorer', 'play', 'game project'],
+  keywords: ['games', 'minigames', 'mini games', 'game dev', 'snake', 'flappy', 'tetris', 'breakout', 'quiz', 'match', 'base ops', 'bug breaker', 'bio explorer', 'play', 'game project', 'παιχνίδια', 'παιχνίδι', 'minigames'],
   patterns: [/what\s+games/i, /what\s+(minigames|mini-games)/i, /^(games|minigames)/i],
   priority: 4,
   response: (profile) => {
     const games = profile.games || [];
-    let reply = `**🎮 Game Projects** (${games.length} total — 7 minigames + 2 standalone games)\n\n`;
-    for (const g of games) {
-      const url = g.playUrl ? ` — [Play](${g.playUrl})` : g.link ? ` — [GitHub](${g.link})` : '';
-      reply += `▸ **${g.title}**${url}\n`;
-      reply += `  ${g.description.split('.')[0]}.\n`;
-      reply += `  _${g.tech.join(', ')}_\n\n`;
-    }
-    reply += 'All 7 minigames are playable from the Bio Explorer 2D overworld or directly via URL.';
-    return reply.trim();
+    const body = games.map(g => {
+      const url = g.playUrl ? ` — [${__tr('Play', 'Παίξε')}](${g.playUrl})` : g.link ? ` — [GitHub](${g.link})` : '';
+      return `▸ **${g.title}**${url}\n  ${g.description.split('.')[0]}.\n  _${g.tech.join(', ')}_`;
+    }).join('\n\n');
+    const minigamesCount = games.filter(g => g.playUrl).length;
+    const standaloneCount = games.length - minigamesCount;
+    return __tr(
+      `**🎮 Game Projects** (${games.length} total — ${minigamesCount} minigames + ${standaloneCount} standalone games)\n\n${body}\n\nAll minigames are playable from the Bio Explorer 2D overworld or directly via URL.`,
+      `**🎮 Game Projects** (σύνολο ${games.length} — ${minigamesCount} minigames + ${standaloneCount} standalone games)\n\n${body}\n\nΌλα τα minigames παίζονται από τον Bio Explorer 2D overworld ή απευθείας από URL.`
+    );
   },
 });
 
@@ -508,7 +550,13 @@ class IntentClassifier {
    * @returns {{ intent: Object|null, confidence: number, scores: Object }}
    */
   classify(message, ctx) {
-    const lower = message.toLowerCase().trim();
+    let effectiveMsg = message;
+    let isSuggestion = false;
+    if (message.startsWith('__suggestion__:')) {
+      effectiveMsg = message.replace('__suggestion__:', '').trim();
+      isSuggestion = true;
+    }
+    const lower = effectiveMsg.toLowerCase().trim();
     if (!lower) return { intent: null, confidence: 0, scores: {} };
 
     const results = [];
@@ -533,7 +581,7 @@ class IntentClassifier {
         keywordScore = Math.max(keywordScore, fuzzyBest * 0.7);
       }
 
-      // Pattern matching
+      // Pattern matching (use effectiveMsg for suggestions, raw lower otherwise)
       if (intent.patterns.length > 0) {
         for (const pat of intent.patterns) {
           if (pat.test(lower)) {
@@ -553,10 +601,9 @@ class IntentClassifier {
               contextScore += 0.1;
             }
           }
-          // Check if user is responding to a suggestion
-          if (message.startsWith('__suggestion__:')) {
-            const label = message.replace('__suggestion__:', '').toLowerCase();
-            if (intent.labels.some(l => l.toLowerCase() === label)) {
+          // Suggestion click matching
+          if (isSuggestion) {
+            if (intent.labels.some(l => l.toLowerCase() === lower)) {
               keywordScore = 1;
               patternScore = 1;
             }

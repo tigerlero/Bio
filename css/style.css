@@ -791,7 +791,7 @@ footer {
 
 /* ── BACK TO TOP ── */
 #back-top {
-  position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+  position: fixed; top: 50%; right: 2rem; margin-top: -22px; z-index: 999;
   width: 44px; height: 44px;
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   border: none; border-radius: 8px;
