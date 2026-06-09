@@ -95,6 +95,7 @@ export class TitleScene extends Phaser.Scene {
       { label: '✦ Campus Quiz', scene: 'CampusQuizScene' },
       { label: '✦ Flappy Job', scene: 'FlappyJobScene' },
       { label: '✦ Tetris Projects', scene: 'TetrisProjectScene' },
+      { label: '✦ Base Ops', scene: 'BaseOpsScene' },
     ];
     games.forEach((g, i) => {
       const txt = this.add.text(width / 2, height * (0.76 + i * 0.035), g.label, {

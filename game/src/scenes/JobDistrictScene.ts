@@ -141,6 +141,20 @@ export class JobDistrictScene extends Phaser.Scene {
       fontSize: '9px', color: '#ff8844', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
+    // Base Ops portal
+    const baseOpsPX = portalX + 80;
+    const baseP = this.add.graphics();
+    baseP.fillStyle(0xff8844, 0.4);
+    baseP.fillCircle(baseOpsPX, portalY, 16);
+    baseP.lineStyle(2, 0xff8844, 0.7);
+    baseP.strokeCircle(baseOpsPX, portalY, 16);
+    this.add.text(baseOpsPX, portalY, 'B', {
+      fontSize: '14px', color: '#ff8844', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(baseOpsPX, portalY + 22, 'BaseOps', {
+      fontSize: '9px', color: '#ff8844', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
     // Player
     this.playerSprite = this.add.sprite(this.px, this.py, 'player_sheet').setDepth(20).play('player_idle_down');
 
@@ -213,6 +227,7 @@ export class JobDistrictScene extends Phaser.Scene {
     let nearJob: Job | null = null;
     let nearReturn = false;
     let nearFlappy = false;
+    let nearBaseOps = false;
 
     for (const b of this.buildings) {
       const dx = this.px - b.bx;
@@ -231,8 +246,12 @@ export class JobDistrictScene extends Phaser.Scene {
     }
 
     const flappyPX = portalX - 80;
+    const baseOpsPX = portalX + 80;
     if (Phaser.Math.Distance.Between(this.px, this.py, flappyPX, portalY) < 25) {
       nearFlappy = true;
+    }
+    if (Phaser.Math.Distance.Between(this.px, this.py, baseOpsPX, portalY) < 25) {
+      nearBaseOps = true;
     }
 
     const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
@@ -251,12 +270,22 @@ export class JobDistrictScene extends Phaser.Scene {
       this.time.delayedCall(200, () => this.scene.start('FlappyJobScene'));
     }
 
+    if (nearBaseOps && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => this.scene.start('BaseOpsScene'));
+    }
+
     if (nearReturn) {
       this.prompt.setText('Press E to return');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearFlappy) {
       this.prompt.setText('Press E: Flappy Job');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearBaseOps) {
+      this.prompt.setText('Press E: Base Ops');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearJob) {
