@@ -7,6 +7,8 @@ import { ProjectParkScene } from './scenes/ProjectParkScene';
 import { JobDistrictScene } from './scenes/JobDistrictScene';
 import { SkillGardenScene } from './scenes/SkillGardenScene';
 import { SnakeGameScene } from './scenes/SnakeGameScene';
+import { ProjectMatchScene } from './scenes/ProjectMatchScene';
+import { CampusQuizScene } from './scenes/CampusQuizScene';
 import { SettingsManager } from './systems/SettingsManager';
 
 // Apply saved settings on load
@@ -29,7 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, TitleScene, OverworldScene, EducationCampusScene, ProjectParkScene, JobDistrictScene, SkillGardenScene, SnakeGameScene],
+  scene: [BootScene, TitleScene, OverworldScene, EducationCampusScene, ProjectParkScene, JobDistrictScene, SkillGardenScene, SnakeGameScene, ProjectMatchScene, CampusQuizScene],
 };
 
 const game = new Phaser.Game(config);

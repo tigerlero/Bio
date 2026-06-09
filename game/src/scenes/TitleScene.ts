@@ -84,18 +84,31 @@ export class TitleScene extends Phaser.Scene {
       duration: 800,
     });
 
-    // Controls info
-    const controls = this.add.text(width / 2, height * 0.78,
-      'WASD / Arrow Keys — Move\nE — Interact  |  ESC — Close  |  Scroll — Zoom', {
-      fontSize: '12px',
-      color: '#667766',
-      fontFamily: 'monospace',
-      align: 'center',
+    // Minigames section
+    const mgLabel = this.add.text(width / 2, height * 0.72, 'MINIGAMES', {
+      fontSize: '13px', color: '#669966', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+
+    const games = [
+      { label: '✦ Skill Snake', scene: 'SnakeGameScene' },
+      { label: '✦ Project Match', scene: 'ProjectMatchScene' },
+      { label: '✦ Campus Quiz', scene: 'CampusQuizScene' },
+    ];
+    games.forEach((g, i) => {
+      const txt = this.add.text(width / 2, height * (0.76 + i * 0.035), g.label, {
+        fontSize: '12px', color: '#88aa88', fontFamily: 'monospace',
+      }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+      txt.on('pointerover', () => txt.setColor('#ccffcc'));
+      txt.on('pointerout', () => txt.setColor('#88aa88'));
+      txt.on('pointerdown', () => {
+        AudioManager.get().init();
+        this.cameras.main.fadeOut(300, 0, 0, 0);
+        this.time.delayedCall(300, () => this.scene.start(g.scene));
+      });
     });
-    controls.setOrigin(0.5);
 
     // Back to website link
-    const back = this.add.text(width / 2, height * 0.90, '< Back to Website', {
+    const back = this.add.text(width / 2, height * 0.92, '< Back to Website', {
       fontSize: '14px',
       color: '#4488aa',
       fontFamily: 'monospace',

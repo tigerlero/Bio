@@ -96,8 +96,22 @@ export class EducationCampusScene extends Phaser.Scene {
       fontSize: '16px', color: '#ffffff', fontFamily: 'monospace', fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    const returnLabel = this.add.text(portalX, portalY + 24, 'Return', {
+    const returnLabel =     this.add.text(portalX, portalY + 24, 'Return', {
       fontSize: '10px', color: '#44cc44', fontFamily: 'monospace',
+    }).setOrigin(0.5);
+
+    // Quiz portal
+    const quizPX = portalX + 80;
+    const quiz = this.add.graphics();
+    quiz.fillStyle(0x44cc44, 0.4);
+    quiz.fillCircle(quizPX, portalY, 16);
+    quiz.lineStyle(2, 0x44cc44, 0.7);
+    quiz.strokeCircle(quizPX, portalY, 16);
+    this.add.text(quizPX, portalY, 'Q', {
+      fontSize: '14px', color: '#44cc44', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    this.add.text(quizPX, portalY + 22, 'Quiz', {
+      fontSize: '9px', color: '#44cc44', fontFamily: 'monospace',
     }).setOrigin(0.5);
 
     // Player
@@ -179,6 +193,7 @@ export class EducationCampusScene extends Phaser.Scene {
     // Check building interaction
     let nearBuilding: Education | null = null;
     let nearReturn = false;
+    let nearQuiz = false;
 
     for (const b of this.buildings) {
       const dx = this.px - b.bx;
@@ -189,11 +204,15 @@ export class EducationCampusScene extends Phaser.Scene {
       }
     }
 
-    // Check return portal
+    // Check portals
     const portalX = width / 2;
     const portalY = height - 40;
     if (Phaser.Math.Distance.Between(this.px, this.py, portalX, portalY) < 30) {
       nearReturn = true;
+    }
+    const quizPX = portalX + 80;
+    if (Phaser.Math.Distance.Between(this.px, this.py, quizPX, portalY) < 25) {
+      nearQuiz = true;
     }
 
     const interact = Phaser.Input.Keyboard.JustDown(this.keyE) || this.interactBtn.justPressed;
@@ -206,9 +225,19 @@ export class EducationCampusScene extends Phaser.Scene {
       this.returnToWorld();
     }
 
+    if (nearQuiz && interact) {
+      AudioManager.get().stopBgm(0.2);
+      this.cameras.main.fadeOut(200, 0, 0, 0);
+      this.time.delayedCall(200, () => this.scene.start('CampusQuizScene'));
+    }
+
     // Prompt
     if (nearReturn) {
       this.prompt.setText('Press E to return');
+      this.prompt.setPosition(this.px, this.py - 16);
+      this.prompt.setVisible(true);
+    } else if (nearQuiz) {
+      this.prompt.setText('Press E: Campus Quiz');
       this.prompt.setPosition(this.px, this.py - 16);
       this.prompt.setVisible(true);
     } else if (nearBuilding) {
