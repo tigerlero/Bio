@@ -8,7 +8,12 @@ const CAT_COLORS: Record<string, number> = {
   'DevOps': 0xff8844, 'Languages': 0xff44ff, 'Game Dev': 0xffaa44, 'AI/ML': 0xaa44ff,
 };
 
-interface SkillCrystal { category: string; skills: string[]; mesh: THREE.Mesh; x: number; z: number; }
+const CAT_ICON_FILE: Record<string, string> = {
+  'Frontend': 'icons/frontend.svg', 'Backend': 'icons/backend.svg', 'Databases': 'icons/databases.svg',
+  'DevOps': 'icons/devops.svg', 'Languages': 'icons/languages.svg', 'Game Dev': 'icons/gamedev.svg', 'AI/ML': 'icons/aiml.svg',
+};
+
+interface SkillCrystal { category: string; skills: string[]; mesh: THREE.Mesh; sprite: THREE.Sprite; x: number; z: number; }
 
 export class SkillGardenScene3D {
   public scene: THREE.Scene;
@@ -49,6 +54,7 @@ export class SkillGardenScene3D {
     const centerZ = 350;
     const radius = 250;
 
+    const texLoader = new THREE.TextureLoader();
     this.crystals = [];
     categories.forEach(([cat, skills], i) => {
       const angle = (Math.PI * 2 / catCount) * i - Math.PI / 2;
@@ -67,19 +73,28 @@ export class SkillGardenScene3D {
       crystal.position.set(cx, 20, cz); crystal.castShadow = true;
       this.scene.add(crystal);
 
-      const canvas = document.createElement('canvas');
-      canvas.width = 256; canvas.height = 60;
-      const ctx = canvas.getContext('2d')!;
-      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 16px monospace'; ctx.textAlign = 'center';
-      ctx.fillText(cat, 128, 20);
-      ctx.fillStyle = '#aaaaaa'; ctx.font = '10px monospace';
-      ctx.fillText(skills.slice(0, 4).join(', '), 128, 42);
-      const tex = new THREE.CanvasTexture(canvas);
-      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
-      sprite.position.set(cx, 40, cz); sprite.scale.set(50, 10, 1);
-      this.scene.add(sprite);
+      // Category icon sprite
+      const iconFile = CAT_ICON_FILE[cat] || 'icons/frontend.svg';
+      const iconTex = texLoader.load(iconFile);
+      const iconSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: iconTex, transparent: true, depthTest: false }));
+      iconSprite.position.set(cx, 42, cz);
+      iconSprite.scale.set(28, 28, 1);
+      this.scene.add(iconSprite);
 
-      this.crystals.push({ category: cat, skills, mesh: crystal, x: cx, z: cz });
+      // Category name label
+      const canvas = document.createElement('canvas');
+      canvas.width = 256; canvas.height = 40;
+      const ctx = canvas.getContext('2d')!;
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 14px monospace'; ctx.textAlign = 'center';
+      ctx.fillText(cat, 128, 22);
+      ctx.fillStyle = '#aaaaaa'; ctx.font = '9px monospace';
+      ctx.fillText(skills.slice(0, 4).join(', '), 128, 36);
+      const tex = new THREE.CanvasTexture(canvas);
+      const labelSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
+      labelSprite.position.set(cx, 58, cz); labelSprite.scale.set(40, 8, 1);
+      this.scene.add(labelSprite);
+
+      this.crystals.push({ category: cat, skills, mesh: crystal, sprite: iconSprite, x: cx, z: cz });
     });
 
     const portal = new THREE.Mesh(new THREE.CylinderGeometry(14, 14, 2, 12), new THREE.MeshStandardMaterial({ color: 0x44ff88, emissive: 0x44ff88, emissiveIntensity: 0.3 }));

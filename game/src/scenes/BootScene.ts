@@ -39,6 +39,12 @@ export class BootScene extends Phaser.Scene {
       this.load.image(`logo_${f.replace('.png', '')}`, `logos/${f}`);
     }
 
+    // Load skill category icons
+    const iconFiles = ['frontend', 'backend', 'databases', 'devops', 'languages', 'gamedev', 'aiml'];
+    for (const name of iconFiles) {
+      this.load.svg(`icon_${name}`, `icons/${name}.svg`, { width: 32, height: 32 });
+    }
+
     // Generate placeholder textures
     this.createPlaceholderTextures();
   }

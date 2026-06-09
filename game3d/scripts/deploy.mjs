@@ -24,4 +24,11 @@ if (fs.existsSync(logosSrc)) {
   fs.cpSync(logosSrc, logosDest, { recursive: true });
 }
 
+// Copy icons if they exist
+const iconsSrc = 'public/icons';
+if (fs.existsSync(iconsSrc)) {
+  const iconsDest = path.join(dest, 'icons');
+  fs.cpSync(iconsSrc, iconsDest, { recursive: true });
+}
+
 console.log('Deployed to ../play3d/');

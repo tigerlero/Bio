@@ -15,20 +15,19 @@ const CAT_COLORS: Record<string, number> = {
   'AI/ML': 0xaa44ff,
 };
 
-const CAT_SHAPES: Record<string, (g: Phaser.GameObjects.Graphics, x: number, y: number, color: number) => void> = {
-  'Frontend': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillRect(x - 8, y - 8, 16, 16); },
-  'Backend': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillCircle(x, y, 8); },
-  'Databases': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillTriangle(x, y - 9, x - 9, y + 7, x + 9, y + 7); },
-  'DevOps': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillRoundedRect(x - 7, y - 7, 14, 14, 3); },
-  'Languages': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillCircle(x, y, 8); g.lineStyle(2, 0xffffff, 0.3); g.strokeCircle(x, y, 8); },
-  'Game Dev': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillTriangle(x, y - 9, x - 9, y + 7, x + 9, y + 7); g.lineStyle(2, 0xffffff, 0.3); g.strokeTriangle(x, y - 9, x - 9, y + 7, x + 9, y + 7); },
-  'AI/ML': (g, x, y, c) => { g.fillStyle(c, 0.8); g.fillCircle(x, y, 8); g.fillStyle(0xffffff, 0.2); g.fillCircle(x - 2, y - 2, 3); },
+const CAT_ICON_KEY: Record<string, string> = {
+  'Frontend': 'icon_frontend',
+  'Backend': 'icon_backend',
+  'Databases': 'icon_databases',
+  'DevOps': 'icon_devops',
+  'Languages': 'icon_languages',
+  'Game Dev': 'icon_gamedev',
+  'AI/ML': 'icon_aiml',
 };
 
 interface SkillGem {
-  gfx: Phaser.GameObjects.Graphics;
+  sprite: Phaser.GameObjects.Sprite;
   label: Phaser.GameObjects.Text;
-  icon: Phaser.GameObjects.Text;
   name: string;
   category: string;
   x: number;
@@ -142,23 +141,22 @@ export class SkillGardenScene extends Phaser.Scene {
         const gx = gemStartX + col2 * gemSpacingX;
         const gy = gemY + row2 * 40;
 
-        // Icon shape
-        const icon = this.add.graphics();
-        const drawShape = CAT_SHAPES[cat];
-        if (drawShape) drawShape(icon, gx, gy, color);
-        else { icon.fillStyle(color, 0.8); icon.fillCircle(gx, gy, 7); }
-
-        // Icon letter
-        const letter = this.add.text(gx, gy, skill.substring(0, 2), {
-          fontSize: '7px', color: '#ffffff', fontFamily: 'monospace', fontStyle: 'bold',
-        }).setOrigin(0.5);
+        // Icon sprite
+        const iconKey = CAT_ICON_KEY[cat] || 'icon_frontend';
+        const sprite = this.add.sprite(gx, gy, iconKey).setDepth(5);
 
         // Name label
         const label = this.add.text(gx, gy + 14, skill, {
           fontSize: '8px', color: '#cccccc', fontFamily: 'monospace',
         }).setOrigin(0.5);
 
-        gems.push({ gfx: icon, label, icon: letter, name: skill, category: cat, x: gx, y: gy });
+        // Gentle float tween
+        this.tweens.add({
+          targets: sprite, y: gy - 2, duration: 1200 + Math.random() * 800,
+          yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+        });
+
+        gems.push({ sprite, label, name: skill, category: cat, x: gx, y: gy });
       });
 
       this.beds.push({ cat, skills, bx, by, bw: bedW, bh: bedH, gems, header });

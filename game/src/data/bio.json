@@ -49,6 +49,30 @@
       "tech": ["Rust", "WASM", "WebGL"],
       "link": "https://github.com/tigerlero/Rustix",
       "position": { "x": 280, "y": 100 }
+    },
+    {
+      "id": "snakegame",
+      "title": "Snake Game",
+      "description": "Classic Snake game built with Phaser and TypeScript. Navigate the grid, collect 49 skill orbs across 7 categories, and grow your snake. Features category-colored food items and progressive speed increase.",
+      "tech": ["TypeScript", "Phaser", "Game Development"],
+      "link": "https://github.com/tigerlero",
+      "position": { "x": 440, "y": 140 }
+    },
+    {
+      "id": "bio2d",
+      "title": "Bio Explorer 2D",
+      "description": "Interactive 2D portfolio explorer built with Phaser.js. Explore an 1800x1400 overworld with 5 themed zones, talk to NPCs, collect 49 skills, and play 3 minigames — all in a retro pixel-art style.",
+      "tech": ["TypeScript", "Phaser", "Web"],
+      "link": "https://github.com/tigerlero",
+      "position": { "x": 360, "y": 220 }
+    },
+    {
+      "id": "bio3d",
+      "title": "Bio Explorer 3D",
+      "description": "3D portfolio explorer built with Three.js. Traverse a 1800x1400 3D overworld with a capsule humanoid avatar, orbit camera, day/night cycle, and interactive skill crystals.",
+      "tech": ["TypeScript", "Three.js", "WebGL"],
+      "link": "https://github.com/tigerlero",
+      "position": { "x": 500, "y": 200 }
     }
   ],
   "jobs": [
