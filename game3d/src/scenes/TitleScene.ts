@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Player } from '../entities/Player';
 
 export class TitleScene3D {
   public scene: THREE.Scene;
@@ -11,6 +12,7 @@ export class TitleScene3D {
   private mouse = new THREE.Vector2();
   private linkSprite: THREE.Sprite;
   private linkHovered = false;
+  private playerMesh: THREE.Group;
 
   constructor(
     private renderer_: THREE.WebGLRenderer,
@@ -24,6 +26,8 @@ export class TitleScene3D {
     this.camera.position.set(0, 30, 80);
     this.camera.lookAt(0, 0, 0);
 
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     // Floating particles
     const pGeo = new THREE.SphereGeometry(0.3, 4, 4);
     const pMat = new THREE.MeshBasicMaterial({ color: 0x44ff88 });
@@ -34,6 +38,10 @@ export class TitleScene3D {
       this.particles.push({ mesh: m, vx: (Math.random() - 0.5) * 0.1, vy: (Math.random() - 0.5) * 0.1 });
     }
 
+    // Player mesh - same character as in Overworld
+    this.playerMesh = Player.createVisualMesh(this.scene, 0, 20);
+    this.playerMesh.rotation.y = Math.PI;
+
     // Title text
     const titleCanvas = document.createElement('canvas');
     titleCanvas.width = 512; titleCanvas.height = 80;
@@ -42,7 +50,7 @@ export class TitleScene3D {
     tctx.fillText('✦ BIO EXPLORER 3D ✦', 256, 50);
     const titleTex = new THREE.CanvasTexture(titleCanvas);
     const titleSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: titleTex, transparent: true, depthTest: false }));
-    titleSprite.position.set(0, 15, 0);
+    titleSprite.position.set(0, 22, 0);
     titleSprite.scale.set(60, 9, 1);
     this.scene.add(titleSprite);
 
@@ -53,7 +61,7 @@ export class TitleScene3D {
     sctx.fillText('Panagiotis Efstathiadis', 200, 28);
     const subTex = new THREE.CanvasTexture(subCanvas);
     const subSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: subTex, transparent: true, depthTest: false }));
-    subSprite.position.set(0, 6, 0);
+    subSprite.position.set(0, 12, 0);
     subSprite.scale.set(40, 4, 1);
     this.scene.add(subSprite);
 
@@ -61,23 +69,25 @@ export class TitleScene3D {
     promptCanvas.width = 400; promptCanvas.height = 40;
     const pctx = promptCanvas.getContext('2d')!;
     pctx.fillStyle = '#ffffff'; pctx.font = '18px monospace'; pctx.textAlign = 'center';
-    pctx.fillText('Press ENTER or SPACE to start', 200, 28);
+    pctx.fillText(isMobile ? 'Tap to start' : 'Press ENTER or SPACE to start', 200, 28);
     const promptTex = new THREE.CanvasTexture(promptCanvas);
     const promptSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: promptTex, transparent: true, depthTest: false }));
-    promptSprite.position.set(0, -8, 0);
+    promptSprite.position.set(0, -24, 0);
     promptSprite.scale.set(40, 4, 1);
     this.scene.add(promptSprite);
 
-    const controlCanvas = document.createElement('canvas');
-    controlCanvas.width = 400; controlCanvas.height = 40;
-    const cctx = controlCanvas.getContext('2d')!;
-    cctx.fillStyle = '#667766'; cctx.font = '12px monospace'; cctx.textAlign = 'center';
-    cctx.fillText('WASD — Move  |  Right-drag — Orbit  |  E — Interact  |  ESC — Pause', 200, 20);
-    const controlTex = new THREE.CanvasTexture(controlCanvas);
-    const controlSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: controlTex, transparent: true, depthTest: false }));
-    controlSprite.position.set(0, -16, 0);
-    controlSprite.scale.set(50, 3, 1);
-    this.scene.add(controlSprite);
+    if (!isMobile) {
+      const controlCanvas = document.createElement('canvas');
+      controlCanvas.width = 400; controlCanvas.height = 40;
+      const cctx = controlCanvas.getContext('2d')!;
+      cctx.fillStyle = '#667766'; cctx.font = '12px monospace'; cctx.textAlign = 'center';
+      cctx.fillText('WASD — Move  |  Right-drag — Orbit  |  E — Interact  |  ESC — Pause', 200, 20);
+      const controlTex = new THREE.CanvasTexture(controlCanvas);
+      const controlSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: controlTex, transparent: true, depthTest: false }));
+      controlSprite.position.set(0, -32, 0);
+      controlSprite.scale.set(50, 3, 1);
+      this.scene.add(controlSprite);
+    }
 
     // Web link (clickable)
     const linkCanvas = document.createElement('canvas');
@@ -87,12 +97,15 @@ export class TitleScene3D {
     lctx.fillText('< Back to Website', 150, 24);
     const linkTex = new THREE.CanvasTexture(linkCanvas);
     this.linkSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: linkTex, transparent: true, depthTest: false }));
-    this.linkSprite.position.set(0, -24, 0);
+    this.linkSprite.position.set(0, isMobile ? -36 : -40, 0);
     this.linkSprite.scale.set(30, 3, 1);
     this.scene.add(this.linkSprite);
 
-    // Ambient light
+    // Ambient + directional light to illuminate player mesh
     this.scene.add(new THREE.AmbientLight(0x446644, 0.6));
+    const dirLight = new THREE.DirectionalLight(0xffeedd, 0.8);
+    dirLight.position.set(20, 40, 60);
+    this.scene.add(dirLight);
 
     document.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ' ') && !this.started) {
@@ -101,10 +114,13 @@ export class TitleScene3D {
       }
     });
 
-    // Click detection for back link
-    this.renderer.domElement.addEventListener('click', (e) => {
-      this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    // Click/tap to start (or go back via link)
+    const handleClick = (e: MouseEvent | TouchEvent) => {
+      if (this.started) return;
+      const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const cy = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      this.mouse.x = (cx / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(cy / window.innerHeight) * 2 + 1;
       this.raycaster.setFromCamera(this.mouse, this.camera);
       const intersects = this.raycaster.intersectObjects(this.scene.children);
       for (const hit of intersects) {
@@ -113,7 +129,12 @@ export class TitleScene3D {
           return;
         }
       }
-    });
+      this.started = true;
+      this.onStart();
+    };
+
+    this.renderer.domElement.addEventListener('click', handleClick);
+    this.renderer.domElement.addEventListener('touchstart', handleClick, { passive: true });
 
     // Hover effect for back link
     this.renderer.domElement.addEventListener('mousemove', (e) => {
@@ -138,6 +159,10 @@ export class TitleScene3D {
     }
     this.camera.position.x = Math.sin(Date.now() * 0.0003) * 5;
     this.camera.lookAt(0, 0, 0);
+
+    // Gentle idle sway on player
+    this.playerMesh.rotation.y = Math.PI + Math.sin(Date.now() * 0.0008) * 0.15;
+    this.playerMesh.position.y = Math.sin(Date.now() * 0.002) * 0.5;
 
     // Link hover pulse
     if (this.linkHovered) {

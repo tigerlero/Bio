@@ -74,7 +74,7 @@ export class DevMarioScene extends Phaser.Scene {
     this.score = 0; this.lives = 3;
     this.gameOver = false; this.won = false;
     this.focusMode = false; this.focusTimer = 0; this.focusChamber = -1;
-    this.respawnX = 80; this.respawnY = 400;
+    this.respawnX = 80; this.respawnY = GROUND_Y - 13;
     this.enemies = []; this.coins = [];
     this.byteGfx = []; this.bytePositions = [];
     this.exitPipePos = null;
@@ -93,6 +93,7 @@ export class DevMarioScene extends Phaser.Scene {
     this.buildFlag();
     this.buildPlayer();
     this.buildEnemies();
+    this.physics.add.collider(this.playerBody, this.platforms);
 
     this.promptText = this.add.text(0, 0, '', {
       fontSize: '11px', color: '#ffffff', fontFamily: 'monospace',
@@ -351,7 +352,6 @@ export class DevMarioScene extends Phaser.Scene {
       body.setCollideWorldBounds(true);
       body.setBounce(0);
       this.enemies.push({ body, gfx, minX: d.minX, maxX: d.maxX, dir: -1, isDeadline: d.dl, alive: true });
-      this.platforms.add(r);
     }
   }
 

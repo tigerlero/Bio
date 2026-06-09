@@ -19,12 +19,10 @@ export class Player {
   private keys: Record<string, boolean> = {};
   private dustTimer = 0;
 
-  constructor(private scene: THREE.Scene, spawnX: number, spawnZ: number) {
-    this.x = spawnX;
-    this.z = spawnZ;
-    this.mesh = new THREE.Group();
-    this.mesh.position.set(this.x, 0, this.z);
-    this.mesh.castShadow = true;
+  static createVisualMesh(scene: THREE.Scene, x: number, z: number): THREE.Group {
+    const g = new THREE.Group();
+    g.position.set(x, 0, z);
+    g.castShadow = true;
 
     const bodyMat = new THREE.MeshStandardMaterial({ color: 0x3366cc });
     const skinMat = new THREE.MeshStandardMaterial({ color: 0xffcc88 });
@@ -33,60 +31,67 @@ export class Player {
     const torso = new THREE.Mesh(new THREE.CapsuleGeometry(6, 14, 8, 8), bodyMat);
     torso.position.y = 13;
     torso.castShadow = true;
-    this.mesh.add(torso);
-    torso.userData.baseY = 13;
-    this.bodyParts.push(torso);
+    g.add(torso);
 
     const head = new THREE.Mesh(new THREE.SphereGeometry(5, 8, 8), skinMat);
     head.position.y = 31;
     head.castShadow = true;
-    this.mesh.add(head);
+    g.add(head);
 
     const armGeo = new THREE.CylinderGeometry(1.5, 1.5, 14, 6);
     const lArm = new THREE.Mesh(armGeo, darkMat);
     lArm.position.set(-9, 18, 0);
     lArm.castShadow = true;
-    this.mesh.add(lArm);
-    lArm.userData.baseY = 18;
-    this.bodyParts.push(lArm);
+    g.add(lArm);
 
     const rArm = new THREE.Mesh(armGeo, darkMat);
     rArm.position.set(9, 18, 0);
     rArm.castShadow = true;
-    this.mesh.add(rArm);
-    rArm.userData.baseY = 18;
-    this.bodyParts.push(rArm);
+    g.add(rArm);
 
     const legGeo = new THREE.CylinderGeometry(2, 2, 12, 6);
     const lLeg = new THREE.Mesh(legGeo, darkMat);
     lLeg.position.set(-3, 6, 0);
     lLeg.castShadow = true;
-    this.mesh.add(lLeg);
-    lLeg.userData.baseY = 6;
-    this.bodyParts.push(lLeg);
+    g.add(lLeg);
 
     const rLeg = new THREE.Mesh(legGeo, darkMat);
     rLeg.position.set(3, 6, 0);
     rLeg.castShadow = true;
-    this.mesh.add(rLeg);
-    rLeg.userData.baseY = 6;
-    this.bodyParts.push(rLeg);
+    g.add(rLeg);
 
     const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
     const eyeGeo = new THREE.SphereGeometry(1.2, 6, 6);
     const lEye = new THREE.Mesh(eyeGeo, eyeMat);
     lEye.position.set(-2.5, 32, 4.5);
-    this.mesh.add(lEye);
+    g.add(lEye);
     const rEye = new THREE.Mesh(eyeGeo, eyeMat);
     rEye.position.set(2.5, 32, 4.5);
-    this.mesh.add(rEye);
+    g.add(rEye);
 
     const shadowGeo = new THREE.CircleGeometry(8, 12);
     const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.2, depthWrite: false });
     const shadow = new THREE.Mesh(shadowGeo, shadowMat);
     shadow.rotation.x = -Math.PI / 2;
     shadow.position.y = 0.1;
-    this.mesh.add(shadow);
+    g.add(shadow);
+
+    scene.add(g);
+    return g;
+  }
+
+  constructor(private scene: THREE.Scene, spawnX: number, spawnZ: number) {
+    this.x = spawnX;
+    this.z = spawnZ;
+    this.mesh = Player.createVisualMesh(scene, spawnX, spawnZ);
+    this.mesh.position.set(this.x, 0, this.z);
+
+    for (const child of this.mesh.children) {
+      if (child instanceof THREE.Mesh && child.position.y >= 6 && child.position.y <= 18) {
+        child.userData.baseY = child.position.y;
+        this.bodyParts.push(child);
+      }
+    }
 
     document.addEventListener('keydown', (e) => { this.keys[e.key.toLowerCase()] = true; });
     document.addEventListener('keyup', (e) => { this.keys[e.key.toLowerCase()] = false; });
