@@ -193,7 +193,7 @@ function initSite() {
       }
       var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
       var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var cellSize = 100;
+      var cellSize = window.innerWidth < 900 ? 50 : 100;
       var gap = 4;
       var step = cellSize + gap;
 
