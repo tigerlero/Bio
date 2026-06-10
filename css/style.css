@@ -1403,7 +1403,7 @@ footer {
   border-radius: 12px;
   padding: 1rem 1.5rem;
   min-height: 200px;
-  width: 100%;
+  width: fit-content;
 }
 .dashboard-card-header {
   display: flex;

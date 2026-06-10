@@ -223,7 +223,7 @@ function initSite() {
         for (var dd = 0; dd < 7; dd++) {
           if (dd < weeks[w].length) {
             var c = weeks[w][dd];
-            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;align-items:center;justify-content:center;font-size:' + Math.max(6, Math.min(10, cellSize * 0.22)) + 'px;color:rgba(255,255,255,0.7);font-weight:500;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '">' + parseInt(c.date.slice(8)) + '</div>';
+            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + Math.max(6, Math.min(10, cellSize * 0.22)) + 'px;line-height:1.1;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"><div style="color:rgba(255,255,255,0.85);font-weight:600;">' + parseInt(c.date.slice(8)) + '</div><div style="color:rgba(255,255,255,0.5);font-size:' + Math.max(5, Math.min(8, cellSize * 0.16)) + 'px;">' + c.count + '</div></div>';
           } else {
             html += '<div style="width:' + cellSize + 'px;height:' + cellSize + 'px;"></div>';
           }
