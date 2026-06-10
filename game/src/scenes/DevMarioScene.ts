@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { AudioManager } from '../systems/AudioManager';
 
 const GRAVITY = 900;
-const JUMP_VEL = -420;
+const JUMP_VEL = -500;
 const MOVE_SPEED = 180;
 const FOCUS_SPEED = 240;
 const WORLD_W = 5200;
@@ -74,7 +74,7 @@ export class DevMarioScene extends Phaser.Scene {
     this.score = 0; this.lives = 3;
     this.gameOver = false; this.won = false;
     this.focusMode = false; this.focusTimer = 0; this.focusChamber = -1;
-    this.respawnX = 80; this.respawnY = GROUND_Y - 13;
+    this.respawnX = 80; this.respawnY = GROUND_Y - 28;
     this.enemies = []; this.coins = [];
     this.byteGfx = []; this.bytePositions = [];
     this.exitPipePos = null;
@@ -129,14 +129,14 @@ export class DevMarioScene extends Phaser.Scene {
       { x: 3900, y: GROUND_Y, w: 1100, h: 64 },
     ];
     this.floatPlats = [
-      { x: 280, y: 380, w: 96, h: 18 }, { x: 480, y: 310, w: 96, h: 18 },
-      { x: 760, y: 370, w: 128, h: 18 }, { x: 1100, y: 340, w: 96, h: 18 },
-      { x: 1350, y: 300, w: 128, h: 18 }, { x: 1600, y: 360, w: 96, h: 18 },
-      { x: 2000, y: 320, w: 96, h: 18 }, { x: 2250, y: 380, w: 96, h: 18 },
-      { x: 2550, y: 320, w: 128, h: 18 }, { x: 2850, y: 270, w: 96, h: 18 },
-      { x: 3150, y: 340, w: 96, h: 18 }, { x: 3500, y: 300, w: 128, h: 18 },
-      { x: 4050, y: 320, w: 128, h: 18 }, { x: 4350, y: 270, w: 96, h: 18 },
-      { x: 4650, y: 340, w: 96, h: 18 },
+      { x: 280, y: 460, w: 96, h: 18 }, { x: 480, y: 390, w: 96, h: 18 },
+      { x: 760, y: 456, w: 128, h: 18 }, { x: 1100, y: 460, w: 96, h: 18 },
+      { x: 1350, y: 380, w: 128, h: 18 }, { x: 1600, y: 456, w: 96, h: 18 },
+      { x: 2000, y: 460, w: 96, h: 18 }, { x: 2250, y: 390, w: 96, h: 18 },
+      { x: 2550, y: 460, w: 128, h: 18 }, { x: 2850, y: 380, w: 96, h: 18 },
+      { x: 3150, y: 456, w: 96, h: 18 }, { x: 3500, y: 460, w: 128, h: 18 },
+      { x: 4050, y: 460, w: 128, h: 18 }, { x: 4350, y: 390, w: 96, h: 18 },
+      { x: 4650, y: 456, w: 96, h: 18 },
     ];
     this.pipes = [
       { x: 820, y: GROUND_Y - 64, h: 64 },
@@ -256,6 +256,8 @@ export class DevMarioScene extends Phaser.Scene {
       g.fillRect(px - 4, pipe.y - 8, pw + 8, 3);
       g.fillStyle(0x111111, 0.5);
       g.fillRect(px + 6, pipe.y + 8, pw - 12, pipe.h - 8);
+      const rim = this.add.rectangle(pipe.x, pipe.y - 8, pw + 8, 10, 0x33aa33).setDepth(2).setVisible(false);
+      this.platforms.add(rim);
     }
   }
 
@@ -621,8 +623,7 @@ export class DevMarioScene extends Phaser.Scene {
     if (this.focusMode) this.exitFocusMode();
     AudioManager.get().playSfx('interact');
     const p = this.player;
-    p.setPosition(this.respawnX, this.respawnY);
-    (p.body as Phaser.Physics.Arcade.Body).setVelocity(0, 0);
+    (p.body as Phaser.Physics.Arcade.Body).reset(this.respawnX, this.respawnY);
     this.cameras.main.shake(200, 0.01);
   }
 

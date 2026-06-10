@@ -11,6 +11,7 @@ import { EducationCampusScene3D } from './scenes/EducationCampusScene';
 import { ProjectParkScene3D } from './scenes/ProjectParkScene';
 import { JobDistrictScene3D } from './scenes/JobDistrictScene';
 import { SkillGardenScene3D } from './scenes/SkillGardenScene';
+import { EndlessRunnerScene } from './scenes/EndlessRunnerScene';
 import { fadeIn, fadeOut } from './utils/Transitions';
 
 SettingsManager.get();
@@ -28,6 +29,7 @@ let paused = false;
 let currentOverworld: Overworld | null = null;
 let currentDetail: any = null;
 let currentTitle: TitleScene3D | null = null;
+let currentRunner: EndlessRunnerScene | null = null;
 let pauseMenu: PauseMenu | null = null;
 let firstScene = true;
 
@@ -56,6 +58,9 @@ async function startScene(key: string): Promise<void> {
     currentDetail = new JobDistrictScene3D(renderer, () => startScene('OverworldScene'), dialogue, modal);
   } else if (key === 'SkillGardenScene') {
     currentDetail = new SkillGardenScene3D(renderer, () => startScene('OverworldScene'), dialogue, modal);
+  } else if (key === 'EndlessRunnerScene') {
+    AudioManager.get().stopBgm(0.2);
+    currentRunner = new EndlessRunnerScene(renderer, () => startScene('OverworldScene'));
   }
   await fadeIn(250);
 }
@@ -64,6 +69,7 @@ function cleanupCurrent(): void {
   if (currentOverworld) { currentOverworld.destroy(); currentOverworld = null; }
   if (currentDetail) { currentDetail.destroy(); currentDetail = null; }
   if (currentTitle) { currentTitle.destroy(); currentTitle = null; }
+  if (currentRunner) { currentRunner.destroy(); currentRunner = null; }
   if (pauseMenu) { pauseMenu.destroy(); pauseMenu = null; }
 }
 
@@ -97,8 +103,8 @@ function animate(): void {
   const dt = Math.min(clock.getDelta(), 0.05);
 
   if (paused) {
-    renderer.render((currentOverworld?.scene || currentDetail?.scene || currentTitle?.scene)!,
-      (currentOverworld as any)?.camera || currentDetail?.camera || currentTitle?.getCamera());
+    renderer.render((currentOverworld?.scene || currentRunner?.scene || currentDetail?.scene || currentTitle?.scene)!,
+      (currentOverworld as any)?.camera || currentRunner?.camera || currentDetail?.camera || currentTitle?.getCamera());
     return;
   }
 
@@ -108,6 +114,9 @@ function animate(): void {
   } else if (currentOverworld) {
     currentOverworld.update(dt);
     renderer.render(currentOverworld.scene, (currentOverworld as any).camera);
+  } else if (currentRunner) {
+    currentRunner.update(dt);
+    renderer.render(currentRunner.scene, currentRunner.camera);
   } else if (currentDetail) {
     currentDetail.update(dt);
     renderer.render(currentDetail.scene, currentDetail.camera);
@@ -123,5 +132,6 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
   if (currentTitle) currentTitle.resize(w, h);
   if (currentOverworld) currentOverworld.resize(w, h);
+  if (currentRunner) currentRunner.resize(w, h);
   if (currentDetail) currentDetail.resize(w, h);
 });

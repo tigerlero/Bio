@@ -269,7 +269,18 @@ export class Overworld {
       this.npcs.push(new NPC(this.scene, edu.position.x, edu.position.y, 0xccaa44, edu.degree, `education_${edu.id}`, 'education', edu));
     }
 
-    // Coffee shops
+    // Arcade terminal (Endless Runner)
+    const arcadeData: any = {
+      id: 'arcade_terminal',
+      degree: 'ARCADE TERMINAL',
+      company: 'CODE SPRINT',
+      role: 'Endless Runner',
+      period: '',
+      highlights: ['Avoid bad code habits, collect good ones!'],
+      position: { x: 1200, y: 820 },
+    };
+    this.npcs.push(new NPC(this.scene, 1200, 820, 0x44ff88, 'CODE SPRINT', 'arcade_terminal', 'arcade', arcadeData, 200));
+
     for (const cs of COFFEE_SHOPS) {
       const fake: any = {
         id: `coffee_${cs.name.replace(/[^a-z]/gi, '_').toLowerCase()}`,
@@ -382,6 +393,19 @@ export class Overworld {
     npc.markVisited();
     const type = npc.type;
     const data = npc.data;
+    if (type === 'arcade') {
+      this.dialogue.show([
+        '🖥 CODE SPRINT — Endless Runner',
+        'Avoid bad code habits (bugs, spaghetti, tech debt)',
+        'Collect good habits (clean code, tests, docs)',
+        'Press E to start ▶',
+      ], npc.npcName, null, () => {
+        AudioManager.get().stopBgm(0.3);
+        this.cleanupNPCs();
+        this.onSceneChange('EndlessRunnerScene');
+      });
+      return;
+    }
     if (type === 'coffee') {
       this.dialogue.show([
         `☕ Welcome to ${npc.npcName}!`,
