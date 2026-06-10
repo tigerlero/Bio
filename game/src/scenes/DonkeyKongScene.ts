@@ -4,7 +4,8 @@ import { AudioManager } from '../systems/AudioManager';
 const W = 800;
 const H = 600;
 const GRAVITY = 800;
-const JUMP_VEL = -380;
+const JUMP_VEL = -300;
+const COFFEE_DURATION = 8000;
 const MOVE_SPEED = 160;
 const PLAT_H = 14;
 const PLAYER_W = 18;
@@ -24,6 +25,7 @@ interface LadderData {
 }
 
 interface CoinObj { gfx: Phaser.GameObjects.Graphics; x: number; y: number; collected: boolean }
+interface CoffeeObj { gfx: Phaser.GameObjects.Graphics; x: number; y: number; active: boolean }
 
 const ROW_YS = [H - 48, H - 128, H - 208, H - 288, H - 368, H - 448];
 const TESTER_Y = ROW_YS[5] - 40;
@@ -76,6 +78,10 @@ export class DonkeyKongScene extends Phaser.Scene {
   private currentLadder: LadderData | null = null;
   private bugSpawnTimer = 0;
   private bugSpawnInterval = 1800;
+  private caffeinated = false;
+  private coffeeTimer = 0;
+  private coffeeSpawnTimer = 12000;
+  private currentCoffee: CoffeeObj | null = null;
 
   constructor() {
     super({ key: 'DonkeyKongScene' });
@@ -87,6 +93,8 @@ export class DonkeyKongScene extends Phaser.Scene {
     this.climbing = false; this.currentLadder = null;
     this.bugs = []; this.coins = [];
     this.bugSpawnTimer = 0; this.bugSpawnInterval = 1800;
+    this.caffeinated = false; this.coffeeTimer = 0;
+    this.coffeeSpawnTimer = 12000; this.currentCoffee = null;
 
     this.physics.world.setBounds(0, 0, W, H);
     this.physics.world.gravity.y = GRAVITY;
@@ -236,7 +244,8 @@ export class DonkeyKongScene extends Phaser.Scene {
     const body = p.body as Phaser.Physics.Arcade.Body;
 
     this.handleInput(p, body, delta);
-    this.updateBugs(p, delta);
+    this.updateBugs(p, body, delta);
+    this.updateCoffee(p, delta);
     this.checkCoins(p);
     this.checkWin(p);
     this.drawPlayer(p.x, p.y);
@@ -338,8 +347,8 @@ export class DonkeyKongScene extends Phaser.Scene {
     }
   }
 
-  private updateBugs(p: Phaser.GameObjects.Rectangle, _delta: number): void {
-    this.bugSpawnTimer += _delta;
+  private updateBugs(p: Phaser.GameObjects.Rectangle, body: Phaser.Physics.Arcade.Body, delta: number): void {
+    this.bugSpawnTimer += delta;
     if (this.bugSpawnTimer >= this.bugSpawnInterval) {
       this.bugSpawnTimer = 0;
       this.spawnBug();
@@ -355,8 +364,16 @@ export class DonkeyKongScene extends Phaser.Scene {
 
       if (go.y > H + 20) { this.destroyBug(i); continue; }
 
-      if (Phaser.Math.Distance.Between(p.x, p.y, go.x, go.y) < 18) {
-        this.loseLife();
+      const dist = Phaser.Math.Distance.Between(p.x, p.y, go.x, go.y);
+      if (dist < 18) {
+        if (this.caffeinated && body.velocity.y > 0 && p.y < go.y - 6) {
+          this.score += 20;
+          this.showPopup(go.x, go.y, '+20 SMASH!');
+          body.setVelocityY(-150);
+          this.destroyBug(i);
+        } else {
+          this.loseLife();
+        }
       }
     }
   }
@@ -387,6 +404,59 @@ export class DonkeyKongScene extends Phaser.Scene {
     this.bugs.splice(idx, 1);
   }
 
+  private spawnCoffee(): void {
+    if (this.currentCoffee) return;
+    const plat = Phaser.Utils.Array.GetRandom(PLATS);
+    const cx = Phaser.Math.Between(plat.x + 10, plat.x + plat.w - 10);
+    const cy = plat.y - 18;
+    const gfx = this.add.graphics().setDepth(5);
+    this.drawCoffee(gfx, cx, cy);
+    this.currentCoffee = { gfx, x: cx, y: cy, active: true };
+    this.tweens.add({
+      targets: { y: cy }, y: cy - 4, duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+      onUpdate: (tw) => { const v = tw.getValue(); if (v !== null) gfx.y = v - cy; },
+    });
+  }
+
+  private updateCoffee(p: Phaser.GameObjects.Rectangle, delta: number): void {
+    if (this.caffeinated) {
+      this.coffeeTimer -= delta;
+      if (this.coffeeTimer <= 0) {
+        this.caffeinated = false;
+        this.coffeeTimer = 0;
+      }
+    }
+    if (this.currentCoffee && this.currentCoffee.active) {
+      if (Phaser.Math.Distance.Between(p.x, p.y, this.currentCoffee.x, this.currentCoffee.y) < 20) {
+        this.currentCoffee.active = false;
+        this.currentCoffee.gfx.destroy();
+        this.currentCoffee = null;
+        this.caffeinated = true;
+        this.coffeeTimer = COFFEE_DURATION;
+        this.showPopup(p.x, p.y - 20, '☕ COFFEE BOOST!');
+        AudioManager.get().playSfx('interact');
+      }
+    }
+    this.coffeeSpawnTimer -= delta;
+    if (this.coffeeSpawnTimer <= 0) {
+      this.coffeeSpawnTimer = Phaser.Math.Between(8000, 15000);
+      this.spawnCoffee();
+    }
+  }
+
+  private drawCoffee(gfx: Phaser.GameObjects.Graphics, x: number, y: number): void {
+    gfx.fillStyle(0x6f4e37, 1);
+    gfx.fillRoundedRect(x - 6, y - 5, 12, 10, 2);
+    gfx.fillStyle(0x8b6914, 1);
+    gfx.fillRect(x + 5, y - 3, 3, 4);
+    gfx.fillStyle(0xffffff, 0.4);
+    gfx.fillRect(x - 4, y - 4, 8, 3);
+    gfx.lineStyle(1, 0xffffff, 0.5);
+    gfx.beginPath(); gfx.moveTo(x - 3, y - 9); gfx.lineTo(x - 1, y - 6);
+    gfx.beginPath(); gfx.moveTo(x + 1, y - 9); gfx.lineTo(x + 3, y - 6);
+    gfx.strokePath();
+  }
+
   private checkCoins(p: Phaser.GameObjects.Rectangle): void {
     for (const c of this.coins) {
       if (c.collected) continue;
@@ -412,6 +482,10 @@ export class DonkeyKongScene extends Phaser.Scene {
     const moving = Math.abs(body.velocity.x) > 5;
     const right = body.velocity.x >= 0;
 
+    if (this.caffeinated) {
+      this.playerGfx.fillStyle(0xffaa00, 0.5);
+      this.playerGfx.fillRect(x - 11, y - 14, 22, 30);
+    }
     this.playerGfx.fillStyle(0x4488ff, 1);
     this.playerGfx.fillRect(x - 9, y - 12, 18, 24);
     this.playerGfx.fillStyle(0x66aaff, 1);
@@ -434,6 +508,8 @@ export class DonkeyKongScene extends Phaser.Scene {
     if (this.lives <= 0) { this.lose(); return; }
     this.climbing = false;
     this.currentLadder = null;
+    this.caffeinated = false;
+    this.coffeeTimer = 0;
     const body = this.playerBody.body as Phaser.Physics.Arcade.Body;
     body.checkCollision.none = false;
     body.allowGravity = true;
@@ -479,7 +555,9 @@ export class DonkeyKongScene extends Phaser.Scene {
 
   private renderUI(): void {
     const hearts = '❤️'.repeat(this.lives);
-    this.uiText.setText(`${hearts}  Bugs: ${this.bugs.length}  Score: ${this.score}`);
+    const coffeeIcon = this.caffeinated ? ' ☕' : '';
+    const coffeeBar = this.caffeinated ? ' [' + '█'.repeat(Math.ceil(this.coffeeTimer / 800)) + ']' : '';
+    this.uiText.setText(`${hearts}  Bugs: ${this.bugs.length}  Score: ${this.score}${coffeeIcon}${coffeeBar}`);
   }
 
   private returnToWorld(): void {
