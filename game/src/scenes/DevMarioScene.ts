@@ -675,16 +675,17 @@ export class DevMarioScene extends Phaser.Scene {
   }
 
   private checkPipes(p: Phaser.GameObjects.Rectangle): void {
-    if (this.focusMode) { this.promptText.setVisible(false); return; }
     let near = false;
-    for (const pipe of this.pipes) {
-      const rimY = pipe.y - 8;
-      if (Phaser.Math.Distance.Between(p.x, p.y, pipe.x, rimY) < 65) {
-        this.promptText.setText('Press E / Down to enter focus');
-        this.promptText.setPosition(pipe.x, rimY - 50);
-        this.promptText.setVisible(true);
-        near = true;
-        break;
+    if (!this.focusMode) {
+      for (const pipe of this.pipes) {
+        const rimY = pipe.y - 8;
+        if (Phaser.Math.Distance.Between(p.x, p.y, pipe.x, rimY) < 65) {
+          this.promptText.setText('Press E / Down to enter focus');
+          this.promptText.setPosition(pipe.x, rimY - 50);
+          this.promptText.setVisible(true);
+          near = true;
+          break;
+        }
       }
     }
     if (this.exitPipePos && this.focusMode) {
@@ -702,7 +703,7 @@ export class DevMarioScene extends Phaser.Scene {
   private checkBreakBlocks(p: Phaser.GameObjects.Rectangle, body: Phaser.Physics.Arcade.Body): void {
     for (const bb of this.breakBlocks) {
       if (!bb.alive) continue;
-      if (body.velocity.y < 0 && Math.abs(p.x - bb.x) < 24 && p.y > bb.y + 4 && p.y - 13 < bb.y + 10) {
+      if (body.velocity.y < 0 && Math.abs(p.x - bb.x) < 24 && p.y > bb.y + 8) {
         AudioManager.get().playSfx('step');
         bb.alive = false;
         bb.rect.destroy();
