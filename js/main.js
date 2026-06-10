@@ -194,41 +194,31 @@ function initSite() {
 
       /* header: total + legend */
       var html = '<div class="calendar-header" style="margin-bottom:8px;">';
-      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions</span></div>';
+      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions in the last year</span></div>';
       html += '<div class="calendar-legend">Less <span class="calendar-cell level-0"></span><span class="calendar-cell level-1"></span><span class="calendar-cell level-2"></span><span class="calendar-cell level-3"></span><span class="calendar-cell level-4"></span> More</div>';
       html += '</div>';
 
-      /* ── horizontal (standard GitHub) layout ── */
-      html += '<div style="display:flex;">';
+      /* ── vertical layout: days on top, months on left ── */
+      html += '<div class="cal-v">';
 
-      /* left column: day labels */
-      html += '<div style="display:flex;flex-direction:column;gap:' + gap + 'px;padding-right:6px;padding-top:' + (step + 2) + 'px;">';
+      /* top row: day-of-week labels (offset for month column) */
+      html += '<div class="cal-v-row" style="padding-left:44px;">';
       for (var d = 0; d < 7; d++) {
-        html += '<div style="height:' + cellSize + 'px;font-size:10px;color:var(--text-muted);display:flex;align-items:center;justify-content:flex-end;">' + dayNames[d] + '</div>';
+        html += '<div style="width:' + cellSize + 'px;font-size:11px;text-align:center;color:var(--text-muted);font-weight:500;">' + dayNames[d] + '</div>';
       }
       html += '</div>';
 
-      /* right side: weeks as columns */
-      html += '<div style="overflow-x:auto;">';
-      html += '<div style="display:flex;gap:' + gap + 'px;">';
-
-      /* month label row (top) */
+      /* data rows: month label + 7 cells */
       var lastMonth = -1;
       for (var w = 0; w < weeks.length; w++) {
         var m = new Date(weeks[w][0].date + 'T00:00:00').getMonth();
+        html += '<div class="cal-v-row" style="gap:' + gap + 'px;">';
         if (m !== lastMonth) {
-          html += '<div style="width:' + cellSize + 'px;font-size:10px;color:var(--text-muted);text-align:center;margin-bottom:2px;">' + monthNames[m] + '</div>';
+          html += '<div style="width:40px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:4px;line-height:' + step + 'px;font-weight:500;">' + monthNames[m] + '</div>';
           lastMonth = m;
         } else {
-          html += '<div style="width:' + cellSize + 'px;"></div>';
+          html += '<div style="width:40px;"></div>';
         }
-      }
-      html += '</div>'; /* end month row */
-
-      /* week columns with day cells */
-      html += '<div style="display:flex;gap:' + gap + 'px;">';
-      for (var w = 0; w < weeks.length; w++) {
-        html += '<div style="display:flex;flex-direction:column;gap:' + gap + 'px;">';
         for (var dd = 0; dd < 7; dd++) {
           if (dd < weeks[w].length) {
             var c = weeks[w][dd];
@@ -239,9 +229,7 @@ function initSite() {
         }
         html += '</div>';
       }
-      html += '</div>'; /* end weeks */
-      html += '</div>'; /* end scrollable */
-      html += '</div>'; /* end flex */
+      html += '</div>';
       container.innerHTML = html;
     }
 
