@@ -1404,6 +1404,7 @@ footer {
   padding: 1rem 1.5rem;
   min-height: 200px;
   width: fit-content;
+  margin: 0 auto;
 }
 .dashboard-card-header {
   display: flex;
