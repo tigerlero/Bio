@@ -103,8 +103,8 @@ function addIntent(spec) {
 addIntent({
   id: 'greeting',
   labels: ['Hello', 'Hi'],
-  keywords: ['hi', 'hello', 'hey', 'sup', 'yo', 'greetings', 'good morning', 'good evening', 'good afternoon', 'howdy'],
-  patterns: [/^(hi|hello|hey|howdy)(\s|$)/i, /^greetings/i],
+  keywords: ['hi', 'hello', 'hey', 'sup', 'yo', 'greetings', 'good morning', 'good evening', 'good afternoon', 'howdy', 'καλημέρα', 'καλησπέρα', 'γεια σου', 'γεια', 'χαίρετε', 'γεια χαρά'],
+  patterns: [/^(hi|hello|hey|howdy)(\s|$)/i, /^greetings/i, /^(γεια|καλημέρα|καλησπέρα|χαίρετε)/i],
   priority: 2,
   response: (profile, ctx) => {
     const name = profile.meta.name.split(' ')[0];
@@ -127,8 +127,8 @@ addIntent({
 addIntent({
   id: 'about_me',
   labels: ['About Me'],
-  keywords: ['about', 'who', 'yourself', 'tell', 'bio', 'introduction', 'introduce', 'background', 'summary', 'about you', 'who are you', 'tell me about', 'ποιος', 'σχετικά', 'βιογραφικό', 'ποιος είσαι', 'πες μου'],
-  patterns: [/^(who|what)\s+(is|are)\s+(you|this)/i, /tell\s+(me\s+)?about/i, /^(about|introduce)\s/i],
+  keywords: ['about', 'who', 'yourself', 'tell', 'bio', 'introduction', 'introduce', 'background', 'summary', 'about you', 'who are you', 'tell me about', 'describe yourself', 'overview', 'profile', 'ποιος', 'σχετικά', 'βιογραφικό', 'ποιος είσαι', 'πες μου', 'παρουσίαση', 'αυτοβιογραφία', 'περίγραψε'],
+  patterns: [/^(who|what)\s+(is|are)\s+(you|this)/i, /tell\s+(me\s+)?about/i, /^(about|introduce|describe)\s/i],
   priority: 5,
   response: (profile) => {
     const name = profile.meta.name;
@@ -142,8 +142,8 @@ addIntent({
 addIntent({
   id: 'skills',
   labels: ['Skills'],
-  keywords: ['skills', 'technologies', 'languages', 'frameworks', 'tools', 'tech stack', 'stack', 'know', 'proficient', 'expertise', 'capable', 'what can you', 'competencies', 'δεξιότητες', 'γλώσσες', 'τεχνολογίες', 'ξέρεις', 'τι ξέρεις', 'ικανότητες'],
-  patterns: [/what\s+(technologies|tools|stacks|skills)/i, /tech\s+stack/i, /what\s+(do\s+)?(you\s+)?know/i],
+  keywords: ['skills', 'technologies', 'languages', 'frameworks', 'tools', 'tech stack', 'stack', 'know', 'proficient', 'expertise', 'capable', 'what can you', 'competencies', 'programming languages', 'skillset', 'tech', 'what languages', 'expert in', 'δεξιότητες', 'γλώσσες', 'τεχνολογίες', 'ξέρεις', 'τι ξέρεις', 'ικανότητες', 'γνώσεις', 'προγραμματισμός', 'ικανός', 'κατέχω'],
+  patterns: [/what\s+(technologies|tools|stacks|skills|programming\s+languages)/i, /tech\s+stack/i, /what\s+(do\s+)?(you\s+)?know/i, /^(skills|technologies|tech\s+stack)/i],
   priority: 4,
   response: (profile) => {
     const cats = Object.entries(profile.skills);
@@ -159,8 +159,8 @@ addIntent({
 addIntent({
   id: 'frontend',
   labels: ['Frontend'],
-  keywords: ['frontend', 'front-end', 'front end', 'ui', 'react', 'vue', 'angular', 'css', 'html'],
-  patterns: [],
+  keywords: ['frontend', 'front-end', 'front end', 'ui', 'react', 'vue', 'angular', 'css', 'html', 'client-side', 'interface', 'spa', 'responsive', 'tailwind', 'bootstrap', 'material ui', 'javascript', 'typescript', 'διασύνδεση', 'διεπαφή', 'οπτική', 'σχεδίαση', 'προμετωπίδα'],
+  patterns: [/^(frontend|front-end|front\s+end|ui|client\s*side)/i],
   priority: 3,
   response: (profile) => {
     const fe = profile.skills.Frontend || [];
@@ -174,8 +174,8 @@ addIntent({
 addIntent({
   id: 'backend',
   labels: ['Backend'],
-  keywords: ['backend', 'back-end', 'back end', 'server', 'api', 'django', 'express', 'laravel', 'node'],
-  patterns: [],
+  keywords: ['backend', 'back-end', 'back end', 'server', 'api', 'django', 'express', 'laravel', 'node', 'server-side', 'database', 'rest', 'graphql', 'middleware', 'python', 'php', 'fastapi', 'flask', 'sql', 'nosql', 'διακομιστής', 'βάση δεδομένων', 'server', 'δεδομένα'],
+  patterns: [/^(backend|back-end|back\s+end|server|api)/i],
   priority: 3,
   response: (profile) => {
     const be = profile.skills.Backend || [];
@@ -189,8 +189,8 @@ addIntent({
 addIntent({
   id: 'projects',
   labels: ['Projects'],
-  keywords: ['projects', 'portfolio', 'built', 'created', 'developed', 'made', 'applications', 'apps', 'work', 'showcase', 'what have you', 'what did you', 'έργα', 'projects', 'εργασίες', 'δημιούργησες', 'έχεις φτιάξει'],
-  patterns: [/what\s+(projects|apps|applications|things)\s/i, /show\s+(me\s+)?(your\s+)?(projects|work)/i, /^projects/i],
+  keywords: ['projects', 'portfolio', 'built', 'created', 'developed', 'made', 'applications', 'apps', 'work', 'showcase', 'what have you', 'what did you', 'your work', 'creations', 'side projects', 'portfolio projects', 'έργα', 'projects', 'εργασίες', 'δημιούργησες', 'έχεις φτιάξει', 'κατασκευές', 'δημιουργίες'],
+  patterns: [/what\s+(projects|apps|applications|things|creations)\s/i, /show\s+(me\s+)?(your\s+)?(projects|work|creations)/i, /^projects/i, /what\s+(have|did)\s+(you\s+)?(built|created|made)/i],
   priority: 4,
   response: (profile) => {
     const projects = profile.projects || [];
@@ -205,8 +205,8 @@ addIntent({
 addIntent({
   id: 'project_detail',
   labels: ['Bio Explorer 2D', 'Bio Explorer 3D', 'RePaw', 'UR8', 'Pixel Sprint', 'Rustix', 'Speech Recognition', 'PhotoFavorites', 'Kivy Downloader', 'Tournaments', 'CryptDB', 'Flag Builder', 'PingPong', 'Asteroid', 'Snake', 'Flappy', 'Tetris', 'Quiz', 'Match', 'Base Ops', 'Bug Breaker', 'CareBeat', 'DrakosDesign', 'IslandBookings', 'MariaKostoula', 'AuraLibre'],
-  keywords: ['project', 'tell me about', 'detail', 'bio explorer', 'repaw', 'rustix', 'pixelsprint', 'speech', 'photofavorites', 'kivy', 'tournaments', 'snake', 'flappy', 'tetris', 'asteroid', 'cryptdb'],
-  patterns: [/^(bio explorer|repaw|ur8|pixelsprint|rustix|speech|snake|photofavorites|kivy|tournaments|cryptdb|flag|pingpong|asteroid|carebeat|drakos|islandbookings|mariakostoula|laralibre)/i],
+  keywords: ['project', 'tell me about', 'detail', 'bio explorer', 'repaw', 'rustix', 'pixelsprint', 'speech', 'photofavorites', 'kivy', 'tournaments', 'snake', 'flappy', 'tetris', 'asteroid', 'cryptdb', 'base ops', 'bug breaker', 'pacman', 'dev mario', 'donkey kong', 'code sprint', 'endless runner', 'match', 'quiz', 'carebeat', 'drakos', 'islandbookings', 'mariakostoula', 'laralibre', 'flag', 'pingpong', 'ur8', 'project', 'λεπτομέρειες', 'προβολή', 'πες μου για'],
+  patterns: [/^(bio explorer|repaw|ur8|pixelsprint|rustix|speech|snake|photofavorites|kivy|tournaments|cryptdb|flag|pingpong|asteroid|carebeat|drakos|islandbookings|mariakostoula|laralibre|base ops|bug breaker|pacman|dev mario|donkey kong|code sprint|endless runner|match|quiz)/i],
   priority: 6,
   response: (profile, ctx, raw) => {
     const lower = raw.toLowerCase();
@@ -236,8 +236,8 @@ addIntent({
 addIntent({
   id: 'experience',
   labels: ['Experience'],
-  keywords: ['experience', 'work', 'job', 'career', 'employment', 'worked', 'professional', 'history', 'background', 'where did you', 'companies', 'εμπειρία', 'εργασία', 'δουλειά', 'επαγγελματική', 'που δούλεψες'],
-  patterns: [/where\s+(have|did)\s+(you\s+)?(worked|work)/i, /work\s+(history|experience)/i, /^experience/i],
+  keywords: ['experience', 'work', 'job', 'career', 'employment', 'worked', 'professional', 'history', 'background', 'where did you', 'companies', 'roles', 'positions', 'previous jobs', 'where have you', 'προϋπηρεσία', 'εμπειρία', 'εργασία', 'δουλειά', 'επαγγελματική', 'που δούλεψες', 'θέσεις', 'εργάστηκες'],
+  patterns: [/where\s+(have|did)\s+(you\s+)?(worked|work)/i, /work\s+(history|experience)/i, /^experience/i, /^(jobs|job\s+history|previous\s+jobs|roles)/i],
   priority: 4,
   response: (profile) => {
     const jobs = profile.experience || [];
@@ -252,8 +252,8 @@ addIntent({
 addIntent({
   id: 'education',
   labels: ['Education'],
-  keywords: ['education', 'studied', 'degree', 'university', 'school', 'learned', 'college', 'academic', 'graduated', 'bachelor', 'certification', 'ecdl', 'unipi', 'εκπαίδευση', 'σπουδές', 'πανεπιστήμιο', 'πτυχίο', 'σχολή'],
-  patterns: [/where\s+(did\s+)?(you\s+)?(study|go\s+to\s+school)/i, /academic\s+(background|history)/i, /^education/i],
+  keywords: ['education', 'studied', 'degree', 'university', 'school', 'learned', 'college', 'academic', 'graduated', 'bachelor', 'certification', 'ecdl', 'unipi', 'qualifications', 'alma mater', 'major', 'field of study', 'computer science', 'informatics', 'πτυχίο', 'εκπαίδευση', 'σπουδές', 'πανεπιστήμιο', 'σχολή', 'εκπαιδευτικό', 'δίπλωμα', 'μεταπτυχιακό', 'πτυχίο', 'μαθήματα'],
+  patterns: [/where\s+(did\s+)?(you\s+)?(study|go\s+to\s+school)/i, /academic\s+(background|history|qualifications)/i, /^education/i, /^(qualifications|degree|bachelor|master)/i],
   priority: 4,
   response: (profile) => {
     const edu = profile.education || [];
@@ -268,8 +268,8 @@ addIntent({
 addIntent({
   id: 'github',
   labels: ['GitHub'],
-  keywords: ['github', 'repository', 'repos', 'code', 'source', 'open source', 'contribution', 'tigerlero', 'git'],
-  patterns: [/^(github|git|repos)/i, /where\s+(is|can\s+i\s+find)\s+(your\s+)?code/i],
+  keywords: ['github', 'repository', 'repos', 'code', 'source', 'open source', 'contribution', 'tigerlero', 'git', 'source code', 'αποθετήριο', 'πηγαίος κώδικας', 'ανοικτός κώδικας', 'κώδικας', 'αποθετήρια'],
+  patterns: [/^(github|git|repos|source\s+code)/i, /where\s+(is|can\s+i\s+find)\s+(your\s+)?(code|source)/i],
   priority: 5,
   response: (profile) => {
     const gh = profile.social.github;
@@ -284,8 +284,8 @@ addIntent({
 addIntent({
   id: 'linkedin',
   labels: ['LinkedIn'],
-  keywords: ['linkedin', 'linked in', 'professional', 'profile', 'connect', 'network'],
-  patterns: [],
+  keywords: ['linkedin', 'linked in', 'professional', 'profile', 'connect', 'network', 'λίνκεντίν', 'επαγγελματικό δίκτυο', 'προφίλ', 'σύνδεση'],
+  patterns: [/^(linkedin|linked\s+in)/i],
   priority: 3,
   response: (profile) => {
     const li = profile.social.linkedin;
@@ -300,8 +300,8 @@ addIntent({
 addIntent({
   id: 'contact',
   labels: ['Contact'],
-  keywords: ['contact', 'reach', 'email', 'phone', 'call', 'message', 'get in touch', 'how to', 'hire', 'available', 'επικοινωνία', 'τηλέφωνο', 'email', 'στοιχεία'],
-  patterns: [/how\s+(can\s+i|to)\s+(contact|reach|get)/i, /^(email|phone|contact)/i],
+  keywords: ['contact', 'reach', 'email', 'phone', 'call', 'message', 'get in touch', 'how to', 'hire', 'available', 'how to hire', 'reach out', 'get hold of', 'information', 'επικοινωνία', 'τηλέφωνο', 'email', 'στοιχεία', 'επικοινωνήσω', 'τηλεφωνήσω', 'βρες'],
+  patterns: [/how\s+(can\s+i|to)\s+(contact|reach|get|hire)/i, /^(email|phone|contact|reach|hire)/i],
   priority: 4,
   response: (profile) => {
     const c = profile.contact;
@@ -318,8 +318,8 @@ addIntent({
 addIntent({
   id: 'interests',
   labels: ['Interests'],
-  keywords: ['interests', 'hobbies', 'passionate', 'free time', 'fun', 'like to', 'enjoy', 'ενδιαφέροντα', 'χόμπι', 'ελεύθερος χρόνος'],
-  patterns: [/what\s+(are\s+)?(your\s+)?(interests|hobbies)/i, /what\s+(do\s+)?(you\s+)?(do\s+)?(for\s+)?fun/i],
+  keywords: ['interests', 'hobbies', 'passionate', 'free time', 'fun', 'like to', 'enjoy', 'what are you into', 'passions', 'pastimes', 'ενδιαφέροντα', 'χόμπι', 'ελεύθερος χρόνος', 'ασχολίες', 'αγαπώ', 'μου αρέσει'],
+  patterns: [/what\s+(are\s+)?(your\s+)?(interests|hobbies|passions)/i, /what\s+(do\s+)?(you\s+)?(do\s+)?(for\s+)?fun/i],
   priority: 3,
   response: (profile) => {
     const interests = profile.interests || [];
@@ -334,8 +334,8 @@ addIntent({
 addIntent({
   id: 'help',
   labels: ['Help'],
-  keywords: ['help', 'what can you do', 'commands', 'options', 'menu', 'capabilities', 'can you', 'what do you', 'βοήθεια', 'τι μπορείς', 'βοήθ', 'επιλογές'],
-  patterns: [/^(help|menu|options|commands)/i, /what\s+(can|do)\s+(you|i)\s+(do|ask)/i],
+  keywords: ['help', 'what can you do', 'commands', 'options', 'menu', 'capabilities', 'can you', 'what do you', 'tutorial', 'guide', 'what to ask', 'starter', 'βοήθεια', 'τι μπορείς', 'βοήθ', 'επιλογές', 'τι κάνεις', 'πώς δουλεύει', 'οδηγός', 'τι ξέρεις να κάνεις'],
+  patterns: [/^(help|menu|options|commands|guide|tutorial)/i, /what\s+(can|do)\s+(you|i)\s+(do|ask)/i],
   priority: 1,
   response: () => {
     const suggestions = CONFIG.SUGGESTIONS.map(s => `▸ *"${s}"*`).join('\n');
@@ -349,8 +349,8 @@ addIntent({
 addIntent({
   id: 'thanks',
   labels: [],
-  keywords: ['thanks', 'thank', 'thx', 'ty', 'appreciate', 'cool', 'nice', 'awesome', 'great', 'ευχαριστώ', 'σε ευχαριστώ'],
-  patterns: [],
+  keywords: ['thanks', 'thank', 'thx', 'ty', 'appreciate', 'cool', 'nice', 'awesome', 'great', 'wonderful', 'excellent', 'perfect', 'amazing', 'lovely', 'ευχαριστώ', 'σε ευχαριστώ', 'μπράβο', 'τέλεια', 'εξαιρετικά', 'ωραία', 'υπέροχα'],
+  patterns: [/^(thanks|thank|thx|ty|ευχαριστώ)/i],
   priority: 1,
   response: () => {
     if (window.__CHAT_LANG_IDX === 1) {
@@ -365,8 +365,8 @@ addIntent({
 addIntent({
   id: 'bye',
   labels: [],
-  keywords: ['bye', 'goodbye', 'see you', 'later', 'cya', 'farewell', 'take care', 'peace', 'αντίο', 'γεια', 'τα λέμε'],
-  patterns: [],
+  keywords: ['bye', 'goodbye', 'see you', 'later', 'cya', 'farewell', 'take care', 'peace', 'exit', 'quit', 'leave', 'done', 'signing off', 'αντίο', 'γεια', 'τα λέμε', 'θα τα πούμε', 'γεια χαρά', 'αντίο γεια'],
+  patterns: [/^(bye|goodbye|see\s+you|later|cya|farewell|αντίο|γεια)\b/i],
   priority: 1,
   response: () => {
     return __tr(
@@ -379,8 +379,8 @@ addIntent({
 addIntent({
   id: 'freelance',
   labels: ['Freelance'],
-  keywords: ['freelance', 'freelancer', 'independent', 'client', 'contract', 'gig', 'side project', 'consulting', 'carebeat', 'drakosdesign', 'islandbookings', 'mariakostoula', 'laralibre', 'enosi', 'ελεύθερος επαγγελματίας', 'freelance projects', 'συνεργάτες'],
-  patterns: [/freelance/i, /what\s+(freelance|client|contract)\s+(work|projects)/i],
+  keywords: ['freelance', 'freelancer', 'independent', 'client', 'contract', 'gig', 'side project', 'consulting', 'carebeat', 'drakosdesign', 'islandbookings', 'mariakostoula', 'laralibre', 'enosi', 'freelancing', 'self-employed', 'contract work', 'gigs', 'side gigs', 'ελεύθερος επαγγελματίας', 'freelance projects', 'συνεργάτες', 'ελεύθερος', 'ανάθεση', 'συμβόλαιο', 'projects'],
+  patterns: [/freelance/i, /what\s+(freelance|client|contract|self\s*employed)\s+(work|projects)/i, /^(freelance|freelancer|self\s*employed)/i],
   priority: 4,
   response: (profile) => {
     const fl = profile.freelance || [];
@@ -396,8 +396,8 @@ addIntent({
 addIntent({
   id: 'teaching',
   labels: ['Teaching'],
-  keywords: ['teaching', 'tutoring', 'tutor', 'teacher', 'instructor', 'lesson', 'course', 'class', 'student', 'educate', 'algorithmics', 'ecdl', 'workshop', 'διδασκαλία', 'μάθημα', 'φροντιστήριο', 'δάσκαλος', 'μαθητής', 'μαθήματα'],
-  patterns: [/teaching|tutoring/i, /what\s+(do\s+)?(you\s+)?teach/i, /can\s+(you\s+)?teach/i],
+  keywords: ['teaching', 'tutoring', 'tutor', 'teacher', 'instructor', 'lesson', 'course', 'class', 'student', 'educate', 'algorithmics', 'ecdl', 'workshop', 'lessons', 'training', 'mentoring', 'coding instructor', 'kids', 'education', 'mentor', 'διδασκαλία', 'μάθημα', 'φροντιστήριο', 'δάσκαλος', 'μαθητής', 'μαθήματα', 'εκπαίδευση', 'σεμινάρια', 'παραδίδω', 'καθηγητής', 'εκπαιδευτής'],
+  patterns: [/teaching|tutoring|mentoring/i, /what\s+(do\s+)?(you\s+)?teach/i, /can\s+(you\s+)?teach/i],
   priority: 4,
   response: (profile) => {
     const teach = profile.teaching || [];
@@ -413,8 +413,8 @@ addIntent({
 addIntent({
   id: 'pricing',
   labels: ['Pricing'],
-  keywords: ['pricing', 'price', 'cost', 'rate', 'fee', 'how much', 'charge', 'budget', '€', 'eur', 'euro', 'dollar', 'hire', 'services', 'offer', 'τιμές', 'τιμολόγηση', 'κόστος', 'πόσο', 'χρεώνεις', 'πακέτα'],
-  patterns: [/how\s+much\s+(do\s+)?(you\s+)?(charge|cost)/i, /what\s+(are\s+)?(your\s+)?(rates|prices)/i, /^(pricing|rates|cost)/i],
+  keywords: ['pricing', 'price', 'cost', 'rate', 'fee', 'how much', 'charge', 'budget', '€', 'eur', 'euro', 'dollar', 'hire', 'services', 'offer', 'prices', 'pricelist', 'payment', 'invest', 'package', 'packages', 'quote', 'τιμές', 'τιμολόγηση', 'κόστος', 'πόσο', 'χρεώνεις', 'πακέτα', 'πληρωμή', 'τιμή', 'κατάλογος', 'προσφορές', 'πακέτο'],
+  patterns: [/how\s+much\s+(do\s+)?(you\s+)?(charge|cost)/i, /what\s+(are\s+)?(your\s+)?(rates|prices|pricelist)/i, /^(pricing|rates|cost|prices|quote)/i],
   priority: 4,
   response: (profile) => {
     const svc = profile.pricing.services || [];
@@ -432,7 +432,7 @@ addIntent({
 addIntent({
   id: 'pricing_detail',
   labels: [],
-  keywords: ['website pricing', 'landing page', 'desktop app', 'web app', 'game dev', 'game development'],
+  keywords: ['website pricing', 'landing page', 'desktop app', 'web app', 'game dev', 'game development', 'website', 'landing', 'desktop', 'web application', 'saas', 'dashboard', 'game', 'unity', 'unreal', 'tutoring pricing', 'pricing details', 'τιμή ιστοσελίδας', 'τιμή εφαρμογής', 'τιμή παιχνιδιού'],
   patterns: [],
   priority: 5,
   response: (profile, ctx, raw) => {
@@ -465,8 +465,8 @@ addIntent({
 addIntent({
   id: 'games',
   labels: ['Games'],
-  keywords: ['games', 'minigames', 'mini games', 'game dev', 'snake', 'flappy', 'tetris', 'breakout', 'quiz', 'match', 'base ops', 'bug breaker', 'bio explorer', 'play', 'game project', 'pacman', 'παιχνίδια', 'παιχνίδι', 'minigames'],
-  patterns: [/what\s+games/i, /what\s+(minigames|mini-games)/i, /^(games|minigames)/i],
+  keywords: ['games', 'minigames', 'mini games', 'game dev', 'snake', 'flappy', 'tetris', 'breakout', 'quiz', 'match', 'base ops', 'bug breaker', 'bio explorer', 'play', 'game project', 'pacman', 'donkey kong', 'mario', 'dev mario', 'code sprint', 'endless runner', 'dungeon', 'skill pacman', 'παιχνίδια', 'παιχνίδι', 'minigames', 'παιχνίδια υπολογιστή'],
+  patterns: [/what\s+games/i, /what\s+(minigames|mini-games)/i, /^(games|minigames|παιχνίδια)/i, /what\s+(games|minigames)\s+(are\s+)?(there|available)/i],
   priority: 4,
   response: (profile) => {
     const games = profile.games || [];
