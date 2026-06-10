@@ -546,7 +546,12 @@ export class DonkeyKongScene extends Phaser.Scene {
   private lose(): void {
     this.gameOver = true;
     AudioManager.get().playSfx('interact');
-    this.showLargeText(`GAME OVER — Bugged out!\nScore: ${this.score}`, '#ff4444', 3000);
+    AudioManager.get().stopBgm(0.2);
+    const t = this.add.text(W / 2, H / 2, `GAME OVER — Bugged out!\nScore: ${this.score}`, {
+      fontSize: '22px', color: '#ff4444', fontFamily: 'monospace', fontStyle: 'bold',
+      align: 'center', stroke: '#000000', strokeThickness: 5,
+    }).setOrigin(0.5).setDepth(30);
+    this.time.delayedCall(2500, () => this.scene.restart());
   }
 
   private showLargeText(msg: string, color: string, delay: number): void {

@@ -62,7 +62,7 @@
         "Handling both frontend (React, Vue) and backend (PHP, Express) responsibilities",
         "Containerized deployments with Docker"
       ],
-      "position": { "x": 720, "y": 180 }
+      "position": { "x": 1880, "y": 180 }
     },
     {
       "id": "expresstransfers",
@@ -74,7 +74,7 @@
         "Interactive Leaflet maps for route visualization",
         "Containerized deployment with Docker"
       ],
-      "position": { "x": 660, "y": 250 }
+      "position": { "x": 1830, "y": 250 }
     },
     {
       "id": "evalion",
@@ -86,7 +86,7 @@
         "End-to-end testing with Playwright",
         "Containerized environments with Laravel Sail"
       ],
-      "position": { "x": 750, "y": 310 }
+      "position": { "x": 1910, "y": 310 }
     },
     {
       "id": "infologic",
@@ -98,7 +98,7 @@
         "Developed booking web apps and REST APIs",
         "Built template component answer systems"
       ],
-      "position": { "x": 680, "y": 170 }
+      "position": { "x": 1840, "y": 170 }
     },
     {
       "id": "newdeal",
@@ -110,7 +110,7 @@
         "SEO optimization and analytics setup",
         "CRM management and WordPress/Laravel development"
       ],
-      "position": { "x": 720, "y": 380 }
+      "position": { "x": 1880, "y": 380 }
     },
     {
       "id": "datawise",
@@ -122,7 +122,7 @@
         "Moodle e-learning integrations",
         "Java-based tool development"
       ],
-      "position": { "x": 650, "y": 440 }
+      "position": { "x": 1810, "y": 440 }
     },
     {
       "id": "algorithmics",
@@ -135,7 +135,7 @@
         "Mentored students through project-based learning modules",
         "Conducted workshops on algorithms, logic, and computational thinking"
       ],
-      "position": { "x": 700, "y": 480 }
+      "position": { "x": 1860, "y": 480 }
     }
   ],
   "skills": {
@@ -154,7 +154,7 @@
       "school": "University of Piraeus (UNIPI)",
       "year": 2020,
       "description": "Graduated with a focus on software engineering, distributed systems, and game development. Thesis on speech recognition using neural networks.",
-      "position": { "x": 140, "y": 490 }
+      "position": { "x": 140, "y": 1400 }
     },
     {
       "id": "ecdl",
@@ -162,7 +162,7 @@
       "school": "European Computer Driving Licence",
       "year": 2015,
       "description": "Expert level certification covering Office Suite, Operating Systems, and PC Hardware fundamentals.",
-      "position": { "x": 260, "y": 540 }
+      "position": { "x": 260, "y": 1480 }
     }
   ]
 }

@@ -696,7 +696,12 @@ export class DevMarioScene extends Phaser.Scene {
   private lose(): void {
     this.gameOver = true;
     AudioManager.get().playSfx('interact');
-    this.showLargeText(`GAME OVER — Missed the sprint!\nScore: ${this.score}`, '#ff4444', 3000);
+    AudioManager.get().stopBgm(0.2);
+    const t = this.add.text(400, 280, `GAME OVER — Missed the sprint!\nScore: ${this.score}`, {
+      fontSize: '22px', color: '#ff4444', fontFamily: 'monospace', fontStyle: 'bold',
+      align: 'center', stroke: '#000000', strokeThickness: 5,
+    }).setOrigin(0.5).setDepth(30).setScrollFactor(0);
+    this.time.delayedCall(2500, () => this.scene.restart());
   }
 
   private showLargeText(msg: string, color: string, delay: number): void {
