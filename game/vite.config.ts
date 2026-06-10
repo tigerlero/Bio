@@ -5,6 +5,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsInlineLimit: 0,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/index.js',
+      },
+    },
   },
   server: {
     port: 3000,
