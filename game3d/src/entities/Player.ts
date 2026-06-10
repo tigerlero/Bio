@@ -30,8 +30,8 @@ export class Player {
     const skinMat = new THREE.MeshStandardMaterial({ color: 0xffcc88 });
     const darkMat = new THREE.MeshStandardMaterial({ color: 0x224488 });
 
-    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(6, 14, 8, 8), bodyMat);
-    torso.position.y = 13;
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(5, 2, 8, 8), bodyMat);
+    torso.position.y = 20;
     torso.castShadow = true;
     g.add(torso);
 
@@ -41,15 +41,23 @@ export class Player {
     g.add(head);
 
     const armGeo = new THREE.CylinderGeometry(1.5, 1.5, 14, 6);
+    const lArmPivot = new THREE.Group();
+    lArmPivot.position.set(-9, 22, 0);
     const lArm = new THREE.Mesh(armGeo, darkMat);
-    lArm.position.set(-9, 18, 0);
+    lArm.position.set(0, -7, 0);
     lArm.castShadow = true;
-    g.add(lArm);
+    lArmPivot.add(lArm);
+    g.add(lArmPivot);
+    g.userData.leftArm = lArmPivot;
 
+    const rArmPivot = new THREE.Group();
+    rArmPivot.position.set(9, 22, 0);
     const rArm = new THREE.Mesh(armGeo, darkMat);
-    rArm.position.set(9, 18, 0);
+    rArm.position.set(0, -7, 0);
     rArm.castShadow = true;
-    g.add(rArm);
+    rArmPivot.add(rArm);
+    g.add(rArmPivot);
+    g.userData.rightArm = rArmPivot;
 
     const legData = Player.buildLegs(darkMat);
     g.add(legData.leftGroup);
@@ -80,31 +88,31 @@ export class Player {
   }
 
   private static buildLegs(mat: THREE.Material) {
-    const thighGeo = new THREE.CylinderGeometry(2.5, 2.5, 8, 6);
-    const shinGeo = new THREE.CylinderGeometry(2.3, 1.8, 8, 6);
+    const thighGeo = new THREE.CylinderGeometry(2, 2, 6, 6);
+    const shinGeo = new THREE.CylinderGeometry(1.8, 1.5, 6, 6);
 
     function makeLeg(xOff: number) {
       const legGroup = new THREE.Group();
       legGroup.position.set(xOff, 12, 0);
 
       const thigh = new THREE.Mesh(thighGeo, mat);
-      thigh.position.set(0, -4, 0);
+      thigh.position.set(0, -3, 0);
       thigh.castShadow = true;
       legGroup.add(thigh);
 
       const shinGroup = new THREE.Group();
-      shinGroup.position.set(0, -8, 0);
+      shinGroup.position.set(0, -6, 0);
 
       const shin = new THREE.Mesh(shinGeo, mat);
-      shin.position.set(0, -4, 0);
+      shin.position.set(0, -3, 0);
       shin.castShadow = true;
       shinGroup.add(shin);
 
       const foot = new THREE.Mesh(
-        new THREE.BoxGeometry(3, 1, 5),
+        new THREE.BoxGeometry(2.5, 0.8, 4),
         new THREE.MeshStandardMaterial({ color: 0x1a3366 }),
       );
-      foot.position.set(0, -8, 1);
+      foot.position.set(0, -6, 1);
       foot.castShadow = true;
       shinGroup.add(foot);
 
@@ -112,8 +120,8 @@ export class Player {
       return { group: legGroup, thigh, shin };
     }
 
-    const left = makeLeg(-4);
-    const right = makeLeg(4);
+    const left = makeLeg(-3);
+    const right = makeLeg(3);
 
     return {
       leftGroup: left.group, rightGroup: right.group,
@@ -127,16 +135,22 @@ export class Player {
     const rt = group.userData.rightThigh;
     const ls = group.userData.leftShin;
     const rs = group.userData.rightShin;
+    const la = group.userData.leftArm;
+    const ra = group.userData.rightArm;
     if (!lt || !rt) return;
 
-    const swing = Math.sin(phase) * 0.5;
-    const leftKnee = Math.max(0, -Math.sin(phase)) * 0.4;
-    const rightKnee = Math.max(0, Math.sin(phase)) * 0.4;
+    const s = Math.sin(phase);
+    const swing = s * 0.5;
+    const knee = Math.max(0, -s) * 0.5;
+    const knee2 = Math.max(0, s) * 0.5;
 
     lt.rotation.x = swing;
     rt.rotation.x = -swing;
-    if (ls) ls.rotation.x = leftKnee;
-    if (rs) rs.rotation.x = rightKnee;
+    if (ls) ls.rotation.x = knee;
+    if (rs) rs.rotation.x = knee2;
+
+    if (la) la.rotation.x = -swing * 0.6;
+    if (ra) ra.rotation.x = swing * 0.6;
   }
 
   constructor(private scene: THREE.Scene, spawnX: number, spawnZ: number) {
@@ -146,7 +160,7 @@ export class Player {
     this.mesh.position.set(this.x, 0, this.z);
 
     for (const child of this.mesh.children) {
-      if (child instanceof THREE.Mesh && child.position.y >= 6 && child.position.y <= 18) {
+      if (child instanceof THREE.Mesh && child.position.y >= 14 && child.position.y <= 35) {
         child.userData.baseY = child.position.y;
         this.bodyParts.push(child);
       }

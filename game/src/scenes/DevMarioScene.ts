@@ -369,6 +369,10 @@ export class DevMarioScene extends Phaser.Scene {
     this.playerGfx.fillStyle(0x224488, 1);
     this.playerGfx.fillRect(x - 7, y + 9, 5, 4 + lp);
     this.playerGfx.fillRect(x + 2, y + 9, 5, 4 - lp);
+    const ap = moving ? Math.sin(this.time.now * 0.012) * 3 : 0;
+    this.playerGfx.fillStyle(0x224488, 1);
+    this.playerGfx.fillRect(x - 12, y - 6, 4, 8 - ap);
+    this.playerGfx.fillRect(x + 8, y - 6, 4, 8 + ap);
   }
 
   private buildEnemies(): void {
