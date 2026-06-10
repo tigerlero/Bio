@@ -19,32 +19,44 @@
 <body>
 
   <nav id="navbar">
-    <a href="index.html" class="nav-logo">PE</a>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <select id="lang-switcher" class="lang-switcher" aria-label="Language">
-        <option value="en">EN</option>
-        <option value="el">EL</option>
-        <option value="it">IT</option>
-        <option value="tr">TR</option>
-        <option value="ro">RO</option>
-        <option value="sq">SQ</option>
-        <option value="bg">BG</option>
-        <option value="es">ES</option>
-        <option value="fr">FR</option>
-      </select>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+    <a href="index.html" class="nav-logo">PANAGIOTIS EFSTATHIADIS</a>
+    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+      <option value="en">🇬🇧</option>
+      <option value="el">🇬🇷</option>
+      <option value="it">🇮🇹</option>
+      <option value="tr">🇹🇷</option>
+      <option value="ro">🇷🇴</option>
+      <option value="sq">🇦🇱</option>
+      <option value="bg">🇧🇬</option>
+      <option value="es">🇪🇸</option>
+      <option value="fr">🇫🇷</option>
+    </select>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
   <div class="mobile-menu" id="mobile-menu">
     <a href="index.html" class="mobile-link"><i class="fas fa-home"></i></a>
     <a href="index.html#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
     <a href="index.html#experience" class="mobile-link" data-i18n="nav_experience">Experience</a>
+    <a href="index.html#freelance" class="mobile-link" data-i18n="nav_freelance">Freelance</a>
     <a href="index.html#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
+    <a href="index.html#education" class="mobile-link" data-i18n="nav_education">Education</a>
+    <a href="index.html#teaching" class="mobile-link" data-i18n="nav_teaching">Teaching</a>
+    <a href="index.html#dashboard" class="mobile-link"><i class="fas fa-chart-line"></i> Dashboard</a>
     <a href="pricing.html" class="mobile-link" data-i18n="nav_pricing">Pricing</a>
-    <a href="play/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 2D</a>
-    <a href="play3d/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 3D</a>
+    <div style="border-top:1px solid var(--border);margin:0.3rem 0;"></div>
+    <a href="play/" class="mobile-link" style="color:var(--accent-cyan);font-weight:600;">✦ Bio Explorer 2D</a>
+    <a href="play/?game=snake" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🐍 Snake</a>
+    <a href="play/?game=pacman" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">👾 Pac-Man</a>
+    <a href="play/?game=mario" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🏃 Dev Mario</a>
+    <a href="play/?game=dk" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🦍 Donkey Kong</a>
+    <a href="play/?game=flappy" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🐤 Flappy Job</a>
+    <a href="play/?game=tetris" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🧱 Job Tetris</a>
+    <a href="play/?game=match" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🔗 Project Match</a>
+    <a href="play/?game=quiz" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🎓 Campus Quiz</a>
+    <a href="play/?game=bugbreaker" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🐛 Bug Breaker</a>
+    <a href="play3d/" class="mobile-link" style="color:var(--accent-cyan);font-weight:600;">✦ Bio Explorer 3D</a>
   </div>
 
   <div class="sidebar">
@@ -55,10 +67,20 @@
     <a href="index.html#projects" class="sidebar-item" title="Projects"><i class="fas fa-folder-open"></i><span data-i18n="nav_projects">Projects</span></a>
     <a href="index.html#education" class="sidebar-item" title="Education"><i class="fas fa-graduation-cap"></i><span data-i18n="nav_education">Education</span></a>
     <a href="index.html#teaching" class="sidebar-item" title="Teaching"><i class="fas fa-chalkboard-teacher"></i><span data-i18n="nav_teaching">Teaching</span></a>
+    <a href="index.html#dashboard" class="sidebar-item" title="Dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
     <div class="sidebar-divider"></div>
     <a href="pricing.html" class="sidebar-item" title="Pricing" style="color:var(--accent-purple);"><i class="fas fa-tag"></i><span data-i18n="nav_pricing">Pricing</span></a>
-    <a href="play/" class="sidebar-item" title="Bio Explorer (2D)" style="color:var(--accent-purple);"><i class="fas fa-gamepad"></i><span>✦ Bio Explorer 2D</span></a>
-    <a href="play3d/" class="sidebar-item" title="Bio Explorer (3D)" style="color:var(--accent-purple);"><i class="fas fa-cube"></i><span>✦ Bio Explorer 3D</span></a>
+    <a href="play/" class="sidebar-item" title="Bio Explorer (2D)" style="color:var(--accent-purple);"><i class="fas fa-gamepad"></i><span>✦ Bio 2D</span></a>
+    <a href="play/?game=snake" class="sidebar-item" title="Snake"><i class="fas fa-robot"></i><span>🐍 Snake</span></a>
+    <a href="play/?game=pacman" class="sidebar-item" title="Pac-Man"><i class="fas fa-circle"></i><span>👾 Pac-Man</span></a>
+    <a href="play/?game=mario" class="sidebar-item" title="Dev Mario"><i class="fas fa-running"></i><span>🏃 Dev Mario</span></a>
+    <a href="play/?game=dk" class="sidebar-item" title="Donkey Kong"><i class="fas fa-monkey"></i><span>🦍 Donkey Kong</span></a>
+    <a href="play/?game=flappy" class="sidebar-item" title="Flappy Job"><i class="fas fa-dove"></i><span>🐤 Flappy Job</span></a>
+    <a href="play/?game=tetris" class="sidebar-item" title="Job Tetris"><i class="fas fa-cubes"></i><span>🧱 Job Tetris</span></a>
+    <a href="play/?game=match" class="sidebar-item" title="Project Match"><i class="fas fa-link"></i><span>🔗 Project Match</span></a>
+    <a href="play/?game=quiz" class="sidebar-item" title="Campus Quiz"><i class="fas fa-graduation-cap"></i><span>🎓 Campus Quiz</span></a>
+    <a href="play/?game=bugbreaker" class="sidebar-item" title="Bug Breaker"><i class="fas fa-bug"></i><span>🐛 Bug Breaker</span></a>
+    <a href="play3d/" class="sidebar-item" title="Bio Explorer (3D)" style="color:var(--accent-purple);"><i class="fas fa-cube"></i><span>✦ Bio 3D</span></a>
   </div>
 
   <div class="page-hero pricing-hero">

@@ -1394,9 +1394,8 @@ footer {
 
 /* ── DASHBOARD ── */
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 1rem;
+  display: flex;
+  justify-content: center;
 }
 .dashboard-card {
   background: var(--bg-card);
@@ -1404,6 +1403,8 @@ footer {
   border-radius: 12px;
   padding: 0.75rem;
   min-height: 200px;
+  width: 100%;
+  max-width: 900px;
 }
 .dashboard-card-header {
   display: flex;
@@ -1559,9 +1560,6 @@ footer {
   padding: 1rem 0;
 }
 @media (max-width: 900px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
   .dashboard-card {
     padding: 0.6rem;
   }

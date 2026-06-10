@@ -236,31 +236,44 @@
 <body>
 
   <nav id="navbar">
-    <a href="index.html" class="nav-logo">PE</a>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <select id="lang-switcher" class="lang-switcher" aria-label="Language">
-        <option value="en">EN</option>
-        <option value="el">EL</option>
-        <option value="it">IT</option>
-        <option value="tr">TR</option>
-        <option value="ro">RO</option>
-        <option value="sq">SQ</option>
-        <option value="bg">BG</option>
-        <option value="es">ES</option>
-        <option value="fr">FR</option>
-      </select>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+    <a href="index.html" class="nav-logo">PANAGIOTIS EFSTATHIADIS</a>
+    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
+      <option value="en">🇬🇧</option>
+      <option value="el">🇬🇷</option>
+      <option value="it">🇮🇹</option>
+      <option value="tr">🇹🇷</option>
+      <option value="ro">🇷🇴</option>
+      <option value="sq">🇦🇱</option>
+      <option value="bg">🇧🇬</option>
+      <option value="es">🇪🇸</option>
+      <option value="fr">🇫🇷</option>
+    </select>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
   <div class="mobile-menu" id="mobile-menu">
     <a href="index.html" class="mobile-link"><i class="fas fa-home"></i></a>
     <a href="index.html#skills" class="mobile-link" data-i18n="nav_skills">Skills</a>
     <a href="index.html#experience" class="mobile-link" data-i18n="nav_experience">Experience</a>
+    <a href="index.html#freelance" class="mobile-link" data-i18n="nav_freelance">Freelance</a>
     <a href="index.html#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
-    <a href="play/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 2D</a>
-    <a href="play3d/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 3D</a>
+    <a href="index.html#education" class="mobile-link" data-i18n="nav_education">Education</a>
+    <a href="index.html#teaching" class="mobile-link" data-i18n="nav_teaching">Teaching</a>
+    <a href="index.html#dashboard" class="mobile-link"><i class="fas fa-chart-line"></i> Dashboard</a>
+    <a href="pricing.html" class="mobile-link" data-i18n="nav_pricing">Pricing</a>
+    <div style="border-top:1px solid var(--border);margin:0.3rem 0;"></div>
+    <a href="play/" class="mobile-link" style="color:var(--accent-cyan);font-weight:600;">✦ Bio Explorer 2D</a>
+    <a href="play/?game=snake" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🐍 Snake</a>
+    <a href="play/?game=pacman" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">👾 Pac-Man</a>
+    <a href="play/?game=mario" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🏃 Dev Mario</a>
+    <a href="play/?game=dk" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🦍 Donkey Kong</a>
+    <a href="play/?game=flappy" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🐤 Flappy Job</a>
+    <a href="play/?game=tetris" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🧱 Job Tetris</a>
+    <a href="play/?game=match" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🔗 Project Match</a>
+    <a href="play/?game=quiz" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🎓 Campus Quiz</a>
+    <a href="play/?game=bugbreaker" class="mobile-link" style="color:var(--text-muted);font-size:0.85rem;">🐛 Bug Breaker</a>
+    <a href="play3d/" class="mobile-link" style="color:var(--accent-cyan);font-weight:600;">✦ Bio Explorer 3D</a>
   </div>
 
   <div class="sidebar">
@@ -271,10 +284,20 @@
     <a href="index.html#projects" class="sidebar-item" title="Projects"><i class="fas fa-folder-open"></i><span data-i18n="nav_projects">Projects</span></a>
     <a href="index.html#education" class="sidebar-item" title="Education"><i class="fas fa-graduation-cap"></i><span data-i18n="nav_education">Education</span></a>
     <a href="index.html#teaching" class="sidebar-item" title="Teaching"><i class="fas fa-chalkboard-teacher"></i><span data-i18n="nav_teaching">Teaching</span></a>
+    <a href="index.html#dashboard" class="sidebar-item" title="Dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
     <div class="sidebar-divider"></div>
-    <a href="pricing.html" class="sidebar-item" title="Pricing"><i class="fas fa-tag"></i><span data-i18n="nav_pricing">Pricing</span></a>
-    <a href="play/" class="sidebar-item" title="Bio Explorer (2D)" style="color:var(--accent-purple);"><i class="fas fa-gamepad"></i><span>✦ Bio Explorer 2D</span></a>
-    <a href="play3d/" class="sidebar-item" title="Bio Explorer (3D)" style="color:var(--accent-purple);"><i class="fas fa-cube"></i><span>✦ Bio Explorer 3D</span></a>
+    <a href="pricing.html" class="sidebar-item" title="Pricing" style="color:var(--accent-purple);"><i class="fas fa-tag"></i><span data-i18n="nav_pricing">Pricing</span></a>
+    <a href="play/" class="sidebar-item" title="Bio Explorer (2D)" style="color:var(--accent-purple);"><i class="fas fa-gamepad"></i><span>✦ Bio 2D</span></a>
+    <a href="play/?game=snake" class="sidebar-item" title="Snake"><i class="fas fa-robot"></i><span>🐍 Snake</span></a>
+    <a href="play/?game=pacman" class="sidebar-item" title="Pac-Man"><i class="fas fa-circle"></i><span>👾 Pac-Man</span></a>
+    <a href="play/?game=mario" class="sidebar-item" title="Dev Mario"><i class="fas fa-running"></i><span>🏃 Dev Mario</span></a>
+    <a href="play/?game=dk" class="sidebar-item" title="Donkey Kong"><i class="fas fa-monkey"></i><span>🦍 Donkey Kong</span></a>
+    <a href="play/?game=flappy" class="sidebar-item" title="Flappy Job"><i class="fas fa-dove"></i><span>🐤 Flappy Job</span></a>
+    <a href="play/?game=tetris" class="sidebar-item" title="Job Tetris"><i class="fas fa-cubes"></i><span>🧱 Job Tetris</span></a>
+    <a href="play/?game=match" class="sidebar-item" title="Project Match"><i class="fas fa-link"></i><span>🔗 Project Match</span></a>
+    <a href="play/?game=quiz" class="sidebar-item" title="Campus Quiz"><i class="fas fa-graduation-cap"></i><span>🎓 Campus Quiz</span></a>
+    <a href="play/?game=bugbreaker" class="sidebar-item" title="Bug Breaker"><i class="fas fa-bug"></i><span>🐛 Bug Breaker</span></a>
+    <a href="play3d/" class="sidebar-item" title="Bio Explorer (3D)" style="color:var(--accent-purple);"><i class="fas fa-cube"></i><span>✦ Bio 3D</span></a>
   </div>
 
   <div class="page-hero" style="min-height:40vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;overflow:hidden;">
@@ -722,8 +745,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Project Match</div>
-            <div class="card-desc">Memory card matching game — flip cards to match 8 project tech-stack pairs and test your memory.</div>
+            <div class="card-title" data-i18n="proj_match_title">Project Match</div>
+            <div class="card-desc" data-i18n="proj_match_desc">Memory card matching game — flip cards to match 8 project tech-stack pairs and test your memory.</div>
           </div>
           <div class="detail-body">
             <p>A memory card matching game built with Phaser.js and TypeScript. Flip cards on a 4×4 grid to find matching pairs based on project technology tags. Track your match count, flips, and time. Features smooth flip animations, match/mismatch feedback, and a victory overlay upon completion. Accessible via the "M" portal in Project Park or directly from the title screen.</p>
@@ -755,8 +778,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Campus Quiz</div>
-            <div class="card-desc">Trivia quiz with 6 questions drawn from job experience and education history — test your knowledge.</div>
+            <div class="card-title" data-i18n="proj_quiz_title">Campus Quiz</div>
+            <div class="card-desc" data-i18n="proj_quiz_desc">Trivia quiz with 6 questions drawn from job experience and education history.</div>
           </div>
           <div class="detail-body">
             <p>A trivia quiz game built with Phaser.js and TypeScript. Answer 6 multiple-choice questions drawn from the portfolio's job experience and education data. Each question has 4 shuffled choices, with correct/incorrect feedback after each answer. Final score is displayed on a results screen. Accessible via the "Q" portal in Education Campus or directly from the title screen.</p>
@@ -788,8 +811,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Flappy Job</div>
-            <div class="card-desc">Flappy Bird clone — flap through pipes labeled with job roles & project titles. Score "Jobs Completed".</div>
+            <div class="card-title" data-i18n="proj_flappy_title">Flappy Job</div>
+            <div class="card-desc" data-i18n="proj_flappy_desc">Flappy Bird clone — flap through pipes labeled with job roles & project titles. Score "Jobs Completed".</div>
           </div>
           <div class="detail-body">
             <p>A Flappy Bird-style arcade game built with Phaser.js and TypeScript. Navigate a bird through pipes labeled with job roles and project titles from the portfolio. Features gravity-based physics, collision detection, progressive difficulty, and a "Jobs Completed" scoring system. Accessible via the "F" portal in Job District or directly from the title screen.</p>
@@ -821,8 +844,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Tetris Projects</div>
-            <div class="card-desc">Full Tetris with 7 tetrominoes (each labeled with a project name), 10×20 grid, wall kicks, 5-level speed progression.</div>
+            <div class="card-title" data-i18n="proj_tetris_title">Tetris Projects</div>
+            <div class="card-desc" data-i18n="proj_tetris_desc">Full Tetris with 7 tetrominoes (each labeled with a project name), 10×20 grid, wall kicks, 5-level speed.</div>
           </div>
           <div class="detail-body">
             <p>A complete Tetris clone built with Phaser.js and TypeScript. Features 7 tetromino shapes, each labeled with a project name from the portfolio. Includes a 10×20 grid, hard drop, wall kick system, 5-level speed progression, line scoring, and pause functionality. Accessible via the "T" portal in Project Park or directly from the title screen.</p>
@@ -854,8 +877,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Base Ops</div>
-            <div class="card-desc">Multi-phase army simulation — CCTV anomaly detection, stealth patrol, binocular recon, basketball, and daily debrief.</div>
+            <div class="card-title" data-i18n="proj_baseops_title">Base Ops</div>
+            <div class="card-desc" data-i18n="proj_baseops_desc">Multi-phase army simulation — CCTV surveillance, stealth patrol, recon, basketball, and daily debrief.</div>
           </div>
           <div class="detail-body">
             <p>A multi-phase army simulation game built with Phaser.js and TypeScript. Experience 5 rotating phases across 2 day cycles: Camera Room (CCTV anomaly detection), Field Patrol (stealth with vision cones), Recon (binocular target marking), Off-duty Basketball (timing-based power bar shooting), and Debrief (daily score review). Stats including score, morale, and fatigue persist across cycles. Accessible via the "B" portal in Job District or directly from the title screen.</p>
@@ -887,8 +910,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Snake Game</div>
-            <div class="card-desc">Classic Snake built with Phaser.js — collect 49 skills across 7 categories in a grid-based endless runner.</div>
+            <div class="card-title" data-i18n="proj_snake_title">Snake Game</div>
+            <div class="card-desc" data-i18n="proj_snake_desc">Classic Snake built with Phaser.js — collect 49 skills across 7 categories in a grid-based endless runner.</div>
           </div>
           <div class="detail-body">
             <p>A fully-featured Snake game implemented in TypeScript using the Phaser game framework. Navigate a growing snake across a 24×18 grid to collect all 49 skill orbs, each color-coded by category (Frontend, Backend, Databases, DevOps, Languages, Game Dev, AI/ML). Features progressive speed increase, category-colored food items, and a victory condition upon collecting all skills.</p>
@@ -920,8 +943,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Bug Breaker</div>
-            <div class="card-desc">Breakout-style game — smash blocks labeled with common coding bugs (Null Pointer, SQL Injection, Spaghetti Code, etc).</div>
+            <div class="card-title" data-i18n="proj_bugbreaker_title">Bug Breaker</div>
+            <div class="card-desc" data-i18n="proj_bugbreaker_desc">Breakout-style game — smash blocks labeled with common coding bugs (Null Pointer, SQL Injection, Spaghetti Code, etc).</div>
           </div>
           <div class="detail-body">
             <p>A breakout-style arcade game built with Phaser.js and TypeScript. Control a paddle to bounce a ball into blocks labeled with 20 common coding bugs across 5 categories: Runtime Errors (Null Pointer, Stack Overflow, Memory Leak, Out of Bounds), Logic Bugs (Off-by-One, Infinite Loop, Race Condition, Deadlock), Security Holes (SQL Injection, XSS Attack, Buffer Overflow, Hardcoded Creds), Code Smells (Spaghetti Code, Magic Numbers, Circular Dep, Callback Hell), and Async Bugs (Uncaught Promise, Hoisting, Type Coercion, Floating Point). Track your score, manage 3 lives, and win when all bugs are squashed.</p>
@@ -953,8 +976,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Skill Pacman</div>
-            <div class="card-desc">Pacman-style maze game — collect 49 color-coded skill dots across a 28x20 grid while evading 4 job-themed ghosts (Frontend, Backend, Databases, DevOps). Power pellets, ghost-eating, distinct ghost AI per role, score popups, 3 lives.</div>
+            <div class="card-title" data-i18n="proj_pacman_title">Skill Pacman</div>
+            <div class="card-desc" data-i18n="proj_pacman_desc">Pacman-style maze game — collect 49 color-coded skill dots across a 28x20 grid while evading 4 job-themed ghosts. Power pellets, ghost-eating, distinct ghost AI per role, score popups, 3 lives.</div>
           </div>
           <div class="detail-body">
             <p>A Pacman-style maze game built with Phaser.js and TypeScript. Navigate a 28x20 grid collecting 49 skill dots and 4 power pellets while avoiding 4 job-themed ghosts, each with distinct movement AI matching their role: Frontend (chases), Backend (patrols), Databases (ambushes), DevOps (random). Power pellets let you eat ghosts for bonus points. Features smooth mouth animation, score popups, 3 lives, and a victory condition when all skills are collected.</p>
@@ -986,8 +1009,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Dev Mario</div>
-            <div class="card-desc">Super Mario-style platformer — run, jump, and stomp Bug and Deadline enemies across a 5200px scrolling level. Collect coins, enter pipe sub-levels for Focus Mode with glowing bytes, and reach the Sprint End flag!</div>
+            <div class="card-title" data-i18n="proj_mario_title">Dev Mario</div>
+            <div class="card-desc" data-i18n="proj_mario_desc">Super Mario-style platformer — run, jump, and stomp Bug and Deadline enemies across a 5200px scrolling level. Collect coins, enter pipe sub-levels for Focus Mode with glowing bytes and intense visuals, and reach the Sprint End flag to deliver on time!</div>
           </div>
           <div class="detail-body">
             <p>A full Super Mario-style platformer built with Phaser.js and TypeScript. Control a developer protagonist through a 5200px scrolling world with gravity, jumping, and camera-follow. Stomp on Bug enemies (green, ground patrol) and Deadline enemies (red, elevated patrol) to kill them. Collect 26 coin pickups for +10 points each. Enter 3 green pipes to descend into underground Focus Mode chambers — dark overlays with glow effects, intense pulsing particles, and float-up byte collectibles (+50). Focus Mode has an 18s timer, faster movement speed (240 vs 180), and resets upon exit. Reach the Sprint End flagpole at the end of the level to win! 3 lives, respawn on death, game over at 0 lives.</p>
@@ -1019,8 +1042,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Donkey Kong (Bug Tower)</div>
-            <div class="card-desc">Donkey Kong-style vertical climber — a Tester at the top of Bug Tower throws bugs down at you as you climb 6 levels of platforms connected by ladders. Dodge, jump, collect coins, and reach the top!</div>
+            <div class="card-title" data-i18n="proj_dk_title">Donkey Kong (Bug Tower)</div>
+            <div class="card-desc" data-i18n="proj_dk_desc">Donkey Kong-style vertical climber — a Tester at the top of Bug Tower throws bugs down at you. Climb 6 levels of platforms via ladders, dodge falling bugs, collect coins, and reach the top to survive!</div>
           </div>
           <div class="detail-body">
             <p>A Donkey Kong-inspired vertical climber built with Phaser.js and TypeScript. The Tester awaits at the top of Bug Tower, hurling bugs down through 6 levels of platforms connected by ladders. Use arrow keys to move left/right, jump (Up/Space/W) to reach higher platforms, and climb ladders by pressing Up when overlapping them. Bugs bounce and roll along platforms — dodge them or die! Collect coins for bonus points. The bug spawn rate increases over time, making each climb more intense. 3 lives, score tracking, and a satisfying victory when you reach the top platform to confront the Tester.</p>
@@ -1052,8 +1075,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Bio Explorer 2D</div>
-            <div class="card-desc">Interactive 2D portfolio built with Phaser.js — explore 5 zones, collect skills, play 10 minigames (Snake, Match, Quiz, Flappy, Tetris, Base Ops, Bug Breaker, Pacman, Dev Mario, Donkey Kong), day/night cycle.</div>
+            <div class="card-title" data-i18n="proj_bio2d_title">Bio Explorer 2D</div>
+            <div class="card-desc" data-i18n="proj_bio2d_desc">Interactive 2D portfolio built with Phaser.js — explore 5 zones, collect skills, play 10 minigames, day/night cycle.</div>
           </div>
           <div class="detail-body">
             <p>An interactive 2D portfolio explorer built from scratch with Phaser.js and TypeScript. Walk through an 1800×1400 overworld featuring 5 themed zones (Home, Projects, Jobs, Skills, Education), each with unique NPCs, buildings, and interactive objects. Includes a real-time day/night cycle, minimap navigation, virtual joystick for mobile, and 10 built-in minigames: Skill Snake (49 skills), Project Match (memory), Campus Quiz (trivia), Flappy Job (flappy bird), Tetris Projects, Base Ops (army sim), Bug Breaker (breakout), Skill Pacman (maze chase), Dev Mario (platformer), and Donkey Kong (bug tower climber). All textures are procedurally generated — zero external image assets required.</p>
@@ -1085,8 +1108,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Bio Explorer 3D</div>
-            <div class="card-desc">Immersive 3D world built with Three.js — walk an 1800×1400 terrain with capsule avatar, day/night, and skill crystals.</div>
+            <div class="card-title" data-i18n="proj_bio3d_title">Bio Explorer 3D</div>
+            <div class="card-desc" data-i18n="proj_bio3d_desc">Immersive 3D world built with Three.js — walk an 1800×1400 terrain with capsule avatar, day/night, and skill crystals.</div>
           </div>
           <div class="detail-body">
             <p>A fully 3D interactive portfolio explorer built with Three.js and TypeScript. Navigate an 1800×1400 3D terrain using WASD controls with a third-person orbit camera (right-click drag to rotate). Features a capsule humanoid player with idle body bob, interactive NPCs with floating name badges, skill crystals (colored cones) for each of 7 categories, real-time day/night cycle, minimap, and fade transitions between scenes. All geometry is procedural — no external 3D model files required.</p>
@@ -1118,8 +1141,8 @@
             </div>
           </div>
           <div class="detail-section-header">
-            <div class="card-title">Code Sprint</div>
-            <div class="card-desc">Endless runner built with Three.js — sprint through a procedurally generated corridor dodging coding hazards and collecting developer power-ups.</div>
+            <div class="card-title" data-i18n="proj_codesprint_title">Code Sprint</div>
+            <div class="card-desc" data-i18n="proj_codesprint_desc">Endless runner in Three.js — dodge Bug, Spaghetti, Tech Debt obstacles; collect Clean Code, Tests, Docs power-ups. Speed increases over time. How far can you sprint?</div>
           </div>
           <div class="detail-body">
             <p>An endless runner minigame built with Three.js and TypeScript, embedded inside the Bio Explorer 3D world. Control a developer character running down an infinite corridor divided into 3 lanes. Use arrow keys (or A/D) to dodge obstacles: Bug (green cube), Spaghetti (yellow tangle), and Tech Debt (red stack). Collect Clean Code (cyan vial), Tests (blue checkmark), and Docs (orange scroll) for bonus points. Speed increases continuously from a base pace to a frantic max. Features procedural geometry (no external assets), lane-switch animation with body bob, particle effects on collection, and a game-over screen with final sprint distance. Accessible in-game via the CODE SPRINT terminal NPC in the 3D Overworld.</p>
