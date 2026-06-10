@@ -467,6 +467,7 @@ export class DonkeyKongScene extends Phaser.Scene {
         c.collected = true;
         c.gfx.setVisible(false);
         this.score += 10;
+        AudioManager.get().playSfx('step');
         this.showPopup(c.x, c.y, '+10');
       }
     }

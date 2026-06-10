@@ -453,8 +453,9 @@ export class DevMarioScene extends Phaser.Scene {
     if (!this.focusMode) {
       for (let i = 0; i < this.pipes.length; i++) {
         const pipe = this.pipes[i];
+        const rimY = pipe.y - 8;
         if ((Phaser.Input.Keyboard.JustDown(this.keyE) || Phaser.Input.Keyboard.JustDown(this.cursors.down))
-          && Phaser.Math.Distance.Between(p.x, p.y, pipe.x, pipe.y) < 50) {
+          && Phaser.Math.Distance.Between(p.x, p.y, pipe.x, rimY) < 65) {
           this.enterFocusMode(i);
           break;
         }
@@ -615,9 +616,10 @@ export class DevMarioScene extends Phaser.Scene {
     if (this.focusMode) { this.promptText.setVisible(false); return; }
     let near = false;
     for (const pipe of this.pipes) {
-      if (Phaser.Math.Distance.Between(p.x, p.y, pipe.x, pipe.y) < 50) {
+      const rimY = pipe.y - 8;
+      if (Phaser.Math.Distance.Between(p.x, p.y, pipe.x, rimY) < 65) {
         this.promptText.setText('Press E / Down to enter focus');
-        this.promptText.setPosition(pipe.x, pipe.y - 50);
+        this.promptText.setPosition(pipe.x, rimY - 50);
         this.promptText.setVisible(true);
         near = true;
         break;
@@ -639,6 +641,7 @@ export class DevMarioScene extends Phaser.Scene {
     for (const bb of this.breakBlocks) {
       if (!bb.alive) continue;
       if (body.velocity.y < 0 && Math.abs(p.x - bb.x) < 24 && p.y > bb.y - 4 && p.y < bb.y + 12) {
+        AudioManager.get().playSfx('step');
         bb.alive = false;
         bb.rect.destroy();
         this.score += 50;
