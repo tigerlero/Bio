@@ -33,26 +33,63 @@ export class AudioManager {
     this.masterVolume = Math.max(0, Math.min(1, v));
   }
 
-  playBgm(): void {
+  playBgm(style: 'ambient' | 'pacman' | 'mario' | 'dk' = 'ambient'): void {
     this.stopBgm();
     const ctx = this.ensureCtx();
     if (!ctx) return;
 
-    // Simple ambient bgm: repeating soft chord arpeggio
     const sr = ctx.sampleRate;
-    const duration = 8;
+    const duration = style === 'ambient' ? 8 : 4;
     const buf = ctx.createBuffer(1, sr * duration, sr);
     const data = buf.getChannelData(0);
-    const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
-    for (let i = 0; i < data.length; i++) {
-      const t = i / sr;
-      const note = notes[Math.floor((t * 2) % notes.length)];
-      const noteT = (t * 2) % 1;
-      const env = Math.max(0, 1 - noteT * 3) * Math.min(1, noteT * 20);
-      data[i] = Math.sin(2 * Math.PI * note * t) * env * 0.08;
-      // Add soft pad
-      data[i] += Math.sin(2 * Math.PI * 196 * t) * 0.02;
-      data[i] += Math.sin(2 * Math.PI * 261.63 * t) * 0.015;
+
+    if (style === 'pacman') {
+      const notes = [523.25, 587.33, 659.25, 783.99, 659.25, 587.33, 523.25, 440];
+      for (let i = 0; i < data.length; i++) {
+        const t = i / sr;
+        const noteIdx = Math.floor(t * 4) % notes.length;
+        const note = notes[noteIdx];
+        const noteT = (t * 4) % 1;
+        const env = Math.max(0, 1 - noteT * 4) * Math.min(1, noteT * 30);
+        data[i] = Math.sin(2 * Math.PI * note * t) * env * 0.07;
+        data[i] += Math.sin(2 * Math.PI * note * 2 * t) * env * 0.03;
+        data[i] += Math.sin(2 * Math.PI * 130.81 * t) * 0.02;
+      }
+    } else if (style === 'mario') {
+      const notes = [392, 440, 523.25, 587.33, 659.25, 587.33, 523.25, 440, 392, 523.25, 659.25, 783.99, 659.25, 523.25, 440, 392];
+      for (let i = 0; i < data.length; i++) {
+        const t = i / sr;
+        const noteIdx = Math.floor(t * 3) % notes.length;
+        const note = notes[noteIdx];
+        const noteT = (t * 3) % 1;
+        const env = Math.max(0, 1 - noteT * 2.5) * Math.min(1, noteT * 40);
+        data[i] = Math.sin(2 * Math.PI * note * t) * env * 0.07;
+        data[i] += Math.sin(2 * Math.PI * note * 0.5 * t) * 0.025;
+        data[i] += Math.sin(2 * Math.PI * 196 * t) * 0.015;
+      }
+    } else if (style === 'dk') {
+      const notes = [130.81, 164.81, 196, 164.81, 130.81, 110, 130.81, 164.81, 196, 220, 196, 164.81];
+      for (let i = 0; i < data.length; i++) {
+        const t = i / sr;
+        const noteIdx = Math.floor(t * 1.5) % notes.length;
+        const note = notes[noteIdx];
+        const noteT = (t * 1.5) % 1;
+        const env = Math.max(0, 1 - noteT * 2) * Math.min(1, noteT * 20);
+        data[i] = Math.sin(2 * Math.PI * note * t) * env * 0.1;
+        data[i] += Math.sin(2 * Math.PI * note * 0.5 * t) * 0.04;
+        data[i] += Math.sin(2 * Math.PI * 65.41 * t) * 0.03;
+      }
+    } else {
+      const notes = [261.63, 329.63, 392.00, 523.25];
+      for (let i = 0; i < data.length; i++) {
+        const t = i / sr;
+        const note = notes[Math.floor((t * 2) % notes.length)];
+        const noteT = (t * 2) % 1;
+        const env = Math.max(0, 1 - noteT * 3) * Math.min(1, noteT * 20);
+        data[i] = Math.sin(2 * Math.PI * note * t) * env * 0.08;
+        data[i] += Math.sin(2 * Math.PI * 196 * t) * 0.02;
+        data[i] += Math.sin(2 * Math.PI * 261.63 * t) * 0.015;
+      }
     }
 
     this.bgmSource = ctx.createBufferSource();

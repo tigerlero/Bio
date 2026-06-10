@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Player } from '../entities/Player';
+import { AudioManager } from '../systems/AudioManager';
 
 const LANES = [-22, 0, 22];
 const SPAWN_Z = -200;
@@ -95,6 +96,7 @@ export class EndlessRunnerScene {
     this.findPlayerParts();
     this.buildUI();
     this.setupInput();
+    AudioManager.get().playBgm('runner');
   }
 
   private findPlayerParts(): void {
@@ -569,6 +571,7 @@ export class EndlessRunnerScene {
   }
 
   private returnToWorld(): void {
+    AudioManager.get().stopBgm(0.2);
     this.destroy();
     this.onSceneChange('OverworldScene');
   }

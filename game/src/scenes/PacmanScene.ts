@@ -130,6 +130,7 @@ export class PacmanScene extends Phaser.Scene {
 
     this.spawnGhosts();
     this.buildUI();
+    AudioManager.get().playBgm('pacman');
   }
 
   private parseMaze(): void {

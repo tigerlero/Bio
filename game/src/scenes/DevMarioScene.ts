@@ -29,12 +29,14 @@ interface Chamber {
 }
 
 interface CoinObj { gfx: Phaser.GameObjects.Graphics; x: number; y: number; collected: boolean }
+interface BreakBlock { rect: Phaser.GameObjects.Rectangle; x: number; y: number; alive: boolean }
 
 export class DevMarioScene extends Phaser.Scene {
   private playerGfx!: Phaser.GameObjects.Graphics;
   private platforms!: Phaser.Physics.Arcade.StaticGroup;
   private enemies: EnemyData[] = [];
   private coins: CoinObj[] = [];
+  private breakBlocks: BreakBlock[] = [];
   private byteGfx: Phaser.GameObjects.Graphics[] = [];
   private bytePositions: { x: number; y: number }[] = [];
 
@@ -115,6 +117,7 @@ export class DevMarioScene extends Phaser.Scene {
     this.keyD = kb.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.keyE = kb.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     kb.on('keydown-ESC', () => this.returnToWorld());
+    AudioManager.get().playBgm('mario');
   }
 
   private buildLevel(): void {
@@ -208,21 +211,33 @@ export class DevMarioScene extends Phaser.Scene {
       this.add.rectangle(p.x + p.w / 2, p.y + 2, p.w, 5, 0x44aa44).setDepth(2);
       this.platforms.add(r);
     }
+    const breakPositions = [
+      { x: 328, y: 390 }, { x: 824, y: 386 },
+      { x: 2048, y: 390 }, { x: 2614, y: 390 },
+      { x: 4088, y: 390 }, { x: 4682, y: 386 },
+    ];
+    for (const bp of breakPositions) {
+      const r = this.add.rectangle(bp.x, bp.y, 28, 16, 0xcc8844).setDepth(2);
+      this.add.rectangle(bp.x, bp.y - 3, 26, 4, 0xeeaa66).setDepth(3);
+      this.add.rectangle(bp.x, bp.y + 5, 26, 3, 0x886633).setDepth(3);
+      this.platforms.add(r);
+      this.breakBlocks.push({ rect: r, x: bp.x, y: bp.y, alive: true });
+    }
   }
 
   private buildCoins(): void {
     const positions = [
-      { x: 350, y: 340 }, { x: 380, y: 340 }, { x: 410, y: 340 },
-      { x: 540, y: 270 }, { x: 570, y: 270 },
-      { x: 820, y: 330 }, { x: 860, y: 330 },
+      { x: 350, y: 320 }, { x: 380, y: 320 }, { x: 410, y: 320 },
+      { x: 540, y: 250 }, { x: 570, y: 250 },
+      { x: 820, y: 315 }, { x: 860, y: 315 },
       { x: 1150, y: 300 }, { x: 1180, y: 300 },
-      { x: 1400, y: 260 }, { x: 1440, y: 260 },
-      { x: 1640, y: 320 }, { x: 1670, y: 320 },
-      { x: 2050, y: 280 }, { x: 2080, y: 280 },
-      { x: 2600, y: 280 }, { x: 2640, y: 280 }, { x: 2680, y: 280 },
+      { x: 1400, y: 240 }, { x: 1440, y: 240 },
+      { x: 1640, y: 310 }, { x: 1670, y: 310 },
+      { x: 2050, y: 290 }, { x: 2080, y: 290 },
+      { x: 2600, y: 290 }, { x: 2640, y: 290 }, { x: 2680, y: 290 },
       { x: 2900, y: 230 }, { x: 2930, y: 230 },
-      { x: 3550, y: 260 }, { x: 3590, y: 260 },
-      { x: 4100, y: 280 }, { x: 4140, y: 280 },
+      { x: 3550, y: 300 }, { x: 3590, y: 300 },
+      { x: 4100, y: 295 }, { x: 4140, y: 295 },
       { x: 4400, y: 230 }, { x: 4430, y: 230 },
     ];
     for (const p of positions) {
@@ -282,20 +297,34 @@ export class DevMarioScene extends Phaser.Scene {
 
   private buildFlag(): void {
     const fx = WORLD_W - 180;
-    const fy = GROUND_Y - 130;
+    const fy = GROUND_Y - 200;
     const g = this.add.graphics().setDepth(2);
     g.lineStyle(4, 0xcccccc, 1);
     g.beginPath(); g.moveTo(fx, fy); g.lineTo(fx, GROUND_Y); g.strokePath();
     g.fillStyle(0xff4444, 1);
-    g.fillTriangle(fx + 4, fy + 4, fx + 60, fy + 30, fx + 4, fy + 56);
+    g.fillTriangle(fx + 4, fy + 4, fx + 60, fy + 34, fx + 4, fy + 64);
     this.add.text(fx + 30, fy - 20, 'SPRINT END', {
       fontSize: '10px', color: '#ffcc00', fontFamily: 'monospace', fontStyle: 'bold',
       stroke: '#000000', strokeThickness: 3,
     }).setOrigin(0.5).setDepth(5);
-    this.add.text(WORLD_W - 160, GROUND_Y - 140, 'DEMO', {
+    this.add.text(WORLD_W - 160, GROUND_Y - 210, 'DEMO', {
       fontSize: '10px', color: '#ff6644', fontFamily: 'monospace', fontStyle: 'bold',
       stroke: '#000000', strokeThickness: 2,
     }).setDepth(6);
+    const bg = this.add.graphics().setDepth(1);
+    const bx = WORLD_W - 40;
+    const bw = 80;
+    const bh = GROUND_Y - (GROUND_Y - 340);
+    bg.fillStyle(0x2a3a5a, 1);
+    bg.fillRect(bx - bw / 2, GROUND_Y - 340, bw, 340);
+    bg.fillStyle(0x3a4a6a, 0.6);
+    bg.fillRect(bx - bw / 2 + 4, GROUND_Y - 336, bw - 8, 8);
+    bg.fillStyle(0xffffff, 0.15);
+    for (let wy = GROUND_Y - 310; wy < GROUND_Y - 20; wy += 28) {
+      for (let wx = bx - 28; wx <= bx + 18; wx += 25) {
+        bg.fillRect(wx, wy, 10, 14);
+      }
+    }
   }
 
   private buildPlayer(): void {
@@ -353,6 +382,7 @@ export class DevMarioScene extends Phaser.Scene {
       const body = r.body as Phaser.Physics.Arcade.Body;
       body.setCollideWorldBounds(true);
       body.setBounce(0);
+      this.physics.add.collider(r, this.platforms);
       this.enemies.push({ body, gfx, minX: d.minX, maxX: d.maxX, dir: -1, isDeadline: d.dl, alive: true });
     }
   }
@@ -392,6 +422,7 @@ export class DevMarioScene extends Phaser.Scene {
     this.checkCoins(p);
     this.checkBytes(p);
     this.checkPipes(p);
+    this.checkBreakBlocks(p, body);
     this.checkDeath(p);
     this.checkFlag(p);
     this.drawPlayer(p.x, p.y);
@@ -604,14 +635,26 @@ export class DevMarioScene extends Phaser.Scene {
     if (!near) this.promptText.setVisible(false);
   }
 
+  private checkBreakBlocks(p: Phaser.GameObjects.Rectangle, body: Phaser.Physics.Arcade.Body): void {
+    for (const bb of this.breakBlocks) {
+      if (!bb.alive) continue;
+      if (body.velocity.y < 0 && Math.abs(p.x - bb.x) < 24 && p.y > bb.y - 4 && p.y < bb.y + 12) {
+        bb.alive = false;
+        bb.rect.destroy();
+        this.score += 50;
+        this.showPopup(bb.x, bb.y, '+50 BLOCK!');
+        body.setVelocityY(60);
+      }
+    }
+  }
+
   private checkDeath(p: Phaser.GameObjects.Rectangle): void {
     if (p.y > WORLD_H + 80) this.loseLife();
   }
 
   private checkFlag(p: Phaser.GameObjects.Rectangle): void {
     const fx = WORLD_W - 180;
-    const fy = GROUND_Y - 60;
-    if (!this.gameOver && !this.won && Phaser.Math.Distance.Between(p.x, p.y, fx, fy) < 50) {
+    if (!this.gameOver && !this.won && p.x >= fx - 10 && p.y < GROUND_Y - 30) {
       this.win();
     }
   }

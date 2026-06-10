@@ -5,7 +5,7 @@ const W = 800;
 const H = 600;
 const GRAVITY = 800;
 const JUMP_VEL = -300;
-const COFFEE_DURATION = 8000;
+const COFFEE_DURATION = 10000;
 const MOVE_SPEED = 160;
 const PLAT_H = 14;
 const PLAYER_W = 18;
@@ -117,6 +117,7 @@ export class DonkeyKongScene extends Phaser.Scene {
     this.keyS = kb.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = kb.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     kb.on('keydown-ESC', () => this.returnToWorld());
+    AudioManager.get().playBgm('dk');
   }
 
   private buildBackground(): void {
@@ -304,7 +305,9 @@ export class DonkeyKongScene extends Phaser.Scene {
     else if (this.keyD.isDown || this.cursors.right.isDown) vx = MOVE_SPEED;
     body.setVelocityX(vx);
 
-    const climbRequest = this.cursors.up.isDown || this.keyW.isDown;
+    const climbUp = this.cursors.up.isDown || this.keyW.isDown;
+    const climbDown = this.cursors.down.isDown || this.keyS.isDown;
+    const climbRequest = climbUp || climbDown;
     if (climbRequest) {
       for (const ladder of this.ladders) {
         if (p.x >= ladder.x - 8 && p.x <= ladder.x + ladder.w + 8
@@ -313,7 +316,7 @@ export class DonkeyKongScene extends Phaser.Scene {
           this.currentLadder = ladder;
           body.allowGravity = false;
           body.checkCollision.none = true;
-          body.setVelocity(0, -120);
+          body.setVelocity(0, climbDown ? 120 : -120);
           p.x = ladder.x + ladder.w / 2;
           break;
         }
@@ -366,7 +369,7 @@ export class DonkeyKongScene extends Phaser.Scene {
 
       const dist = Phaser.Math.Distance.Between(p.x, p.y, go.x, go.y);
       if (dist < 18) {
-        if (this.caffeinated && body.velocity.y > 0 && p.y < go.y - 6) {
+        if (this.caffeinated) {
           this.score += 20;
           this.showPopup(go.x, go.y, '+20 SMASH!');
           body.setVelocityY(-150);

@@ -18,7 +18,7 @@ export class AudioManager {
     this.bgmGain.connect(this.ctx.destination);
   }
 
-  playBgm(fadeIn = 0.5): void {
+  playBgm(style: 'ambient' | 'runner' = 'ambient', fadeIn = 0.5): void {
     if (!this.ctx || !this.bgmGain || this.bgmPlaying) return;
     this.bgmPlaying = true;
     this.bgmGain.gain.cancelScheduledValues(this.ctx.currentTime);
@@ -28,20 +28,48 @@ export class AudioManager {
     const playChord = () => {
       if (!this.ctx || !this.bgmPlaying) return;
       const now = this.ctx.currentTime;
-      const notes = [261.63, 329.63, 392, 523.25];
-      notes.forEach((freq, i) => {
-        const o = this.ctx!.createOscillator();
-        const g = this.ctx!.createGain();
-        o.type = 'sine';
-        o.frequency.value = freq;
-        g.gain.setValueAtTime(0.04, now + i * 0.15);
-        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 1.5);
-        o.connect(g);
-        g.connect(this.bgmGain!);
-        o.start(now + i * 0.15);
-        o.stop(now + i * 0.15 + 1.5);
-      });
-      this.bgmFadeTimer = window.setTimeout(playChord, 2400);
+
+      if (style === 'runner') {
+        const notes = [440, 554.37, 659.25, 880, 659.25, 554.37, 440, 554.37, 659.25, 880, 1046.5, 880, 659.25, 554.37, 440, 554.37];
+        notes.forEach((freq, i) => {
+          const o = this.ctx!.createOscillator();
+          const g = this.ctx!.createGain();
+          o.type = 'square';
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.025, now + i * 0.1);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.35);
+          o.connect(g);
+          g.connect(this.bgmGain!);
+          o.start(now + i * 0.1);
+          o.stop(now + i * 0.1 + 0.35);
+        });
+        const bass = this.ctx!.createOscillator();
+        const bg = this.ctx!.createGain();
+        bass.type = 'sawtooth';
+        bass.frequency.value = 110;
+        bg.gain.setValueAtTime(0.03, now);
+        bg.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+        bass.connect(bg);
+        bg.connect(this.bgmGain!);
+        bass.start(now);
+        bass.stop(now + 1.6);
+        this.bgmFadeTimer = window.setTimeout(playChord, 1600);
+      } else {
+        const notes = [261.63, 329.63, 392, 523.25];
+        notes.forEach((freq, i) => {
+          const o = this.ctx!.createOscillator();
+          const g = this.ctx!.createGain();
+          o.type = 'sine';
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.04, now + i * 0.15);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 1.5);
+          o.connect(g);
+          g.connect(this.bgmGain!);
+          o.start(now + i * 0.15);
+          o.stop(now + i * 0.15 + 1.5);
+        });
+        this.bgmFadeTimer = window.setTimeout(playChord, 2400);
+      }
     };
     playChord();
   }
