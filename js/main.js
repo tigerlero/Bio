@@ -193,7 +193,7 @@ function initSite() {
       }
       var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
       var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var cellSize = window.innerWidth < 900 ? 50 : 100;
+      var cellSize = 50;
       var gap = 4;
       var step = cellSize + gap;
 
@@ -227,7 +227,7 @@ function initSite() {
         for (var dd = 0; dd < 7; dd++) {
           if (dd < weeks[w].length) {
             var c = weeks[w][dd];
-            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + Math.max(8, Math.min(14, cellSize * 0.16)) + 'px;line-height:1.1;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"><div style="color:rgba(255,255,255,0.85);font-weight:600;">' + parseInt(c.date.slice(8)) + '</div><div style="color:rgba(255,255,255,0.5);font-size:' + Math.max(6, Math.min(11, cellSize * 0.12)) + 'px;">' + c.count + '</div></div>';
+            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + Math.max(8, Math.min(14, cellSize * 0.16)) + 'px;line-height:1.1;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"><div style="color:rgba(255,255,255,0.85);font-weight:600;margin-bottom:4px;">' + parseInt(c.date.slice(8)) + '</div><div style="color:rgba(255,255,255,0.5);font-size:' + Math.max(6, Math.min(11, cellSize * 0.12)) + 'px;">' + c.count + '</div></div>';
           } else {
             html += '<div style="width:' + cellSize + 'px;height:' + cellSize + 'px;"></div>';
           }

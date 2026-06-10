@@ -460,6 +460,7 @@ export class DevMarioScene extends Phaser.Scene {
         body.setAllowGravity(true);
         body.setVelocity(0, 0);
         p.y = GROUND_Y - 13;
+        p.x = this.slidePoleX + 15;
         this.score += 500;
         this.showPopup(this.slidePoleX + 30, p.y - 30, '+500 SPRINT!');
       }
