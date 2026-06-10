@@ -62,9 +62,15 @@ const CONFIG = Object.freeze({
   }
 })();
 
-/** Translate helper: returns Greek text when site language is Greek, else English. */
-function __tr(en, el) {
-  return window.__CHAT_LANG_IDX === 1 ? el : en;
+/**
+ * Translate helper: returns text matching current site language.
+ * Supports all 9 languages: en, el, it, tr, ro, sq, bg, es, fr.
+ * Falls back to English for any missing slot.
+ */
+function __tr(en, el, it, tr, ro, sq, bg, es, fr) {
+  const idx = window.__CHAT_LANG_IDX || 0;
+  const texts = [en, el, it, tr, ro, sq, bg, es, fr];
+  return texts[idx] != null ? texts[idx] : (texts[0] || '');
 }
 
 // ============================================================
@@ -109,17 +115,36 @@ addIntent({
   response: (profile, ctx) => {
     const name = profile.meta.name.split(' ')[0];
     const hour = new Date().getHours();
-    const timeGreeting = hour < 12 ? (window.__CHAT_LANG_IDX === 1 ? 'Καλημέρα' : 'Good morning') : hour < 18 ? (window.__CHAT_LANG_IDX === 1 ? 'Καλησπέρα' : 'Good afternoon') : (window.__CHAT_LANG_IDX === 1 ? 'Καλησπέρα' : 'Good evening');
+    const idx = window.__CHAT_LANG_IDX || 0;
+    const morning = ['Good morning', 'Καλημέρα', 'Buongiorno', 'Günaydın', 'Bună dimineața', 'Mirëmëngjes', 'Добро утро', 'Buenos días', 'Bonjour'];
+    const afternoon = ['Good afternoon', 'Καλησπέρα', 'Buon pomeriggio', 'Tünaydın', 'Bună după-amiaza', 'Mirëdita', 'Добър ден', 'Buenas tardes', 'Bon après-midi'];
+    const evening = ['Good evening', 'Καλησπέρα', 'Buonasera', 'İyi akşamlar', 'Bună seara', 'Mirëmbrëma', 'Добър вечер', 'Buenas noches', 'Bonsoir'];
+    const tg = hour < 12 ? morning : hour < 18 ? afternoon : evening;
+    const timeGreeting = tg[idx] || tg[0];
     const visited = ctx.getHistory().length > 2;
     if (visited) {
       return __tr(
         `${timeGreeting}! Welcome back! I'm still here to help you learn more about ${name}. What would you like to know? ☕`,
-        `${timeGreeting}! Καλώς ήρθες ξανά! Είμαι εδώ για να σε βοηθήσω να μάθεις περισσότερα για τον ${name}. Τι θα ήθελες να μάθεις; ☕`
+        `${timeGreeting}! Καλώς ήρθες ξανά! Είμαι εδώ για να σε βοηθήσω να μάθεις περισσότερα για τον ${name}. Τι θα ήθελες να μάθεις; ☕`,
+        `${timeGreeting}! Bentornato! Sono ancora qui per aiutarti a saperne di più su ${name}. Cosa vorresti sapere? ☕`,
+        `${timeGreeting}! Tekrar hoş geldin! ${name} hakkında daha fazla bilgi edinmene yardımcı olmak için hâlâ buradayım. Ne öğrenmek istersin? ☕`,
+        `${timeGreeting}! Bun venit înapoi! Sunt încă aici să te ajut să afli mai multe despre ${name}. Ce ai vrea să știi? ☕`,
+        `${timeGreeting}! Mirë se vini përsëri! Ende jam këtu për t'ju ndihmuar të mësoni më shumë rreth ${name}. Çfarë dëshironi të dini? ☕`,
+        `${timeGreeting}! Добре дошли отново! Все още съм тук, за да ви помогна да научите повече за ${name}. Какво бихте искали да знаете? ☕`,
+        `${timeGreeting}! ¡Bienvenido de nuevo! Sigo aquí para ayudarte a conocer más sobre ${name}. ¿Qué te gustaría saber? ☕`,
+        `${timeGreeting}! Bon retour! Je suis toujours là pour vous en dire plus sur ${name}. Que souhaitez-vous savoir? ☕`
       );
     }
     return __tr(
       `${timeGreeting}! I'm the ${CONFIG.BOT_NAME}. Ask me anything about ${name}'s skills, projects, experience, or education!`,
-      `${timeGreeting}! Είμαι το ${CONFIG.BOT_NAME}. Ρώτα με ό,τι θες για τις δεξιότητες, τα projects, την εμπειρία ή την εκπαίδευση του ${name}!`
+      `${timeGreeting}! Είμαι το ${CONFIG.BOT_NAME}. Ρώτα με ό,τι θες για τις δεξιότητες, τα projects, την εμπειρία ή την εκπαίδευση του ${name}!`,
+      `${timeGreeting}! Sono ${CONFIG.BOT_NAME}. Chiedimi tutto su competenze, progetti, esperienza o formazione di ${name}!`,
+      `${timeGreeting}! Ben ${CONFIG.BOT_NAME}. ${name}'in becerileri, projeleri, deneyimi veya eğitimi hakkında bana her şeyi sor!`,
+      `${timeGreeting}! Sunt ${CONFIG.BOT_NAME}. Întreabă-mă orice despre abilitățile, proiectele, experiența sau educația lui ${name}!`,
+      `${timeGreeting}! Jam ${CONFIG.BOT_NAME}. Më pyet çfarëdo për aftësitë, projektet, përvojën ose arsimin e ${name}!`,
+      `${timeGreeting}! Аз съм ${CONFIG.BOT_NAME}. Питайте ме за уменията, проектите, опита или образованието на ${name}!`,
+      `${timeGreeting}! Soy ${CONFIG.BOT_NAME}. ¡Pregúntame cualquier cosa sobre las habilidades, proyectos, experiencia o educación de ${name}!`,
+      `${timeGreeting}! Je suis ${CONFIG.BOT_NAME}. Demandez-moi tout sur les compétences, projets, expérience ou formation de ${name}!`
     );
   },
 });
@@ -134,7 +159,14 @@ addIntent({
     const name = profile.meta.name;
     return __tr(
       `**${name}**\n\n${profile.bio.summary}\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
-      `**${name}**\n\nΟ ${name.split(' ')[0]} είναι επιστήμονας υπολογιστών και fullstack μηχανικός από την Ελλάδα. Έχει B.Sc. στην Πληροφορική από το Πανεπιστήμιο Πειραιώς και έχει εργαστεί σε startups, εταιρείες και enterprise projects. Διδάσκει προγραμματισμό σε παιδιά στην Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`
+      `**${name}**\n\nΟ ${name.split(' ')[0]} είναι επιστήμονας υπολογιστών και fullstack μηχανικός από την Ελλάδα. Έχει B.Sc. στην Πληροφορική από το Πανεπιστήμιο Πειραιώς και έχει εργαστεί σε startups, εταιρείες και enterprise projects. Διδάσκει προγραμματισμό σε παιδιά στην Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} è un informatico e ingegnere fullstack dalla Grecia. Ha una laurea in Informatica all'Università del Pireo e ha lavorato in startup, aziende e progetti enterprise. Insegna programmazione ai bambini presso Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} Yunanistan'dan bir bilgisayar bilimci ve fullstack mühendisidir. Pire Üniversitesi'nde Bilgisayar Bilimi lisansı yapmış, startup'larda, şirketlerde ve kurumsal projelerde çalışmıştır. Algorithmics'te çocuklara programlama öğretmektedir.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} este un informatician și inginer fullstack din Grecia. Are o licență în Informatică la Universitatea din Pireu și a lucrat în startup-uri, companii și proiecte enterprise. Predă programare copiilor la Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} është një shkencëtar kompjuteri dhe inxhinier fullstack nga Greqia. Ka B.Sc. në Shkenca Kompjuterike në Universitetin e Pireut dhe ka punuar në startup, kompani dhe projekte enterprise. Mëson programim fëmijëve në Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} е компютърен учен и fullstack инженер от Гърция. Има бакалавърска степен по компютърни науки от Университета на Пирея и е работил в стартъпи, компании и корпоративни проекти. Преподава програмиране на деца в Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} es un científico de la computación e ingeniero fullstack de Grecia. Tiene una licenciatura en Informática en la Universidad del Pireo y ha trabajado en startups, empresas y proyectos empresariales. Enseña programación a niños en Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`,
+      `**${name}**\n\n${name.split(' ')[0]} est un informaticien et ingénieur fullstack de Grèce. Il est titulaire d'une licence en Informatique à l'Université du Pirée et a travaillé dans des startups, des entreprises et des projets d'envergure. Il enseigne la programmation aux enfants chez Algorithmics.\n\n📍 ${profile.meta.location}\n💼 ${profile.meta.title}\n📧 ${profile.meta.email}`
     );
   },
 });
@@ -151,7 +183,14 @@ addIntent({
     const total = cats.reduce((s, [, items]) => s + items.length, 0);
     return __tr(
       `**Technical Skills** — ${name} is proficient across ${cats.length} categories:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nThat's ${total}+ individual skills!`,
-      `**Τεχνικές Δεξιότητες** — Ο ${name} γνωρίζει ${cats.length} κατηγορίες:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nΣύνολο ${total}+ δεξιότητες!`
+      `**Τεχνικές Δεξιότητες** — Ο ${name} γνωρίζει ${cats.length} κατηγορίες:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nΣύνολο ${total}+ δεξιότητες!`,
+      `**Competenze Tecniche** — ${name} è competente in ${cats.length} categorie:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\n${total}+ competenze individuali!`,
+      `**Teknik Beceriler** — ${name}, ${cats.length} kategoride uzman:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nToplam ${total}+ beceri!`,
+      `**Abilități Tehnice** — ${name} este competent în ${cats.length} categorii:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\n${total}+ abilități individuale!`,
+      `**Aftësi Teknike** — ${name} është i aftë në ${cats.length} kategori:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nGjithsej ${total}+ aftësi!`,
+      `**Технически умения** — ${name} владее ${cats.length} категории:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\nОбщо ${total}+ умения!`,
+      `**Habilidades Técnicas** — ${name} es competente en ${cats.length} categorías:\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\n¡${total}+ habilidades individuales!`,
+      `**Compétences Techniques** — ${name} maîtrise ${cats.length} catégories :\n\n${cats.map(([cat, items]) => `▸ **${cat}**: ${items.join(', ')}`).join('\n')}\n\n${total}+ compétences individuelles !`
     );
   },
 });
@@ -166,7 +205,14 @@ addIntent({
     const fe = profile.skills.Frontend || [];
     return __tr(
       `**Frontend Skills**\n\n${fe.join(', ')}\n\nHe's comfortable with modern SPA frameworks, responsive design, and component libraries like Material UI and Tailwind CSS.`,
-      `**Frontend Δεξιότητες**\n\n${fe.join(', ')}\n\nΆνετος με σύγχρονα SPA frameworks, responsive design και βιβλιοθήκες components όπως Material UI και Tailwind CSS.`
+      `**Frontend Δεξιότητες**\n\n${fe.join(', ')}\n\nΆνετος με σύγχρονα SPA frameworks, responsive design και βιβλιοθήκες components όπως Material UI και Tailwind CSS.`,
+      `**Competenze Frontend**\n\n${fe.join(', ')}\n\nÈ a suo agio con framework SPA moderni, design responsivo e librerie di componenti come Material UI e Tailwind CSS.`,
+      `**Ön Yüz Becerileri**\n\n${fe.join(', ')}\n\nModern SPA framework'leri, duyarlı tasarım ve Material UI ile Tailwind CSS gibi bileşen kütüphanelerinde rahattır.`,
+      `**Abilități Frontend**\n\n${fe.join(', ')}\n\nEste confortabil cu framework-uri SPA moderne, design responsive și biblioteci de componente precum Material UI și Tailwind CSS.`,
+      `**Aftësi Frontend**\n\n${fe.join(', ')}\n\nËshtë i rehatshëm me framework-et moderne SPA, dizajn responsive dhe biblioteka komponentësh si Material UI dhe Tailwind CSS.`,
+      `**Frontend умения**\n\n${fe.join(', ')}\n\nТой е удобен с модерни SPA frameworks, responsive design и библиотеки от компоненти като Material UI и Tailwind CSS.`,
+      `**Habilidades Frontend**\n\n${fe.join(', ')}\n\nSe siente cómodo con frameworks SPA modernos, diseño responsive y librerías de componentes como Material UI y Tailwind CSS.`,
+      `**Compétences Frontend**\n\n${fe.join(', ')}\n\nIl est à l'aise avec les frameworks SPA modernes, le design responsive et les bibliothèques de composants comme Material UI et Tailwind CSS.`
     );
   },
 });
@@ -181,7 +227,14 @@ addIntent({
     const be = profile.skills.Backend || [];
     return __tr(
       `**Backend Skills**\n\n${be.join(', ')}\n\nExperience spans Python (Django, Flask, FastAPI), PHP (Laravel), and Node.js (Express) ecosystems.`,
-      `**Backend Δεξιότητες**\n\n${be.join(', ')}\n\nΕμπειρία σε Python (Django, Flask, FastAPI), PHP (Laravel) και Node.js (Express).`
+      `**Backend Δεξιότητες**\n\n${be.join(', ')}\n\nΕμπειρία σε Python (Django, Flask, FastAPI), PHP (Laravel) και Node.js (Express).`,
+      `**Competenze Backend**\n\n${be.join(', ')}\n\nEsperienza negli ecosistemi Python (Django, Flask, FastAPI), PHP (Laravel) e Node.js (Express).`,
+      `**Arka Uç Becerileri**\n\n${be.join(', ')}\n\nPython (Django, Flask, FastAPI), PHP (Laravel) ve Node.js (Express) ekosistemlerinde deneyimli.`,
+      `**Abilități Backend**\n\n${be.join(', ')}\n\nExperiență în ecosistemele Python (Django, Flask, FastAPI), PHP (Laravel) și Node.js (Express).`,
+      `**Aftësi Backend**\n\n${be.join(', ')}\n\nPërvojë në ekosistemet Python (Django, Flask, FastAPI), PHP (Laravel) dhe Node.js (Express).`,
+      `**Backend умения**\n\n${be.join(', ')}\n\nОпит в екосистемите Python (Django, Flask, FastAPI), PHP (Laravel) и Node.js (Express).`,
+      `**Habilidades Backend**\n\n${be.join(', ')}\n\nExperiencia en los ecosistemas Python (Django, Flask, FastAPI), PHP (Laravel) y Node.js (Express).`,
+      `**Compétences Backend**\n\n${be.join(', ')}\n\nExpérience dans les écosystèmes Python (Django, Flask, FastAPI), PHP (Laravel) et Node.js (Express).`
     );
   },
 });
@@ -196,7 +249,14 @@ addIntent({
     const projects = profile.projects || [];
     const reply = __tr(
       `**Projects** (${projects.length} total):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Tech: ${p.tech.join(', ')}_`).join('\n\n')}`,
-      `**Projects** (σύνολο ${projects.length}):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Τεχνολογίες: ${p.tech.join(', ')}_`).join('\n\n')}`
+      `**Projects** (σύνολο ${projects.length}):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Τεχνολογίες: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Progetti** (${projects.length} totali):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Tech: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Projeler** (toplam ${projects.length}):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Teknoloji: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Proiecte** (${projects.length} total):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Tech: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Projekte** (gjithsej ${projects.length}):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Tech: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Проекти** (общо ${projects.length}):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Технологии: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Proyectos** (${projects.length} en total):\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Tecnologías: ${p.tech.join(', ')}_`).join('\n\n')}`,
+      `**Projets** (${projects.length} au total) :\n\n${projects.map(p => `▸ **[${p.title}](${p.link})** — ${p.description.split('.')[0]}.\n  _Technologies : ${p.tech.join(', ')}_`).join('\n\n')}`
     );
     return reply.trim();
   },
@@ -224,10 +284,10 @@ addIntent({
     if (!best || bestScore < 0.3) return null;
     let reply = `**${best.title}**\n\n${best.description}\n\n`;
     if (best.highlights) {
-      reply += __tr(`**Key highlights:**\n`, `**Κύρια σημεία:**\n`);
+      reply += __tr('**Key highlights:**\n', '**Κύρια σημεία:**\n', '**Punti salienti:**\n', '**Öne çıkanlar:**\n', '**Puncte cheie:**\n', '**Pikat kryesore:**\n', '**Основни моменти:**\n', '**Aspectos destacados:**\n', '**Points clés :**\n');
       for (const h of best.highlights) reply += `• ${h}\n`;
     }
-    reply += `\n🔗 ${__tr('View on GitHub', 'Προβολή στο GitHub')}`;
+    reply += `\n🔗 ${__tr('View on GitHub', 'Προβολή στο GitHub', 'Vedi su GitHub', 'GitHub\'da Gör', 'Vezi pe GitHub', 'Shiko në GitHub', 'Вижте в GitHub', 'Ver en GitHub', 'Voir sur GitHub')}`;
     if (best.link) reply += `: [${best.link}](${best.link})`;
     return reply;
   },
@@ -243,7 +303,14 @@ addIntent({
     const jobs = profile.experience || [];
     const reply = __tr(
       `**Professional Experience** — ${jobs.length} positions:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
-      `**Επαγγελματική Εμπειρία** — ${jobs.length} θέσεις:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`
+      `**Επαγγελματική Εμπειρία** — ${jobs.length} θέσεις:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Esperienza Professionale** — ${jobs.length} posizioni:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Profesyonel Deneyim** — ${jobs.length} pozisyon:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Experiență Profesională** — ${jobs.length} poziții:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Përvojë Profesionale** — ${jobs.length} pozita:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Професионален опит** — ${jobs.length} позиции:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Experiencia Profesional** — ${jobs.length} puestos:\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`,
+      `**Expérience Professionnelle** — ${jobs.length} postes :\n\n${jobs.map(j => `▸ **${j.role}** @ ${j.company}\n  ${j.period} · ${j.type}\n${j.highlights.slice(0, 2).map(h => `  • ${h}`).join('\n')}`).join('\n\n')}`
     );
     return reply.trim();
   },
@@ -259,7 +326,14 @@ addIntent({
     const edu = profile.education || [];
     const reply = __tr(
       `**Education**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
-      `**Εκπαίδευση**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`
+      `**Εκπαίδευση**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Istruzione**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Eğitim**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Educație**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Arsimi**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Образование**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Educación**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`,
+      `**Formation**\n\n${edu.map(e => `▸ **${e.degree}**\n  ${e.school} · ${e.year}\n  ${e.description}`).join('\n\n')}`
     );
     return reply.trim();
   },
@@ -276,7 +350,14 @@ addIntent({
     const name = profile.meta.name.split(' ')[0];
     return __tr(
       `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} has ${profile.projects.length} public repositories covering web apps, game engines, ML models, and tools. Open-source contributions are always welcome! 👨‍💻`,
-      `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\nΟ ${name} έχει ${profile.projects.length} δημόσια repositories με web apps, game engines, ML μοντέλα και εργαλεία. Open-source συνεισφορές πάντα ευπρόσδεκτες! 👨‍💻`
+      `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\nΟ ${name} έχει ${profile.projects.length} δημόσια repositories με web apps, game engines, ML μοντέλα και εργαλεία. Open-source συνεισφορές πάντα ευπρόσδεκτες! 👨‍💻`,
+      `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} ha ${profile.projects.length} repository pubblici che coprono app web, motori di gioco, modelli ML e strumenti. I contributi open-source sono sempre benvenuti! 👨‍💻`,
+      `**GitHub**\n\nKullanıcı adı: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name}'in web uygulamaları, oyun motorları, ML modelleri ve araçlar içeren ${profile.projects.length} genel reposu var. Açık kaynak katkıları her zaman hoş karşılanır! 👨‍💻`,
+      `**GitHub**\n\nUsername: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} are ${profile.projects.length} repository-uri publice care acoperă web apps, motoare de jocuri, modele ML și unelte. Contribuțiile open-source sunt întotdeauna binevenite! 👨‍💻`,
+      `**GitHub**\n\nEmri: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} ka ${profile.projects.length} depo publike që përfshijnë aplikacione web, motorë lojërash, modele ML dhe mjete. Kontributet open-source janë gjithmonë të mirëseardhura! 👨‍💻`,
+      `**GitHub**\n\nПотребителско име: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} има ${profile.projects.length} публични хранилища, обхващащи уеб приложения, игрови двигатели, ML модели и инструменти. Приносите с отворен код винаги са добре дошли! 👨‍💻`,
+      `**GitHub**\n\nUsuario: **${gh.username}**\nURL: [${gh.url}](${gh.url})\n\n${name} tiene ${profile.projects.length} repositorios públicos que cubren aplicaciones web, motores de juegos, modelos ML y herramientas. ¡Las contribuciones open-source siempre son bienvenidas! 👨‍💻`,
+      `**GitHub**\n\nNom d'utilisateur : **${gh.username}**\nURL : [${gh.url}](${gh.url})\n\n${name} a ${profile.projects.length} dépôts publics couvrant des applications web, des moteurs de jeu, des modèles ML et des outils. Les contributions open-source sont toujours les bienvenues ! 👨‍💻`
     );
   },
 });
@@ -292,7 +373,14 @@ addIntent({
     const name = profile.meta.name.split(' ')[0];
     return __tr(
       `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConnect with ${name} on LinkedIn for professional networking and collaboration opportunities.`,
-      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nΣυνδεθείτε με τον ${name} στο LinkedIn για επαγγελματική δικτύωση και συνεργασίες.`
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nΣυνδεθείτε με τον ${name} στο LinkedIn για επαγγελματική δικτύωση και συνεργασίες.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConnettiti con ${name} su LinkedIn per networking professionale e collaborazioni.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nProfesyonel ağ kurma ve işbirliği fırsatları için ${name} ile LinkedIn'de bağlantı kurun.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConectează-te cu ${name} pe LinkedIn pentru networking profesional și oportunități de colaborare.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nLidhu me ${name} në LinkedIn për rrjete profesionale dhe mundësi bashkëpunimi.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nСвържете се с ${name} в LinkedIn за професионално общуване и възможности за сътрудничество.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConecta con ${name} en LinkedIn para networking profesional y oportunidades de colaboración.`,
+      `**LinkedIn**\n\n[${li.username}](${li.url})\n\nConnectez-vous avec ${name} sur LinkedIn pour le réseautage professionnel et les opportunités de collaboration.`
     );
   },
 });
@@ -310,7 +398,14 @@ addIntent({
     const wa = profile.social.whatsapp.url;
     return __tr(
       `**Contact Information**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Phone**: ${c.phone}\n📍 **Location**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
-      `**Στοιχεία Επικοινωνίας**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Τηλέφωνο**: ${c.phone}\n📍 **Τοποθεσία**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`
+      `**Στοιχεία Επικοινωνίας**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Τηλέφωνο**: ${c.phone}\n📍 **Τοποθεσία**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Informazioni di Contatto**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Telefono**: ${c.phone}\n📍 **Posizione**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**İletişim Bilgileri**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Telefon**: ${c.phone}\n📍 **Konum**: ${c.location}\n\n💬 ${c.availability}\n\n**Sosyal:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Informații de Contact**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Telefon**: ${c.phone}\n📍 **Locație**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Informacione Kontakti**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Telefon**: ${c.phone}\n📍 **Vendndodhja**: ${c.location}\n\n💬 ${c.availability}\n\n**Social:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Информация за контакт**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Телефон**: ${c.phone}\n📍 **Местоположение**: ${c.location}\n\n💬 ${c.availability}\n\n**Социални:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Información de Contacto**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Teléfono**: ${c.phone}\n📍 **Ubicación**: ${c.location}\n\n💬 ${c.availability}\n\n**Redes:**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`,
+      `**Informations de Contact**\n\n📧 **Email**: [${c.email}](mailto:${c.email})\n📞 **Téléphone**: ${c.phone}\n📍 **Localisation**: ${c.location}\n\n💬 ${c.availability}\n\n**Social :**\n▸ [GitHub](${gh})\n▸ [LinkedIn](${li})\n▸ [WhatsApp](${wa})`
     );
   },
 });
@@ -326,7 +421,14 @@ addIntent({
     const body = interests.map(i => `▸ ${i}`).join('\n');
     return __tr(
       `**Interests & Hobbies**\n\n${body}`,
-      `**Ενδιαφέροντα & Χόμπι**\n\n${body}`
+      `**Ενδιαφέροντα & Χόμπι**\n\n${body}`,
+      `**Interessi e Hobby**\n\n${body}`,
+      `**İlgi Alanları ve Hobiler**\n\n${body}`,
+      `**Interese și Hobby-uri**\n\n${body}`,
+      `**Interesat dhe Hobi**\n\n${body}`,
+      `**Интереси и хобита**\n\n${body}`,
+      `**Intereses y Pasatiempos**\n\n${body}`,
+      `**Centres d'Intérêt et Loisirs**\n\n${body}`
     );
   },
 });
@@ -341,7 +443,14 @@ addIntent({
     const suggestions = CONFIG.SUGGESTIONS.map(s => `▸ *"${s}"*`).join('\n');
     return __tr(
       `**I can help you learn about the portfolio!** Try asking:\n\n${suggestions}\n\nOr ask about specific projects (e.g., "Tell me about RePaw"), skills (e.g., "What frontend frameworks?"), freelance work, teaching, pricing, or games!`,
-      `**Μπορώ να σε βοηθήσω να μάθεις για το portfolio!** Δοκίμασε να ρωτήσεις:\n\n${suggestions}\n\nΉ ρώτα για συγκεκριμένα projects (π.χ. "Πες μου για το RePaw"), δεξιότητες, freelance εργασία, διδασκαλία, τιμές ή παιχνίδια!`
+      `**Μπορώ να σε βοηθήσω να μάθεις για το portfolio!** Δοκίμασε να ρωτήσεις:\n\n${suggestions}\n\nΉ ρώτα για συγκεκριμένα projects (π.χ. "Πες μου για το RePaw"), δεξιότητες, freelance εργασία, διδασκαλία, τιμές ή παιχνίδια!`,
+      `**Posso aiutarti a conoscere il portfolio!** Prova a chiedere:\n\n${suggestions}\n\nOppure chiedi su progetti specifici (es. "Parlami di RePaw"), competenze, lavoro freelance, insegnamento, prezzi o giochi!`,
+      `**Portfolyo hakkında bilgi edinmene yardımcı olabilirim!** Şunları sor:\n\n${suggestions}\n\nVeya belirli projeler (ör. "RePaw hakkında bilgi ver"), beceriler, freelance işler, dersler, fiyatlar veya oyunlar hakkında sor!`,
+      `**Pot să te ajut să afli despre portofoliu!** Încearcă să întrebi:\n\n${suggestions}\n\nSau întreabă despre proiecte specifice (ex. "Spune-mi despre RePaw"), abilități, freelance, predare, prețuri sau jocuri!`,
+      `**Mund t'ju ndihmoj të mësoni rreth portofolit!** Provoni të pyesni:\n\n${suggestions}\n\nOse pyetni për projekte specifike, aftësi, punë freelance, mësimdhënie, çmime ose lojëra!`,
+      `**Мога да ви помогна да научите за портфолиото!** Опитайте да попитате:\n\n${suggestions}\n\nИли попитайте за конкретни проекти, умения, freelance работа, преподаване, цени или игри!`,
+      `**¡Puedo ayudarte a conocer el portafolio!** Intenta preguntar:\n\n${suggestions}\n\nO pregunta sobre proyectos específicos (ej. "Cuéntame sobre RePaw"), habilidades, trabajo freelance, enseñanza, precios o juegos!`,
+      `**Je peux vous aider à découvrir le portfolio !** Essayez de demander :\n\n${suggestions}\n\nOu posez des questions sur des projets spécifiques, compétences, travail freelance, enseignement, tarifs ou jeux !`
     );
   },
 });
@@ -353,12 +462,19 @@ addIntent({
   patterns: [/^(thanks|thank|thx|ty|ευχαριστώ)/i],
   priority: 1,
   response: () => {
-    if (window.__CHAT_LANG_IDX === 1) {
-      const greekReplies = ["Παρακαλώ! 😊 Ρώτα με ό,τι άλλο θες!", "Χαρά μου! 🙌 Πες μου αν θες κι άλλες πληροφορίες.", "Όποτε θες! 😄 Θέλεις να εξερευνήσεις κι άλλο το portfolio;", "Χάρηκα που βοήθησα! 🚀"];
-      return greekReplies[Math.floor(Math.random() * greekReplies.length)];
-    }
-    const enReplies = ["You're welcome! 😊 Feel free to ask anything else!", "Happy to help! 🙌 Let me know if you need more info.", "Anytime! 😄 Want to explore more about the portfolio?", "Glad I could help! 🚀"];
-    return enReplies[Math.floor(Math.random() * enReplies.length)];
+    const idx = window.__CHAT_LANG_IDX || 0;
+    const replies = [
+      ["You're welcome! 😊 Feel free to ask anything else!", "Happy to help! 🙌 Let me know if you need more info.", "Anytime! 😄 Want to explore more about the portfolio?", "Glad I could help! 🚀"],
+      ["Παρακαλώ! 😊 Ρώτα με ό,τι άλλο θες!", "Χαρά μου! 🙌 Πες μου αν θες κι άλλες πληροφορίες.", "Όποτε θες! 😄 Θέλεις να εξερευνήσεις κι άλλο το portfolio;", "Χάρηκα που βοήθησα! 🚀"],
+      ["Prego! 😊 Chiedimi pure altro!", "Felice di aiutare! 🙌 Fammi sapere se vuoi altre info.", "Quando vuoi! 😄 Vuoi esplorare ancora il portfolio?", "Contento di essere stato utile! 🚀"],
+      ["Rica ederim! 😊 Başka bir şey sormaktan çekinme!", "Yardımcı olabildiğime sevindim! 🙌 Daha fazla bilgi istersen söyle.", "Ne zaman istersen! 😄 Portfolyoyu daha fazla keşfetmek ister misin?", "Memnuniyetle! 🚀"],
+      ["Cu plăcere! 😊 Întreabă-mă orice altceva!", "Mă bucur să ajut! 🙌 Anunță-mă dacă ai nevoie de mai multe informații.", "Oricând! 😄 Vrei să explorezi mai mult portofoliul?", "Mă bucur că am putut ajuta! 🚀"],
+      ["Ju lutem! 😊 Pyetni çfarëdo tjetër!", "Gëzohem që ndihmova! 🙌 Më tregoni nëse keni nevojë për më shumë info.", "Kurdoherë! 😄 Dëshironi të eksploroni më shumë portofolin?", "I lumtur që ndihmova! 🚀"],
+      ["Моля! 😊 Питайте за каквото друго искате!", "Радвам се да помогна! 🙌 Кажете ми, ако имате нужда от още информация.", "Винаги! 😄 Искате ли да разгледате още портфолиото?", "Щастлив съм, че помогнах! 🚀"],
+      ["¡De nada! 😊 ¡Pregúntame lo que quieras!", "¡Feliz de ayudar! 🙌 Dime si necesitas más información.", "¡Cuando quieras! 😄 ¿Quieres explorar más el portafolio?", "¡Me alegra haber ayudado! 🚀"],
+      ["De rien ! 😊 N'hésitez pas à demander autre chose !", "Ravi d'aider ! 🙌 Dites-moi si vous avez besoin de plus d'infos.", "À tout moment ! 😄 Voulez-vous explorer davantage le portfolio ?", "Content d'avoir pu aider ! 🚀"],
+    ];
+    return replies[idx][Math.floor(Math.random() * replies[idx].length)] || replies[0][0];
   },
 });
 
@@ -371,7 +487,14 @@ addIntent({
   response: () => {
     return __tr(
       "Goodbye! Thanks for visiting the portfolio. Feel free to come back anytime! 👋",
-      "Αντίο! Ευχαριστώ για την επίσκεψη στο portfolio. Μπορείς να επιστρέψεις όποτε θες! 👋"
+      "Αντίο! Ευχαριστώ για την επίσκεψη στο portfolio. Μπορείς να επιστρέψεις όποτε θες! 👋",
+      "Arrivederci! Grazie per aver visitato il portfolio. Torna quando vuoi! 👋",
+      "Hoşça kal! Portfolyoyu ziyaret ettiğin için teşekkürler. İstediğin zaman geri gelebilirsin! 👋",
+      "La revedere! Mulțumesc pentru vizita pe portofoliu. Poți reveni oricând! 👋",
+      "Mirupafshim! Faleminderit që vizituat portofolin. Mund të ktheheni kur të doni! 👋",
+      "Довиждане! Благодаря за посещението на портфолиото. Заповядайте отново по всяко време! 👋",
+      "¡Adiós! Gracias por visitar el portafolio. ¡Vuelve cuando quieras! 👋",
+      "Au revoir ! Merci d'avoir visité le portfolio. Revenez quand vous voulez ! 👋"
     );
   },
 });
@@ -385,10 +508,17 @@ addIntent({
   response: (profile) => {
     const fl = profile.freelance || [];
     const body = fl.map(p => `▸ **[${p.project}]** — ${p.period}\n  ${p.description.split('.')[0]}.\n  _${p.tech.join(', ')}_`).join('\n\n');
-    const footer = __tr('\n\nWant pricing details? Ask about "Pricing"!', '\n\nΘέλεις λεπτομέρειες τιμολόγησης; Ρώτα "Pricing"!');
+    const footer = __tr('\n\nWant pricing details? Ask about "Pricing"!', '\n\nΘέλεις λεπτομέρειες τιμολόγησης; Ρώτα "Pricing"!', '\n\nVuoi dettagli sui prezzi? Chiedi "Pricing"!', '\n\nFiyatlandırma detayları mı istiyorsun? "Pricing" diye sor!', '\n\nVrei detalii prețuri? Întreabă "Pricing"!', '\n\nDëshironi detaje çmimesh? Pyetni "Pricing"!', '\n\nИскате подробности за цените? Попитайте "Pricing"!', '\n\n¿Quieres detalles de precios? ¡Pregunta "Pricing"!', '\n\nVous voulez des détails sur les prix ? Demandez "Pricing" !');
     return __tr(
       `**Freelance Projects** (${fl.length} total):\n\n${body}${footer}`,
-      `**Freelance Projects** (σύνολο ${fl.length}):\n\n${body}${footer}`
+      `**Freelance Projects** (σύνολο ${fl.length}):\n\n${body}${footer}`,
+      `**Progetti Freelance** (${fl.length} totali):\n\n${body}${footer}`,
+      `**Freelance Projeler** (toplam ${fl.length}):\n\n${body}${footer}`,
+      `**Proiecte Freelance** (${fl.length} total):\n\n${body}${footer}`,
+      `**Projekte Freelance** (gjithsej ${fl.length}):\n\n${body}${footer}`,
+      `**Freelance проекти** (общо ${fl.length}):\n\n${body}${footer}`,
+      `**Proyectos Freelance** (${fl.length} total):\n\n${body}${footer}`,
+      `**Projets Freelance** (${fl.length} au total) :\n\n${body}${footer}`
     );
   },
 });
@@ -401,11 +531,18 @@ addIntent({
   priority: 4,
   response: (profile) => {
     const teach = profile.teaching || [];
-    const body = teach.map(t => `▸ **${t.role}**${t.location ? ` @ ${t.location}` : ''}${t.period ? ` (${t.period})` : ''}\n  ${t.description}\n  _${__tr('Subjects', 'Μαθήματα')}: ${t.subjects.join(', ')}_`).join('\n\n');
-    const footer = __tr('\n\n💡 Ask about "Pricing" for tutoring rates!', '\n\n💡 Ρώτα "Pricing" για τιμές μαθημάτων!');
+    const body = teach.map(t => `▸ **${t.role}**${t.location ? ` @ ${t.location}` : ''}${t.period ? ` (${t.period})` : ''}\n  ${t.description}\n  _${__tr('Subjects', 'Μαθήματα', 'Materie', 'Dersler', 'Materii', 'Lëndët', 'Предмети', 'Materias', 'Matières')}: ${t.subjects.join(', ')}_`).join('\n\n');
+    const footer = __tr('\n\n💡 Ask about "Pricing" for tutoring rates!', '\n\n💡 Ρώτα "Pricing" για τιμές μαθημάτων!', '\n\n💡 Chiedi "Pricing" per le tariffe di tutoraggio!', '\n\n💡 Ders ücretleri için "Pricing" sor!', '\n\n💡 Întreabă "Pricing" pentru tarifele de tutorat!', '\n\n💡 Pyetni "Pricing" për tarifat e tutorimit!', '\n\n💡 Попитайте "Pricing" за тарифите за уроци!', '\n\n💡 ¡Pregunta "Pricing" por las tarifas de tutoría!', '\n\n💡 Demandez "Pricing" pour les tarifs de tutorat !');
     return __tr(
       `**Teaching & Tutoring Experience**\n\n${body}${footer}`,
-      `**Διδασκαλία & Φροντιστήριο**\n\n${body}${footer}`
+      `**Διδασκαλία & Φροντιστήριο**\n\n${body}${footer}`,
+      `**Esperienza di Insegnamento e Tutoraggio**\n\n${body}${footer}`,
+      `**Öğretim ve Ders Verme Deneyimi**\n\n${body}${footer}`,
+      `**Experiență de Predare și Tutorat**\n\n${body}${footer}`,
+      `**Përvojë Mësimdhënieje dhe Tutorimi**\n\n${body}${footer}`,
+      `**Опит в преподаването и обучението**\n\n${body}${footer}`,
+      `**Experiencia en Enseñanza y Tutoría**\n\n${body}${footer}`,
+      `**Expérience d'Enseignement et de Tutorat**\n\n${body}${footer}`
     );
   },
 });
@@ -420,11 +557,18 @@ addIntent({
     const svc = profile.pricing.services || [];
     const body = svc.map(s => {
       const basic = s.tiers.find(t => t.name === 'Basic');
-      return `▸ **${s.category}** — ${__tr('from', 'από')} €${basic ? basic.priceEUR : 'varies'}`;
+      return `▸ **${s.category}** — ${__tr('from', 'από', 'da', 'itibaren', 'de la', 'nga', 'от', 'desde', 'à partir de')} €${basic ? basic.priceEUR : 'varies'}`;
     }).join('\n');
     return __tr(
       `**Service Pricing** (EUR — starting prices):\n\n${body}\n\n**Tutoring** (per 1-1.5h session):\n▸ Coding & Programming: €20 remote / €25 in-person\n▸ MS Office, Windows/Linux: €10 remote / €15 in-person\n▸ Video, Image, Sound Editing: €15 remote / €20 in-person\n\n💡 Each service has Basic, Standard, and Premium tiers. Ask about a specific category for details!`,
-      `**Τιμολόγηση Υπηρεσιών** (EUR — αρχικές τιμές):\n\n${body}\n\n**Φροντιστήριο** (ανά 1-1.5 ώρα):\n▸ Coding & Programming: €20 εξ αποστάσεως / €25 δια ζώσης\n▸ MS Office, Windows/Linux: €10 εξ αποστάσεως / €15 δια ζώσης\n▸ Video, Image, Sound Editing: €15 εξ αποστάσεως / €20 δια ζώσης\n\n💡 Κάθε υπηρεσία έχει Basic, Standard και Premium πακέτα. Ρώτα για συγκεκριμένη κατηγορία!`
+      `**Τιμολόγηση Υπηρεσιών** (EUR — αρχικές τιμές):\n\n${body}\n\n**Φροντιστήριο** (ανά 1-1.5 ώρα):\n▸ Coding & Programming: €20 εξ αποστάσεως / €25 δια ζώσης\n▸ MS Office, Windows/Linux: €10 εξ αποστάσεως / €15 δια ζώσης\n▸ Video, Image, Sound Editing: €15 εξ αποστάσεως / €20 δια ζώσης\n\n💡 Κάθε υπηρεσία έχει Basic, Standard και Premium πακέτα. Ρώτα για συγκεκριμένη κατηγορία!`,
+      `**Prezzi dei Servizi** (EUR — prezzi di partenza):\n\n${body}\n\n**Tutoraggio** (per sessione 1-1.5h):\n▸ Coding & Programming: €20 remoto / €25 in presenza\n▸ MS Office, Windows/Linux: €10 remoto / €15 in presenza\n▸ Video, Image, Sound Editing: €15 remoto / €20 in presenza\n\n💡 Ogni servizio ha piani Basic, Standard e Premium. Chiedi una categoria specifica per dettagli!`,
+      `**Hizmet Fiyatlandırması** (EUR — başlangıç fiyatları):\n\n${body}\n\n**Ders** (1-1.5 saatlik oturum başına):\n▸ Kodlama ve Programlama: €20 uzaktan / €25 yüz yüze\n▸ MS Office, Windows/Linux: €10 uzaktan / €15 yüz yüze\n▸ Video, Görüntü, Ses Düzenleme: €15 uzaktan / €20 yüz yüze\n\n💡 Her hizmetin Basic, Standard ve Premium paketleri vardır. Detaylar için belirli bir kategori sorun!`,
+      `**Prețuri Servicii** (EUR — prețuri de pornire):\n\n${body}\n\n**Tutorat** (per sesiune 1-1.5h):\n▸ Coding & Programming: €20 remote / €25 față în față\n▸ MS Office, Windows/Linux: €10 remote / €15 față în față\n▸ Video, Image, Sound Editing: €15 remote / €20 față în față\n\n💡 Fiecare serviciu are niveluri Basic, Standard și Premium. Întreabă o categorie specifică pentru detalii!`,
+      `**Çmimet e Shërbimeve** (EUR — çmimet fillestare):\n\n${body}\n\n**Tutorim** (për seancë 1-1.5 orë):\n▸ Kodim & Programim: €20 në distancë / €25 fizikisht\n▸ MS Office, Windows/Linux: €10 në distancë / €15 fizikisht\n▸ Video, Foto, Zë: €15 në distancë / €20 fizikisht\n\n💡 Çdo shërbim ka paketa Basic, Standard dhe Premium. Pyetni për një kategori specifike!`,
+      `**Цени на услугите** (EUR — начални цени):\n\n${body}\n\n**Обучение** (за сесия 1-1.5ч):\n▸ Програмиране: €20 отдалечено / €25 на място\n▸ MS Office, Windows/Linux: €10 отдалечено / €15 на място\n▸ Видео, Изображения, Звук: €15 отдалечено / €20 на място\n\n💡 Всяка услуга има Basic, Standard и Premium нива. Попитайте за конкретна категория!`,
+      `**Precios de Servicios** (EUR — precios iniciales):\n\n${body}\n\n**Tutoría** (por sesión 1-1.5h):\n▸ Coding & Programming: €20 remoto / €25 presencial\n▸ MS Office, Windows/Linux: €10 remoto / €15 presencial\n▸ Video, Imagen, Sonido: €15 remoto / €20 presencial\n\n💡 Cada servicio tiene niveles Basic, Standard y Premium. ¡Pregunta por una categoría específica para más detalles!`,
+      `**Tarifs des Services** (EUR — prix de départ) :\n\n${body}\n\n**Tutorat** (par séance 1-1.5h) :\n▸ Codage & Programmation : 20€ à distance / 25€ en présentiel\n▸ MS Office, Windows/Linux : 10€ à distance / 15€ en présentiel\n▸ Montage Vidéo, Image, Son : 15€ à distance / 20€ en présentiel\n\n💡 Chaque service a des niveaux Basique, Standard et Premium. Demandez une catégorie spécifique pour plus de détails !`
     );
   },
 });
@@ -451,7 +595,7 @@ addIntent({
       matched = svc.find(s => s.category === 'Game Development');
     }
     if (!matched) return null;
-    const title = __tr(`${matched.category} — Pricing Details`, `${matched.category} — Λεπτομέρειες Τιμολόγησης`);
+    const title = __tr(`${matched.category} — Pricing Details`, `${matched.category} — Λεπτομέρειες Τιμολόγησης`, `${matched.category} — Dettagli Prezzi`, `${matched.category} — Fiyatlandırma Detayları`, `${matched.category} — Detalii Prețuri`, `${matched.category} — Detaje Çmimesh`, `${matched.category} — Подробности за цените`, `${matched.category} — Detalles de Precios`, `${matched.category} — Détails des Prix`);
     let reply = `**${title}**\n\n${matched.description}\n\n`;
     for (const tier of matched.tiers) {
       reply += `▸ **${tier.name}** — **€${tier.priceEUR}** / \$${tier.priceUSD} / £${tier.priceGBP}\n`;
@@ -471,14 +615,21 @@ addIntent({
   response: (profile) => {
     const games = profile.games || [];
     const body = games.map(g => {
-      const url = g.playUrl ? ` — [${__tr('Play', 'Παίξε')}](${g.playUrl})` : g.link ? ` — [GitHub](${g.link})` : '';
+      const url = g.playUrl ? ` — [${__tr('Play', 'Παίξε', 'Gioca', 'Oyna', 'Joacă', 'Luaj', 'Играй', 'Jugar', 'Jouer')}](${g.playUrl})` : g.link ? ` — [GitHub](${g.link})` : '';
       return `▸ **${g.title}**${url}\n  ${g.description.split('.')[0]}.\n  _${g.tech.join(', ')}_`;
     }).join('\n\n');
     const minigamesCount = games.filter(g => g.playUrl).length;
     const standaloneCount = games.length - minigamesCount;
     return __tr(
       `**🎮 Game Projects** (${games.length} total — ${minigamesCount} minigames + ${standaloneCount} standalone games)\n\n${body}\n\nAll minigames are playable from the Bio Explorer 2D overworld or directly via URL.`,
-      `**🎮 Game Projects** (σύνολο ${games.length} — ${minigamesCount} minigames + ${standaloneCount} standalone games)\n\n${body}\n\nΌλα τα minigames παίζονται από τον Bio Explorer 2D overworld ή απευθείας από URL.`
+      `**🎮 Game Projects** (σύνολο ${games.length} — ${minigamesCount} minigames + ${standaloneCount} standalone games)\n\n${body}\n\nΌλα τα minigames παίζονται από τον Bio Explorer 2D overworld ή απευθείας από URL.`,
+      `**🎮 Progetti di Giochi** (${games.length} totali — ${minigamesCount} minigiochi + ${standaloneCount} giochi autonomi)\n\n${body}\n\nTutti i minigiochi sono giocabili dal mondo Bio Explorer 2D o direttamente via URL.`,
+      `**🎮 Oyun Projeleri** (toplam ${games.length} — ${minigamesCount} minigames + ${standaloneCount} bağımsız oyun)\n\n${body}\n\nTüm minigames, Bio Explorer 2D dünyasından veya doğrudan URL üzerinden oynanabilir.`,
+      `**🎮 Proiecte Jocuri** (${games.length} total — ${minigamesCount} minigames + ${standaloneCount} jocuri standalone)\n\n${body}\n\nToate minigames-urile sunt jucabile din lumea Bio Explorer 2D sau direct prin URL.`,
+      `**🎮 Projekte Lojërash** (gjithsej ${games.length} — ${minigamesCount} minigame + ${standaloneCount} lojëra standalone)\n\n${body}\n\nTë gjitha minigames janë të luajtshme nga Bio Explorer 2D ose direkt përmes URL.`,
+      `**🎮 Игрови проекти** (общо ${games.length} — ${minigamesCount} мини-игри + ${standaloneCount} самостоятелни игри)\n\n${body}\n\nВсички мини-игри се играят от Bio Explorer 2D свят или директно чрез URL.`,
+      `**🎮 Proyectos de Juegos** (${games.length} total — ${minigamesCount} minijuegos + ${standaloneCount} juegos independientes)\n\n${body}\n\nTodos los minijuegos se pueden jugar desde el mundo Bio Explorer 2D o directamente desde URL.`,
+      `**🎮 Projets de Jeux** (${games.length} au total — ${minigamesCount} mini-jeux + ${standaloneCount} jeux autonomes)\n\n${body}\n\nTous les mini-jeux sont jouables depuis le monde Bio Explorer 2D ou directement via URL.`
     );
   },
 });
