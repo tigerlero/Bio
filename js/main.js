@@ -184,37 +184,50 @@ function initSite() {
           cursor.setDate(cursor.getDate() + 1);
           if (cursor > today) break;
         }
-        weeks.push(week);
+        if (week.length > 0) weeks.push(week);
       }
-      var html = '<div class="calendar-header">';
-      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions in the last year</span></div>';
+      var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var cellSize = 10;
+      var gap = 2;
+      var step = cellSize + gap;
+
+      /* header row: total + legend */
+      var html = '<div class="calendar-header" style="margin-bottom:6px;">';
+      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions</span></div>';
       html += '<div class="calendar-legend">Less <span class="calendar-cell level-0"></span><span class="calendar-cell level-1"></span><span class="calendar-cell level-2"></span><span class="calendar-cell level-3"></span><span class="calendar-cell level-4"></span> More</div>';
       html += '</div>';
-      html += '<div class="calendar-month-labels">';
+
+      /* top row: day-of-week labels */
+      html += '<div class="cal-v">';
+      html += '<div class="cal-v-row" style="padding-left:40px;">';
+      for (var d = 0; d < 7; d++) {
+        html += '<div class="cal-v-dow" style="width:' + cellSize + 'px;font-size:7px;text-align:center;color:var(--text-muted);">' + dayNames[d] + '</div>';
+      }
+      html += '</div>';
+
+      /* data rows: month label + 7 cells */
       var lastMonth = -1;
       for (var w = 0; w < weeks.length; w++) {
         var m = new Date(weeks[w][0].date + 'T00:00:00').getMonth();
+        html += '<div class="cal-v-row">';
         if (m !== lastMonth) {
-          html += '<span class="calendar-month-label" style="margin-left:' + (w * 14) + 'px">' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m] + '</span>';
+          html += '<div class="cal-v-month" style="width:38px;font-size:8px;color:var(--text-muted);text-align:right;padding-right:4px;line-height:' + step + 'px;">' + monthNames[m] + '</div>';
           lastMonth = m;
+        } else {
+          html += '<div class="cal-v-month" style="width:38px;"></div>';
         }
-      }
-      html += '</div>';
-      html += '<div class="calendar-body">';
-      html += '<div class="calendar-days"><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span><span></span></div>';
-      html += '<div class="calendar-weeks">';
-      for (var w = 0; w < weeks.length; w++) {
-        html += '<div class="calendar-week">';
-        for (var dd = 0; dd < weeks[w].length; dd++) {
-          var c = weeks[w][dd];
-          html += '<div class="calendar-cell level-' + c.level + '" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"></div>';
-        }
-        for (var em = weeks[w].length; em < 7; em++) {
-          html += '<div style="width:12px;height:12px;"></div>';
+        for (var dd = 0; dd < 7; dd++) {
+          if (dd < weeks[w].length) {
+            var c = weeks[w][dd];
+            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"></div>';
+          } else {
+            html += '<div style="width:' + cellSize + 'px;height:' + cellSize + 'px;"></div>';
+          }
         }
         html += '</div>';
       }
-      html += '</div></div>';
+      html += '</div>';
       container.innerHTML = html;
     }
 
