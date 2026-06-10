@@ -6,14 +6,14 @@ const LANES = [-22, 0, 22];
 const SPAWN_Z = -200;
 const DESPAWN_Z = 35;
 const ROAD_W = 72;
-const ROAD_L = 250;
+const ROAD_L = 5000;
 const BASE_SPEED = 18;
 const MAX_SPEED = 70;
 const ACCEL = 1.8;
-const LANE_SWITCH_SPEED = 8;
+const LANE_SWITCH_SPEED = 10;
 const PLAYER_Z = 0;
-const PLAYER_Y = 2;
-const BODY_Y_OFFSET = 2;
+const PLAYER_Y = 1;
+const PLAYER_SCALE = 0.35;
 
 const OBS_TYPES = ['bug', 'spaghetti', 'techdebt'] as const;
 const COLL_TYPES = ['clean', 'tests', 'docs'] as const;
@@ -71,6 +71,7 @@ export class EndlessRunnerScene {
   private speedEl!: HTMLDivElement;
   private gameOverEl!: HTMLDivElement;
   private keys: Record<string, boolean> = {};
+  private collectedEffects: { mesh: THREE.Mesh; life: number }[] = [];
 
   constructor(
     renderer: THREE.WebGLRenderer,
@@ -81,30 +82,21 @@ export class EndlessRunnerScene {
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0f0f23);
-    this.scene.fog = new THREE.Fog(0x0f0f23, 80, 250);
+    this.scene.fog = new THREE.Fog(0x0f0f23, 60, 300);
 
-    this.camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 500);
-    this.camera.position.set(0, 20, 38);
-    this.camera.lookAt(0, 0, -30);
+    this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 500);
+    this.camera.position.set(0, 8, 22);
+    this.camera.lookAt(0, 0, -20);
 
     this.buildLighting();
     this.buildRoad();
     this.buildDecor();
-    this.playerGroup = Player.createVisualMesh(this.scene, 0, PLAYER_Z);
+    this.playerGroup = Player.createVisualMesh(this.scene, 0, PLAYER_Z, PLAYER_SCALE);
     this.playerGroup.position.y = PLAYER_Y;
     this.playerGroup.rotation.y = Math.PI;
-    this.findPlayerParts();
     this.buildUI();
     this.setupInput();
     AudioManager.get().playBgm('runner');
-  }
-
-  private findPlayerParts(): void {
-    for (const child of this.playerGroup.children) {
-      if (child instanceof THREE.Mesh && child.position.y >= 6 && child.position.y <= 18) {
-        child.userData.baseY = child.position.y;
-      }
-    }
   }
 
   private buildLighting(): void {
@@ -160,7 +152,7 @@ export class EndlessRunnerScene {
     this.roadTex = new THREE.CanvasTexture(canvas);
     this.roadTex.wrapS = THREE.RepeatWrapping;
     this.roadTex.wrapT = THREE.RepeatWrapping;
-    this.roadTex.repeat.set(1, 4);
+    this.roadTex.repeat.set(1, 30);
 
     const roadGeo = new THREE.PlaneGeometry(ROAD_W, ROAD_L);
     const roadMat = new THREE.MeshStandardMaterial({
@@ -204,7 +196,7 @@ export class EndlessRunnerScene {
     stars.position.z = -30;
     this.scene.add(stars);
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 80; i++) {
       const pillar = new THREE.Mesh(
         new THREE.BoxGeometry(0.5, 2 + Math.random() * 6, 0.5),
         new THREE.MeshStandardMaterial({ color: 0x2244aa, emissive: 0x1122aa, emissiveIntensity: 0.2 }),
@@ -320,6 +312,8 @@ export class EndlessRunnerScene {
     const lean = (this.keys['a'] || this.keys['arrowleft'] ? -1 : 0) + (this.keys['d'] || this.keys['arrowright'] ? 1 : 0);
     this.playerGroup.rotation.z += (lean * 0.08 - this.playerGroup.rotation.z) * Math.min(1, 4 * dt);
 
+    Player.animateLegs(this.playerGroup, this.bobPhase * 1.5);
+
     this.spawnTimer += dt;
     if (this.spawnTimer >= this.spawnInterval) {
       this.spawnTimer = 0;
@@ -329,10 +323,11 @@ export class EndlessRunnerScene {
 
     this.updateObstacles(dt);
     this.updateCollectibles(dt);
+    this.updateEffects(dt);
     this.updateUI();
 
     this.camera.position.x += (this.playerGroup.position.x * 0.3 - this.camera.position.x) * 0.03;
-    this.camera.lookAt(this.playerGroup.position.x * 0.3, 0, -30);
+    this.camera.lookAt(this.playerGroup.position.x * 0.3, 1, -20);
 
     if (this.flashOn) {
       this.flashOn = false;
@@ -473,10 +468,37 @@ export class EndlessRunnerScene {
       if (Math.abs(px - LANES[c.lane]) < 10 && Math.abs(c.z - PLAYER_Z) < 5) {
         this.collect(c.type);
         c.alive = false;
+        this.spawnCollectEffect(LANES[c.lane]);
         c.mesh.parent?.remove(c.mesh);
         c.mesh.geometry.dispose();
         mat.dispose();
         this.collectibles.splice(i, 1);
+      }
+    }
+  }
+
+  private spawnCollectEffect(x: number): void {
+    const geo = new THREE.SphereGeometry(1, 4, 4);
+    const mat = new THREE.MeshBasicMaterial({ color: 0x44ff88, transparent: true, opacity: 0.8 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, 2, PLAYER_Z);
+    this.scene.add(mesh);
+    this.collectedEffects.push({ mesh, life: 0.4 });
+  }
+
+  private updateEffects(dt: number): void {
+    for (let i = this.collectedEffects.length - 1; i >= 0; i--) {
+      const e = this.collectedEffects[i];
+      e.life -= dt;
+      const s = 1 + (0.4 - e.life) * 8;
+      e.mesh.scale.set(s, s, s);
+      (e.mesh.material as THREE.MeshBasicMaterial).opacity = Math.max(0, e.life / 0.4);
+      e.mesh.position.y += dt * 6;
+      if (e.life <= 0) {
+        this.scene.remove(e.mesh);
+        e.mesh.geometry.dispose();
+        (e.mesh.material as THREE.MeshBasicMaterial).dispose();
+        this.collectedEffects.splice(i, 1);
       }
     }
   }
@@ -560,6 +582,12 @@ export class EndlessRunnerScene {
       if (Array.isArray(pmat)) pmat.forEach(m2 => m2.dispose()); else pmat.dispose();
     }
     this.particles = [];
+    for (const e of this.collectedEffects) {
+      this.scene.remove(e.mesh);
+      e.mesh.geometry.dispose();
+      (e.mesh.material as THREE.MeshBasicMaterial).dispose();
+    }
+    this.collectedEffects = [];
     this.scene.traverse((o) => {
       if (o instanceof THREE.Mesh) {
         o.geometry.dispose();

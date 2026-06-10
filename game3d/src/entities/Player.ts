@@ -18,10 +18,12 @@ export class Player {
   private targetRotation = 0;
   private keys: Record<string, boolean> = {};
   private dustTimer = 0;
+  private walkPhase = 0;
 
-  static createVisualMesh(scene: THREE.Scene, x: number, z: number): THREE.Group {
+  static createVisualMesh(scene: THREE.Scene, x: number, z: number, scale = 1): THREE.Group {
     const g = new THREE.Group();
     g.position.set(x, 0, z);
+    g.scale.set(scale, scale, scale);
     g.castShadow = true;
 
     const bodyMat = new THREE.MeshStandardMaterial({ color: 0x3366cc });
@@ -49,16 +51,13 @@ export class Player {
     rArm.castShadow = true;
     g.add(rArm);
 
-    const legGeo = new THREE.CylinderGeometry(2, 2, 12, 6);
-    const lLeg = new THREE.Mesh(legGeo, darkMat);
-    lLeg.position.set(-3, 6, 0);
-    lLeg.castShadow = true;
-    g.add(lLeg);
-
-    const rLeg = new THREE.Mesh(legGeo, darkMat);
-    rLeg.position.set(3, 6, 0);
-    rLeg.castShadow = true;
-    g.add(rLeg);
+    const legData = Player.buildLegs(darkMat);
+    g.add(legData.leftGroup);
+    g.add(legData.rightGroup);
+    g.userData.leftThigh = legData.leftThigh;
+    g.userData.rightThigh = legData.rightThigh;
+    g.userData.leftShin = legData.leftShin;
+    g.userData.rightShin = legData.rightShin;
 
     const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
     const eyeGeo = new THREE.SphereGeometry(1.2, 6, 6);
@@ -78,6 +77,66 @@ export class Player {
 
     scene.add(g);
     return g;
+  }
+
+  private static buildLegs(mat: THREE.Material) {
+    const thighGeo = new THREE.CylinderGeometry(2, 2, 6, 6);
+    const shinGeo = new THREE.CylinderGeometry(1.8, 1.5, 6, 6);
+
+    function makeLeg(xOff: number) {
+      const legGroup = new THREE.Group();
+      legGroup.position.set(xOff, 12, 0);
+
+      const thigh = new THREE.Mesh(thighGeo, mat);
+      thigh.position.set(0, -3, 0);
+      thigh.castShadow = true;
+      legGroup.add(thigh);
+
+      const shinGroup = new THREE.Group();
+      shinGroup.position.set(0, -6, 0);
+
+      const shin = new THREE.Mesh(shinGeo, mat);
+      shin.position.set(0, -3, 0);
+      shin.castShadow = true;
+      shinGroup.add(shin);
+
+      const foot = new THREE.Mesh(
+        new THREE.BoxGeometry(2.5, 0.8, 4),
+        new THREE.MeshStandardMaterial({ color: 0x1a3366 }),
+      );
+      foot.position.set(0, -6, 1);
+      foot.castShadow = true;
+      shinGroup.add(foot);
+
+      legGroup.add(shinGroup);
+      return { group: legGroup, thigh, shin };
+    }
+
+    const left = makeLeg(-3);
+    const right = makeLeg(3);
+
+    return {
+      leftGroup: left.group, rightGroup: right.group,
+      leftThigh: left.thigh, rightThigh: right.thigh,
+      leftShin: left.shin, rightShin: right.shin,
+    };
+  }
+
+  static animateLegs(group: THREE.Group, phase: number): void {
+    const lt = group.userData.leftThigh;
+    const rt = group.userData.rightThigh;
+    const ls = group.userData.leftShin;
+    const rs = group.userData.rightShin;
+    if (!lt || !rt) return;
+
+    const swing = Math.sin(phase) * 0.5;
+    const leftKnee = Math.max(0, -Math.sin(phase)) * 0.4;
+    const rightKnee = Math.max(0, Math.sin(phase)) * 0.4;
+
+    lt.rotation.x = swing;
+    rt.rotation.x = -swing;
+    if (ls) ls.rotation.x = leftKnee;
+    if (rs) rs.rotation.x = rightKnee;
   }
 
   constructor(private scene: THREE.Scene, spawnX: number, spawnZ: number) {
@@ -140,7 +199,12 @@ export class Player {
         this.dustTimer = 0;
         this.emitDust();
       }
+      this.walkPhase += dt * 8;
+    } else {
+      this.walkPhase += dt * 0.3;
     }
+
+    Player.animateLegs(this.mesh, this.walkPhase);
 
     this.bodyY += 0.03 * this.bobDir;
     if (Math.abs(this.bodyY) > 1.5) this.bobDir *= -1;

@@ -79,7 +79,15 @@ async function boot(): Promise<void> {
   if (loadingEl) loadingEl.style.display = 'flex';
   await new Promise(r => setTimeout(r, 400));
   if (loadingEl) loadingEl.style.display = 'none';
-  startScene('TitleScene');
+
+  const params = new URLSearchParams(window.location.search);
+  const gameParam = params.get('game');
+  if (gameParam === 'runner') {
+    AudioManager.get().init();
+    startScene('EndlessRunnerScene');
+  } else {
+    startScene('TitleScene');
+  }
 }
 
 boot();
