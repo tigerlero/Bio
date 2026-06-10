@@ -80,31 +80,31 @@ export class Player {
   }
 
   private static buildLegs(mat: THREE.Material) {
-    const thighGeo = new THREE.CylinderGeometry(2, 2, 6, 6);
-    const shinGeo = new THREE.CylinderGeometry(1.8, 1.5, 6, 6);
+    const thighGeo = new THREE.CylinderGeometry(2.5, 2.5, 8, 6);
+    const shinGeo = new THREE.CylinderGeometry(2.3, 1.8, 8, 6);
 
     function makeLeg(xOff: number) {
       const legGroup = new THREE.Group();
       legGroup.position.set(xOff, 12, 0);
 
       const thigh = new THREE.Mesh(thighGeo, mat);
-      thigh.position.set(0, -3, 0);
+      thigh.position.set(0, -4, 0);
       thigh.castShadow = true;
       legGroup.add(thigh);
 
       const shinGroup = new THREE.Group();
-      shinGroup.position.set(0, -6, 0);
+      shinGroup.position.set(0, -8, 0);
 
       const shin = new THREE.Mesh(shinGeo, mat);
-      shin.position.set(0, -3, 0);
+      shin.position.set(0, -4, 0);
       shin.castShadow = true;
       shinGroup.add(shin);
 
       const foot = new THREE.Mesh(
-        new THREE.BoxGeometry(2.5, 0.8, 4),
+        new THREE.BoxGeometry(3, 1, 5),
         new THREE.MeshStandardMaterial({ color: 0x1a3366 }),
       );
-      foot.position.set(0, -6, 1);
+      foot.position.set(0, -8, 1);
       foot.castShadow = true;
       shinGroup.add(foot);
 
@@ -112,8 +112,8 @@ export class Player {
       return { group: legGroup, thigh, shin };
     }
 
-    const left = makeLeg(-3);
-    const right = makeLeg(3);
+    const left = makeLeg(-4);
+    const right = makeLeg(4);
 
     return {
       leftGroup: left.group, rightGroup: right.group,

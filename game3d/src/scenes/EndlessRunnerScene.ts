@@ -13,7 +13,7 @@ const ACCEL = 1.8;
 const LANE_SWITCH_SPEED = 10;
 const PLAYER_Z = 0;
 const PLAYER_Y = 1;
-const PLAYER_SCALE = 0.35;
+const PLAYER_SCALE = 0.30;
 
 const OBS_TYPES = ['bug', 'spaghetti', 'techdebt'] as const;
 const COLL_TYPES = ['clean', 'tests', 'docs'] as const;
