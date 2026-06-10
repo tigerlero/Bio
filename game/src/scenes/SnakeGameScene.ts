@@ -139,6 +139,27 @@ export class SnakeGameScene extends Phaser.Scene {
 
     kb.on('keydown-ESC', () => this.returnToWorld());
 
+    // Touch/swipe controls
+    let swipeStartX = 0, swipeStartY = 0;
+    this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
+      swipeStartX = p.x;
+      swipeStartY = p.y;
+    });
+    this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - swipeStartX;
+      const dy = p.y - swipeStartY;
+      const adx = Math.abs(dx);
+      const ady = Math.abs(dy);
+      if (adx < 10 && ady < 10) return;
+      if (adx > ady) {
+        if (dx > 0 && this.direction.x !== -1) this.nextDir = { x: 1, y: 0 };
+        else if (dx < 0 && this.direction.x !== 1) this.nextDir = { x: -1, y: 0 };
+      } else {
+        if (dy > 0 && this.direction.y !== -1) this.nextDir = { x: 0, y: 1 };
+        else if (dy < 0 && this.direction.y !== 1) this.nextDir = { x: 0, y: -1 };
+      }
+    });
+
     this.spawnFood();
     this.renderUI();
   }

@@ -69,6 +69,7 @@ export class DevMarioScene extends Phaser.Scene {
   private exitPipePos: { x: number; y: number } | null = null;
   private groundPlats: Plat[] = [];
   private floatPlats: Plat[] = [];
+  private touchKeys: Record<string, boolean> = {};
 
   constructor() {
     super({ key: 'DevMarioScene' });
@@ -112,6 +113,10 @@ export class DevMarioScene extends Phaser.Scene {
       stroke: '#000000', strokeThickness: 3,
     }).setDepth(30).setScrollFactor(0);
 
+    this.add.text(400, 590, 'Touch: L/R sides=move | Bottom-center=jump | Interact=above jump', {
+      fontSize: '8px', color: '#555577', fontFamily: 'monospace',
+    }).setOrigin(0.5).setDepth(30).setScrollFactor(0);
+
     const kb = this.input.keyboard!;
     this.cursors = kb.createCursorKeys();
     this.keyW = kb.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -120,6 +125,20 @@ export class DevMarioScene extends Phaser.Scene {
     this.keyD = kb.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.keyE = kb.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     kb.on('keydown-ESC', () => this.returnToWorld());
+
+    // Touch controls
+    this.touchKeys = { left: false, right: false, jump: false, interact: false, prevJump: false };
+    const addTB = (zx: number, zy: number, zw: number, zh: number, key: string) => {
+      const z = this.add.zone(zx, zy, zw, zh).setInteractive().setDepth(40);
+      z.on('pointerdown', () => { this.touchKeys[key] = true; });
+      z.on('pointerup', () => { this.touchKeys[key] = false; });
+      z.on('pointerout', () => { this.touchKeys[key] = false; });
+    };
+    addTB(80, 300, 80, 300, 'left');
+    addTB(720, 300, 80, 300, 'right');
+    addTB(400, 540, 80, 60, 'jump');
+    addTB(400, 450, 80, 50, 'interact');
+
     AudioManager.get().playBgm('mario');
   }
 
@@ -463,20 +482,27 @@ export class DevMarioScene extends Phaser.Scene {
 
   private handleInput(p: Phaser.GameObjects.Rectangle, body: Phaser.Physics.Arcade.Body): void {
     const speed = this.focusMode ? FOCUS_SPEED : MOVE_SPEED;
+    const t = this.touchKeys || {};
     let vx = 0;
-    if (this.keyA.isDown || this.cursors.left.isDown) vx = -speed;
-    else if (this.keyD.isDown || this.cursors.right.isDown) vx = speed;
+    if (this.keyA.isDown || this.cursors.left.isDown || t.left) vx = -speed;
+    else if (this.keyD.isDown || this.cursors.right.isDown || t.right) vx = speed;
     body.setVelocityX(vx);
 
     if (body.blocked.down || body.touching.down) {
+      const tJump = this.touchKeys.jump && !this.touchKeys._jumpPrev;
+      this.touchKeys._jumpPrev = this.touchKeys.jump;
       const jump = Phaser.Input.Keyboard.JustDown(this.cursors.up)
         || Phaser.Input.Keyboard.JustDown(this.keyW)
-        || Phaser.Input.Keyboard.JustDown(this.cursors.space);
+        || Phaser.Input.Keyboard.JustDown(this.cursors.space)
+        || tJump;
       if (jump) { body.setVelocityY(JUMP_VEL); AudioManager.get().playSfx('step'); }
     }
 
+    const tInteract = this.touchKeys.interact && !this.touchKeys._interactPrev;
+    this.touchKeys._interactPrev = this.touchKeys.interact;
+
     if (this.focusMode && this.exitPipePos) {
-      if (Phaser.Input.Keyboard.JustDown(this.keyE)
+      if ((Phaser.Input.Keyboard.JustDown(this.keyE) || tInteract)
         && Phaser.Math.Distance.Between(p.x, p.y, this.exitPipePos.x, this.exitPipePos.y) < 80) {
         this.exitFocusMode();
       }
@@ -486,7 +512,7 @@ export class DevMarioScene extends Phaser.Scene {
       for (let i = 0; i < this.pipes.length; i++) {
         const pipe = this.pipes[i];
         const rimY = pipe.y - 8;
-        if ((Phaser.Input.Keyboard.JustDown(this.keyE) || Phaser.Input.Keyboard.JustDown(this.cursors.down))
+        if ((Phaser.Input.Keyboard.JustDown(this.keyE) || Phaser.Input.Keyboard.JustDown(this.cursors.down) || tInteract)
           && Phaser.Math.Distance.Between(p.x, p.y, pipe.x, rimY) < 65) {
           this.enterFocusMode(i);
           break;

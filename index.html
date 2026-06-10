@@ -40,6 +40,7 @@
     <a href="#projects" class="mobile-link" data-i18n="nav_projects">Projects</a>
     <a href="#education" class="mobile-link" data-i18n="nav_education">Education</a>
     <a href="#teaching" class="mobile-link" data-i18n="nav_teaching">Teaching</a>
+    <a href="#dashboard" class="mobile-link"><i class="fas fa-chart-line"></i> Dashboard</a>
     <a href="pricing.html" class="mobile-link" data-i18n="nav_pricing">Pricing</a>
     <a href="play/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 2D</a>
     <a href="play3d/" class="mobile-link" style="color:var(--accent-purple);font-weight:600;">✦ Bio Explorer 3D</a>
@@ -54,6 +55,7 @@
     <a href="#projects" class="sidebar-item" title="Projects"><i class="fas fa-folder-open"></i><span data-i18n="nav_projects">Projects</span></a>
     <a href="#education" class="sidebar-item" title="Education"><i class="fas fa-graduation-cap"></i><span data-i18n="nav_education">Education</span></a>
     <a href="#teaching" class="sidebar-item" title="Teaching"><i class="fas fa-chalkboard-teacher"></i><span data-i18n="nav_teaching">Teaching</span></a>
+    <a href="#dashboard" class="sidebar-item" title="Dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
     <div class="sidebar-divider"></div>
     <a href="pricing.html" class="sidebar-item" title="Pricing"><i class="fas fa-tag"></i><span data-i18n="nav_pricing">Pricing</span></a>
     <a href="play/" class="sidebar-item" title="Bio Explorer (2D)" style="color:var(--accent-purple);"><i class="fas fa-gamepad"></i><span>✦ Bio Explorer 2D</span></a>
@@ -1071,6 +1073,37 @@
           <div class="card-title" data-i18n="other_1_title">Greek Army — IT Specialist</div>
           <div class="card-desc" data-i18n="other_1_desc">2020–2021 · Server administration, hardware repairs, MS Office support, and logistics IT management.</div>
           <div class="card-tags"><span class="tag">Server Admin</span><span class="tag">Hardware</span><span class="tag">MS Office</span><span class="tag">Logistics</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-tag">// activity</span>
+        <h2 class="section-title">GitHub <span>Dashboard</span></h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dashboard-card reveal">
+          <div class="dashboard-card-header">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Contribution Calendar</span>
+          </div>
+          <div class="contribution-calendar" id="contribution-calendar">
+            <div class="calendar-loading"><i class="fas fa-spinner fa-spin"></i> Loading contribution data...</div>
+          </div>
+        </div>
+        <div class="dashboard-card reveal">
+          <div class="dashboard-card-header">
+            <i class="fas fa-history"></i>
+            <span>Recent Activity</span>
+          </div>
+          <div class="diary-list" id="diary-list">
+            <div class="diary-loading"><i class="fas fa-spinner fa-spin"></i> Loading recent activity...</div>
+          </div>
         </div>
       </div>
     </div>

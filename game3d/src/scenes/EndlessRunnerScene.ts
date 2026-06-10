@@ -72,6 +72,7 @@ export class EndlessRunnerScene {
   private gameOverEl!: HTMLDivElement;
   private keys: Record<string, boolean> = {};
   private collectedEffects: { mesh: THREE.Mesh; life: number }[] = [];
+  private touchLaneQueue: number[] = [];
 
   constructor(
     renderer: THREE.WebGLRenderer,
@@ -244,7 +245,7 @@ export class EndlessRunnerScene {
       position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
       color:#667788;font-size:12px;text-shadow:0 0 6px #000;
     `;
-    hintEl.textContent = '\u2190 \u2192 A/D Switch lanes  |  ESC Exit';
+    hintEl.textContent = '\u2190 \u2192 A/D or tap screen sides to switch lanes  |  ESC Exit';
     this.uiContainer.appendChild(hintEl);
 
     this.gameOverEl = document.createElement('div');
@@ -274,6 +275,34 @@ export class EndlessRunnerScene {
     document.addEventListener('keyup', (e) => {
       this.keys[e.key.toLowerCase()] = false;
     });
+
+    // Touch controls — tap/swipe left/right half of screen to switch lanes
+    let touchStartX = 0;
+    const handlePointer = (clientX: number) => {
+      if (this.gameOver) return;
+      const w = window.innerWidth;
+      let dir = 0;
+      if (clientX < w * 0.4) dir = -1;
+      else if (clientX > w * 0.6) dir = 1;
+      if (dir !== 0) this.touchLaneQueue.push(dir);
+    };
+    this.renderer.domElement.addEventListener('touchstart', (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    this.renderer.domElement.addEventListener('touchend', (e: TouchEvent) => {
+      if (this.gameOver) return;
+      const endX = e.changedTouches[0].clientX;
+      const dx = endX - touchStartX;
+      if (Math.abs(dx) < 30) {
+        handlePointer(endX);
+      } else {
+        if (dx < -30) this.touchLaneQueue.push(-1);
+        else if (dx > 30) this.touchLaneQueue.push(1);
+      }
+    }, { passive: true });
+    this.renderer.domElement.addEventListener('click', (e: MouseEvent) => {
+      handlePointer(e.clientX);
+    });
   }
 
   update(dt: number): void {
@@ -296,6 +325,11 @@ export class EndlessRunnerScene {
         this.currentLane = Math.min(2, this.currentLane + 1);
         this.laneCooldown = 0.15;
       }
+    }
+    if (this.touchLaneQueue.length > 0 && this.laneCooldown <= 0) {
+      const dir = this.touchLaneQueue.shift()!;
+      this.currentLane = Math.max(0, Math.min(2, this.currentLane + dir));
+      this.laneCooldown = 0.15;
     }
     this.targetX = LANES[this.currentLane];
 

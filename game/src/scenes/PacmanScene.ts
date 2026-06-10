@@ -189,6 +189,27 @@ export class PacmanScene extends Phaser.Scene {
     this.escKey = kb.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     kb.on('keydown-ESC', () => this.returnToWorld());
 
+    // Touch/swipe controls
+    let swipeStartX = 0, swipeStartY = 0;
+    this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
+      swipeStartX = p.x;
+      swipeStartY = p.y;
+    });
+    this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - swipeStartX;
+      const dy = p.y - swipeStartY;
+      const adx = Math.abs(dx);
+      const ady = Math.abs(dy);
+      if (adx < 10 && ady < 10) return;
+      if (adx > ady) {
+        if (dx > 0) this.nextDir = { x: 1, y: 0 };
+        else if (dx < 0) this.nextDir = { x: -1, y: 0 };
+      } else {
+        if (dy > 0) this.nextDir = { x: 0, y: 1 };
+        else if (dy < 0) this.nextDir = { x: 0, y: -1 };
+      }
+    });
+
     this.uiText = this.add.text(GRID_X, 8, '', {
       fontSize: '12px', color: '#aaaacc', fontFamily: 'monospace',
     }).setDepth(10);

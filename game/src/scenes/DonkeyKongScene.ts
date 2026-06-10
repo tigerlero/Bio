@@ -82,6 +82,7 @@ export class DonkeyKongScene extends Phaser.Scene {
   private coffeeTimer = 0;
   private coffeeSpawnTimer = 12000;
   private currentCoffee: CoffeeObj | null = null;
+  private touchKeys: Record<string, boolean> = {};
 
   constructor() {
     super({ key: 'DonkeyKongScene' });
@@ -117,6 +118,20 @@ export class DonkeyKongScene extends Phaser.Scene {
     this.keyS = kb.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = kb.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     kb.on('keydown-ESC', () => this.returnToWorld());
+
+    // Touch controls
+    this.touchKeys = { left: false, right: false, up: false, down: false, jump: false };
+    const addTouchBtn = (zoneX: number, zoneY: number, zoneW: number, zoneH: number, key: string) => {
+      const z = this.add.zone(zoneX, zoneY, zoneW, zoneH).setInteractive().setDepth(40);
+      z.on('pointerdown', () => { this.touchKeys[key] = true; });
+      z.on('pointerup', () => { this.touchKeys[key] = false; });
+      z.on('pointerout', () => { this.touchKeys[key] = false; });
+    };
+    addTouchBtn(60, H - 60, 100, 80, 'left');
+    addTouchBtn(W - 60, H - 60, 100, 80, 'right');
+    addTouchBtn(W / 2, H - 60, 70, 70, 'jump');
+    addTouchBtn(W / 2 - 60, H - 60, 50, 50, 'up');
+    addTouchBtn(W / 2 + 60, H - 60, 50, 50, 'down');
     AudioManager.get().playBgm('dk');
   }
 
@@ -236,6 +251,10 @@ export class DonkeyKongScene extends Phaser.Scene {
       fontSize: '13px', color: '#ffffff', fontFamily: 'monospace', fontStyle: 'bold',
       stroke: '#000000', strokeThickness: 3,
     }).setDepth(30);
+
+    this.add.text(W / 2, H - 6, 'Touch: L/R sides=move | Center=jump | Ladder=up/down', {
+      fontSize: '8px', color: '#555577', fontFamily: 'monospace',
+    }).setOrigin(0.5).setDepth(30);
   }
 
   update(_time: number, delta: number): void {
@@ -257,10 +276,18 @@ export class DonkeyKongScene extends Phaser.Scene {
 
   private handleInput(p: Phaser.GameObjects.Rectangle, body: Phaser.Physics.Arcade.Body, _delta: number): void {
     const onGround = body.blocked.down || body.touching.down;
+    const t = this.touchKeys || {};
+    const justJump = t.jump && !t._jumpPrev;
+    t._jumpPrev = t.jump;
+
+    const cu = this.cursors.up.isDown || this.keyW.isDown || t.up;
+    const cd = this.cursors.down.isDown || this.keyS.isDown || t.down;
+    const cl = this.cursors.left.isDown || this.keyA.isDown || t.left;
+    const cr = this.cursors.right.isDown || this.keyD.isDown || t.right;
 
     if (this.climbing && this.currentLadder) {
-      let climbUp = this.cursors.up.isDown || this.keyW.isDown;
-      let climbDown = this.cursors.down.isDown || this.keyS.isDown;
+      const climbUp = cu;
+      const climbDown = cd;
 
       if (climbUp) {
         body.setVelocityY(-120);
@@ -289,7 +316,7 @@ export class DonkeyKongScene extends Phaser.Scene {
         body.setVelocityX(0);
       }
 
-      const stepOff = this.cursors.left.isDown || this.keyA.isDown || this.cursors.right.isDown || this.keyD.isDown;
+      const stepOff = cl || cr;
       if (!climbUp && !climbDown && stepOff) {
         this.climbing = false;
         this.currentLadder = null;
@@ -301,12 +328,12 @@ export class DonkeyKongScene extends Phaser.Scene {
 
     body.allowGravity = true;
     let vx = 0;
-    if (this.keyA.isDown || this.cursors.left.isDown) vx = -MOVE_SPEED;
-    else if (this.keyD.isDown || this.cursors.right.isDown) vx = MOVE_SPEED;
+    if (cl) vx = -MOVE_SPEED;
+    else if (cr) vx = MOVE_SPEED;
     body.setVelocityX(vx);
 
-    const climbUp = this.cursors.up.isDown || this.keyW.isDown;
-    const climbDown = this.cursors.down.isDown || this.keyS.isDown;
+    const climbUp = cu;
+    const climbDown = cd;
     const climbRequest = climbUp || climbDown;
     if (climbRequest) {
       for (const ladder of this.ladders) {
@@ -325,7 +352,8 @@ export class DonkeyKongScene extends Phaser.Scene {
 
     if (onGround && !this.climbing) {
       const jump = Phaser.Input.Keyboard.JustDown(this.cursors.space)
-        || (Phaser.Input.Keyboard.JustDown(this.cursors.up) && !climbRequest);
+        || (Phaser.Input.Keyboard.JustDown(this.cursors.up) && !climbRequest)
+        || justJump;
       if (jump) {
         body.setVelocityY(JUMP_VEL);
         AudioManager.get().playSfx('step');

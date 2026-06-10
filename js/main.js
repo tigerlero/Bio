@@ -143,4 +143,158 @@ function initSite() {
     });
   })();
 
+  /* ── GITHUB DASHBOARD ── */
+  (function() {
+    var cal = document.getElementById('contribution-calendar');
+    var diary = document.getElementById('diary-list');
+    if (!cal && !diary) return;
+    var USERNAME = 'tigerlero';
+
+    /* contribution calendar */
+    if (cal) {
+      fetch('https://github-contributions-api.jogruber.de/v4/' + USERNAME)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data || !data.contributions) throw new Error('No data');
+          renderCalendar(cal, data);
+        })
+        .catch(function() {
+          cal.innerHTML = '<div class="calendar-loading" style="color:#f87171;"><i class="fas fa-exclamation-triangle"></i> Could not load contribution data. <a href="https://github.com/' + USERNAME + '" target="_blank" style="color:var(--accent-blue);">View on GitHub</a></div>';
+        });
+    }
+
+    function renderCalendar(container, data) {
+      var contribs = data.contributions;
+      var total = contribs.reduce(function(s, c) { return s + c.count; }, 0);
+      var today = new Date();
+      today.setHours(0,0,0,0);
+      var yearAgo = new Date(today);
+      yearAgo.setDate(yearAgo.getDate() - 364);
+      var dayMap = {};
+      for (var i = 0; i < contribs.length; i++) {
+        dayMap[contribs[i].date] = contribs[i];
+      }
+      var weeks = [];
+      var cursor = new Date(yearAgo);
+      while (cursor <= today) {
+        var week = [];
+        for (var d = 0; d < 7; d++) {
+          var ds = cursor.toISOString().slice(0,10);
+          week.push(dayMap[ds] || { date: ds, count: 0, level: 0 });
+          cursor.setDate(cursor.getDate() + 1);
+          if (cursor > today) break;
+        }
+        weeks.push(week);
+      }
+      var html = '<div class="calendar-header">';
+      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions in the last year</span></div>';
+      html += '<div class="calendar-legend">Less <span class="calendar-cell level-0"></span><span class="calendar-cell level-1"></span><span class="calendar-cell level-2"></span><span class="calendar-cell level-3"></span><span class="calendar-cell level-4"></span> More</div>';
+      html += '</div>';
+      html += '<div class="calendar-month-labels">';
+      var lastMonth = -1;
+      for (var w = 0; w < weeks.length; w++) {
+        var m = new Date(weeks[w][0].date + 'T00:00:00').getMonth();
+        if (m !== lastMonth) {
+          html += '<span class="calendar-month-label" style="margin-left:' + (w * 14) + 'px">' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m] + '</span>';
+          lastMonth = m;
+        }
+      }
+      html += '</div>';
+      html += '<div class="calendar-body">';
+      html += '<div class="calendar-days"><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span><span></span></div>';
+      html += '<div class="calendar-weeks">';
+      for (var w = 0; w < weeks.length; w++) {
+        html += '<div class="calendar-week">';
+        for (var dd = 0; dd < weeks[w].length; dd++) {
+          var c = weeks[w][dd];
+          html += '<div class="calendar-cell level-' + c.level + '" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"></div>';
+        }
+        for (var em = weeks[w].length; em < 7; em++) {
+          html += '<div style="width:12px;height:12px;"></div>';
+        }
+        html += '</div>';
+      }
+      html += '</div></div>';
+      container.innerHTML = html;
+    }
+
+    /* diary */
+    if (diary) {
+      fetch('https://api.github.com/users/' + USERNAME + '/events/public')
+        .then(function(r) { return r.json(); })
+        .then(function(events) {
+          if (!events || !events.length) throw new Error('No events');
+          renderDiary(diary, events);
+        })
+        .catch(function() {
+          diary.innerHTML = '<div class="diary-error"><i class="fas fa-exclamation-triangle"></i> Could not load activity.</div>';
+        });
+    }
+
+    function renderDiary(container, events) {
+      var html = '';
+      var maxItems = 15;
+      var count = 0;
+      for (var i = 0; i < events.length && count < maxItems; i++) {
+        var ev = events[i];
+        if (ev.type !== 'PushEvent' && ev.type !== 'CreateEvent' && ev.type !== 'PullRequestEvent' && ev.type !== 'IssuesEvent' && ev.type !== 'WatchEvent' && ev.type !== 'ForkEvent') continue;
+        count++;
+        var repo = ev.repo.name;
+        var typeLabel = ev.type.replace('Event', '');
+        if (typeLabel === 'Push') typeLabel = 'Commit';
+        else if (typeLabel === 'Watch') typeLabel = 'Star';
+        var timeAgo = getTimeAgo(ev.created_at);
+        html += '<div class="diary-item">';
+        html += '<div class="diary-item-header">';
+        html += '<span class="diary-repo">' + repo + '</span>';
+        html += '<span class="diary-type">' + typeLabel + '</span>';
+        html += '<span class="diary-time" title="' + ev.created_at + '">' + timeAgo + '</span>';
+        html += '</div>';
+        if (ev.type === 'PushEvent' && ev.payload.commits && ev.payload.commits.length) {
+          html += '<div class="diary-commits">';
+          var maxCommits = Math.min(ev.payload.commits.length, 3);
+          for (var ci = 0; ci < maxCommits; ci++) {
+            var msg = ev.payload.commits[ci].message.split('\n')[0];
+            if (msg.length > 60) msg = msg.slice(0, 57) + '...';
+            html += '<div class="diary-commit"><i class="fas fa-code-commit"></i> ' + escapeHtml(msg) + '</div>';
+          }
+          if (ev.payload.commits.length > 3) {
+            html += '<div class="diary-commit" style="color:var(--text-muted);font-style:italic;">+ ' + (ev.payload.commits.length - 3) + ' more</div>';
+          }
+          html += '</div>';
+        } else if (ev.type === 'CreateEvent' && ev.payload.ref) {
+          html += '<div class="diary-commits"><div class="diary-commit"><i class="fas fa-code-branch"></i> ' + escapeHtml(ev.payload.ref) + '</div></div>';
+        } else if (ev.type === 'PullRequestEvent') {
+          html += '<div class="diary-commits"><div class="diary-commit"><i class="fas fa-code-pull-request"></i> ' + escapeHtml(ev.payload.action) + ': ' + escapeHtml((ev.payload.pull_request && ev.payload.pull_request.title) || '') + '</div></div>';
+        } else if (ev.type === 'IssuesEvent') {
+          html += '<div class="diary-commits"><div class="diary-commit"><i class="fas fa-circle-exclamation"></i> ' + escapeHtml(ev.payload.action) + ': ' + escapeHtml((ev.payload.issue && ev.payload.issue.title) || '') + '</div></div>';
+        }
+        html += '</div>';
+      }
+      if (!count) {
+        html = '<div class="diary-empty">No recent public activity found.</div>';
+      }
+      html += '<div style="text-align:center;margin-top:0.75rem;"><a href="https://github.com/' + USERNAME + '" target="_blank" class="btn btn-outline" style="display:inline-flex;"><i class="fab fa-github"></i> View full profile</a></div>';
+      container.innerHTML = html;
+    }
+
+    function getTimeAgo(dateStr) {
+      var n = Date.now() - new Date(dateStr).getTime();
+      var mins = Math.floor(n / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return mins + 'm ago';
+      var hrs = Math.floor(mins / 60);
+      if (hrs < 24) return hrs + 'h ago';
+      var days = Math.floor(hrs / 24);
+      if (days < 30) return days + 'd ago';
+      var months = Math.floor(days / 30);
+      return months + 'mo ago';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+  })();
+
 }
