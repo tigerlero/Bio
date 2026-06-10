@@ -169,7 +169,7 @@ function initSite() {
       var today = new Date();
       today.setHours(0,0,0,0);
       var yearAgo = new Date(today);
-      yearAgo.setDate(yearAgo.getDate() - 364);
+      yearAgo.setDate(yearAgo.getDate() - 90);
       var dayMap = {};
       for (var i = 0; i < contribs.length; i++) {
         dayMap[contribs[i].date] = contribs[i];
@@ -188,13 +188,14 @@ function initSite() {
       }
       var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
       var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var cellSize = 80;
+      var avail = container.clientWidth - 52;
+      var cellSize = Math.max(40, Math.floor((avail - 6 * 4) / 7));
       var gap = 4;
       var step = cellSize + gap;
 
       /* header: total + legend */
       var html = '<div class="calendar-header" style="margin-bottom:8px;">';
-      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions in the last year</span></div>';
+      html += '<div class="calendar-stats"><span><strong>' + total + '</strong> contributions in the last 3 months</span></div>';
       html += '<div class="calendar-legend">Less <span class="calendar-cell level-0"></span><span class="calendar-cell level-1"></span><span class="calendar-cell level-2"></span><span class="calendar-cell level-3"></span><span class="calendar-cell level-4"></span> More</div>';
       html += '</div>';
 
@@ -222,7 +223,7 @@ function initSite() {
         for (var dd = 0; dd < 7; dd++) {
           if (dd < weeks[w].length) {
             var c = weeks[w][dd];
-            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"></div>';
+            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;align-items:center;justify-content:center;font-size:' + Math.max(8, Math.min(14, cellSize * 0.16)) + 'px;color:rgba(255,255,255,0.7);font-weight:500;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '">' + (c.count > 0 ? c.count : '') + '</div>';
           } else {
             html += '<div style="width:' + cellSize + 'px;height:' + cellSize + 'px;"></div>';
           }
