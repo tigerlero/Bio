@@ -672,7 +672,7 @@ export class DevMarioScene extends Phaser.Scene {
   private checkBreakBlocks(p: Phaser.GameObjects.Rectangle, body: Phaser.Physics.Arcade.Body): void {
     for (const bb of this.breakBlocks) {
       if (!bb.alive) continue;
-      if (body.velocity.y < 0 && Math.abs(p.x - bb.x) < 24 && p.y > bb.y - 4 && p.y < bb.y + 12) {
+      if (body.velocity.y < 0 && Math.abs(p.x - bb.x) < 24 && p.y > bb.y + 4 && p.y - 13 < bb.y + 10) {
         AudioManager.get().playSfx('step');
         bb.alive = false;
         bb.rect.destroy();
