@@ -165,7 +165,6 @@ function initSite() {
 
     function renderCalendar(container, data) {
       var contribs = data.contributions;
-      var total = contribs.reduce(function(s, c) { return s + c.count; }, 0);
       var today = new Date();
       today.setHours(0,0,0,0);
       var yearAgo = new Date(today);
@@ -186,11 +185,17 @@ function initSite() {
         }
         if (week.length > 0) weeks.push(week);
       }
+      var total = 0;
+      for (var wi = 0; wi < weeks.length; wi++) {
+        for (var di = 0; di < weeks[wi].length; di++) {
+          total += weeks[wi][di].count;
+        }
+      }
       var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
       var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var avail = container.clientWidth - 30;
-      var cellSize = Math.max(14, Math.floor(((avail - 6 * 2) / 7) * 0.5));
-      var gap = 2;
+      var avail = container.clientWidth - 52;
+      var cellSize = Math.max(40, Math.floor((avail - 6 * 4) / 7));
+      var gap = 4;
       var step = cellSize + gap;
 
       /* header: total + legend */
@@ -203,9 +208,9 @@ function initSite() {
       html += '<div class="cal-v">';
 
       /* top row: day-of-week labels (offset for month column) */
-      html += '<div class="cal-v-row" style="padding-left:26px;">';
+      html += '<div class="cal-v-row" style="padding-left:44px;">';
       for (var d = 0; d < 7; d++) {
-        html += '<div style="width:' + cellSize + 'px;font-size:7px;text-align:center;color:var(--text-muted);font-weight:500;">' + dayNames[d] + '</div>';
+        html += '<div style="width:' + cellSize + 'px;font-size:11px;text-align:center;color:var(--text-muted);font-weight:500;">' + dayNames[d] + '</div>';
       }
       html += '</div>';
 
@@ -215,15 +220,15 @@ function initSite() {
         var m = new Date(weeks[w][0].date + 'T00:00:00').getMonth();
         html += '<div class="cal-v-row" style="gap:' + gap + 'px;">';
         if (m !== lastMonth) {
-          html += '<div style="width:22px;font-size:7px;color:var(--text-muted);text-align:right;padding-right:3px;line-height:' + step + 'px;font-weight:500;">' + monthNames[m] + '</div>';
+          html += '<div style="width:40px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:4px;line-height:' + step + 'px;font-weight:500;">' + monthNames[m] + '</div>';
           lastMonth = m;
         } else {
-          html += '<div style="width:22px;"></div>';
+          html += '<div style="width:40px;"></div>';
         }
         for (var dd = 0; dd < 7; dd++) {
           if (dd < weeks[w].length) {
             var c = weeks[w][dd];
-            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + Math.max(6, Math.min(10, cellSize * 0.22)) + 'px;line-height:1.1;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"><div style="color:rgba(255,255,255,0.85);font-weight:600;">' + parseInt(c.date.slice(8)) + '</div><div style="color:rgba(255,255,255,0.5);font-size:' + Math.max(5, Math.min(8, cellSize * 0.16)) + 'px;">' + c.count + '</div></div>';
+            html += '<div class="calendar-cell level-' + c.level + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:' + Math.max(8, Math.min(14, cellSize * 0.16)) + 'px;line-height:1.1;" title="' + c.date + ': ' + c.count + ' contribution' + (c.count !== 1 ? 's' : '') + '"><div style="color:rgba(255,255,255,0.85);font-weight:600;">' + parseInt(c.date.slice(8)) + '</div><div style="color:rgba(255,255,255,0.5);font-size:' + Math.max(6, Math.min(11, cellSize * 0.12)) + 'px;">' + c.count + '</div></div>';
           } else {
             html += '<div style="width:' + cellSize + 'px;height:' + cellSize + 'px;"></div>';
           }

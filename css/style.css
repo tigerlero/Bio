@@ -1470,8 +1470,8 @@ footer {
   color: var(--text-muted);
 }
 .calendar-legend .calendar-cell {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
 }
 
 #dashboard .section-inner {
