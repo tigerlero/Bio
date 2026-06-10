@@ -1471,8 +1471,8 @@ footer {
   color: var(--text-muted);
 }
 .calendar-legend .calendar-cell {
-  width: 9px;
-  height: 9px;
+  width: 16px;
+  height: 16px;
 }
 
 #dashboard .section-inner {
