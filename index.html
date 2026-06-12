@@ -16,17 +16,23 @@
   <!-- NAVBAR -->
   <nav id="navbar">
     <a href="#hero" class="nav-logo">PANAGIOTIS EFSTATHIADIS</a>
-    <select id="lang-switcher" class="lang-switcher" aria-label="Language">
-      <option value="en">🇬🇧</option>
-      <option value="el">🇬🇷</option>
-      <option value="it">🇮🇹</option>
-      <option value="tr">🇹🇷</option>
-      <option value="ro">🇷🇴</option>
-      <option value="sq">🇦🇱</option>
-      <option value="bg">🇧🇬</option>
-      <option value="es">🇪🇸</option>
-      <option value="fr">🇫🇷</option>
-    </select>
+    <div class="lang-wrap" id="lang-wrap">
+      <button class="lang-btn" id="lang-btn">
+        <img class="lang-current-flag" src="https://flagcdn.com/w20/gb.png" width="20" height="15" alt="en">
+        <svg class="lang-arrow" width="10" height="6" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z" fill="#00d4ff"/></svg>
+      </button>
+      <div class="lang-dd" id="lang-dd">
+        <a data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="20" height="15" alt=""> EN</a>
+        <a data-lang="el"><img src="https://flagcdn.com/w20/gr.png" width="20" height="15" alt=""> EL</a>
+        <a data-lang="it"><img src="https://flagcdn.com/w20/it.png" width="20" height="15" alt=""> IT</a>
+        <a data-lang="tr"><img src="https://flagcdn.com/w20/tr.png" width="20" height="15" alt=""> TR</a>
+        <a data-lang="ro"><img src="https://flagcdn.com/w20/ro.png" width="20" height="15" alt=""> RO</a>
+        <a data-lang="sq"><img src="https://flagcdn.com/w20/al.png" width="20" height="15" alt=""> SQ</a>
+        <a data-lang="bg"><img src="https://flagcdn.com/w20/bg.png" width="20" height="15" alt=""> BG</a>
+        <a data-lang="es"><img src="https://flagcdn.com/w20/es.png" width="20" height="15" alt=""> ES</a>
+        <a data-lang="fr"><img src="https://flagcdn.com/w20/fr.png" width="20" height="15" alt=""> FR</a>
+      </div>
+    </div>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -1140,13 +1146,26 @@
     initSite();
     translatePage(localStorage.getItem('lang') || 'en');
     (function(){
-      var s = document.getElementById('lang-switcher');
-      if (s) {
-        s.value = localStorage.getItem('lang') || 'en';
-        s.addEventListener('change', function() {
-          if (window.translatePage) window.translatePage(this.value);
+      var w = document.getElementById('lang-wrap');
+      if (!w) return;
+      var btn = document.getElementById('lang-btn');
+      var dd = document.getElementById('lang-dd');
+      var flag = w.querySelector('.lang-current-flag');
+      var cur = localStorage.getItem('lang') || 'en';
+      var map = {en:'gb',el:'gr',it:'it',tr:'tr',ro:'ro',sq:'al',bg:'bg',es:'es',fr:'fr'};
+      flag.src = 'https://flagcdn.com/w20/' + (map[cur]||'gb') + '.png';
+      flag.alt = cur;
+      btn.addEventListener('click', function(e) { e.stopPropagation(); dd.classList.toggle('open'); });
+      dd.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          var l = this.getAttribute('data-lang');
+          flag.src = 'https://flagcdn.com/w20/' + (map[l]||'gb') + '.png';
+          flag.alt = l;
+          dd.classList.remove('open');
+          if (window.translatePage) window.translatePage(l);
         });
-      }
+      });
+      document.addEventListener('click', function() { dd.classList.remove('open'); });
     })();
   </script>
 

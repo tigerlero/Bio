@@ -44,7 +44,7 @@ nav.scrolled { padding: 0.5rem 1.5rem; }
   text-decoration: none;
   white-space: nowrap;
 }
-#lang-switcher {
+#navbar .lang-wrap {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -143,6 +143,62 @@ nav.scrolled { padding: 0.5rem 1.5rem; }
   background: rgba(10,10,15,0.98);
   color: var(--text);
 }
+
+/* ── CUSTOM FLAG DROPDOWN ── */
+.lang-wrap {
+  position: relative;
+  display: inline-block;
+}
+.lang-btn {
+  background: rgba(10,10,15,0.9);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s;
+  outline: none;
+  line-height: 1;
+}
+.lang-btn:hover {
+  border-color: var(--accent-blue);
+  box-shadow: var(--glow-blue);
+}
+.lang-btn img { display: block; }
+.lang-arrow {
+  width: 10px; height: 6px;
+  flex-shrink: 0;
+}
+.lang-dd {
+  display: none;
+  position: absolute;
+  top: 100%; right: 0;
+  margin-top: 4px;
+  background: rgba(10,10,15,0.98);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 110px;
+}
+.lang-dd.open { display: block; }
+.lang-dd a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.6rem;
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.lang-dd a:hover { background: rgba(0,212,255,0.1); }
+.lang-dd a img { width: 20px; height: 15px; }
 
 /* ── HERO ── */
 #hero {
