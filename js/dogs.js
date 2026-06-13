@@ -36,17 +36,17 @@
       // sleeping pose
       cx.globalAlpha=0.25;
       // curled body
-      cx.beginPath(); cx.ellipse(0,0,s*0.4,s*0.2,0,0,Math.PI*2); cx.stroke();
+      cx.beginPath(); cx.ellipse(0,0,s*0.3,s*0.15,0,0,Math.PI*2); cx.stroke();
       // tucked head
-      var shx=s*0.3, shy=-s*0.1;
-      cx.beginPath(); cx.ellipse(shx,shy,s*0.16,s*0.18,0.3,0,Math.PI*2); cx.stroke();
-      cx.beginPath(); cx.ellipse(shx+s*0.08,shy+s*0.02,s*0.1,s*0.07,0,0,Math.PI*2); cx.stroke();
+      var shx=s*0.22, shy=-s*0.08;
+      cx.beginPath(); cx.ellipse(shx,shy,s*0.12,s*0.14,0.3,0,Math.PI*2); cx.stroke();
+      cx.beginPath(); cx.ellipse(shx+s*0.06,shy+s*0.02,s*0.08,s*0.05,0,0,Math.PI*2); cx.stroke();
       // closed eye
       cx.fillStyle=LINE; cx.globalAlpha=0.3;
-      cx.beginPath(); cx.arc(shx+s*0.04,shy-0.02*s,s*0.02,0,Math.PI*2); cx.fill();
+      cx.beginPath(); cx.arc(shx+s*0.03,shy-0.02*s,s*0.015,0,Math.PI*2); cx.fill();
       // zzz
       cx.globalAlpha=0.5 + Math.sin(time*4)*0.2; cx.font='bold 16px monospace'; cx.textAlign='center';
-      cx.fillStyle=LINE; cx.fillText('Z z z', s*0.06, -s*0.55 - Math.sin(time*3)*s*0.05);
+      cx.fillStyle=LINE; cx.fillText('Z z z', s*0.08, -s*0.3 - Math.sin(time*3)*s*0.05);
       cx.restore(); return;
     }
     // tail
@@ -105,12 +105,14 @@
       cx.translate(hx, hy);
       cx.strokeStyle = LINE; cx.lineWidth = 2; cx.globalAlpha = 0.3;
       // roof (shorter)
-      cx.beginPath(); cx.moveTo(-hw*0.55, 0); cx.lineTo(0, -hh*0.35); cx.lineTo(hw*0.55, 0); cx.closePath(); cx.stroke();
-      // base (taller)
-      cx.strokeRect(-hw*0.55, 0, hw*1.1, hh*0.5);
-      // door
-      cx.globalAlpha = 0.2; cx.strokeRect(-6, hh*0.2, 12, hh*0.3);
-      cx.globalAlpha = 0.15; cx.beginPath(); cx.arc(4, hh*0.33, 2, 0, Math.PI*2); cx.fill();
+      cx.beginPath(); cx.moveTo(-hw*0.55, 0); cx.lineTo(0, -hh*0.35); cx.lineTo(hw*0.55, 0); cx.stroke();
+      // base (taller, no top line)
+      cx.beginPath(); cx.moveTo(-hw*0.55, 0); cx.lineTo(-hw*0.55, hh*0.5); cx.lineTo(hw*0.55, hh*0.5); cx.lineTo(hw*0.55, 0); cx.stroke();
+      // door (arched, wide, full height)
+      var dw = 10, dTop = hh*0.06, dBot = hh*0.5;
+      cx.globalAlpha = 0.2;
+      cx.beginPath(); cx.moveTo(-dw, dBot); cx.lineTo(-dw, dTop); cx.arc(0, dTop, dw, Math.PI, 0); cx.lineTo(dw, dBot); cx.closePath(); cx.stroke();
+      cx.globalAlpha = 0.15; cx.beginPath(); cx.arc(dw*0.4, dBot-4, 2, 0, Math.PI*2); cx.fill();
       // initial
       cx.globalAlpha = 0.4; cx.font = 'bold 24px monospace'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
       cx.fillStyle = LINE; cx.fillText(dogs[hi].nm[0], 0, -hh*0.18);
@@ -154,7 +156,7 @@
     var ty = ball.a ? ball.y : Math.min(m.y, H-20);
     dogs.forEach(function(d){
       var targetX = tx, targetY = ty;
-      if (d.resting) { var si = dogs.indexOf(d); targetX = W - 60; targetY = 110 + si * 70; }
+      if (d.resting) { var si = dogs.indexOf(d); targetX = W - 60; targetY = 110 + si * 70 + 14; }
       var dx = targetX - d.x, dy = targetY - d.y, dist = Math.sqrt(dx*dx + dy*dy);
       if (dist > 15) { var sp = d.sp * 2.0; d.vx += dx/dist*sp*0.08; d.vy += dy/dist*sp*0.08; }
       // avoid hero button zone (center-top, not overlapping houses on the right)
