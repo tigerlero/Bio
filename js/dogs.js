@@ -1,6 +1,7 @@
 (function(){
   var c = document.getElementById('dogsCanvas');
   if (!c) return;
+  if (window.innerWidth <= 768) { c.remove(); return; }
   var cx = c.getContext('2d');
   var W, H, LINE = '#00d4ff';
 

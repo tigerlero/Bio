@@ -45,9 +45,7 @@ nav.scrolled { padding: 0.5rem 1.5rem; }
   white-space: nowrap;
 }
 #navbar .lang-wrap {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-left: auto;
 }
 
 /* ── SIDEBAR ── */
@@ -100,6 +98,7 @@ nav.scrolled { padding: 0.5rem 1.5rem; }
   border-bottom: 1px solid var(--border);
   padding: 1.5rem 2rem; z-index: 999;
   flex-direction: column; gap: 1.2rem;
+  max-height: calc(100vh - 60px); overflow-y: auto;
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a {
@@ -1180,10 +1179,11 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .sidebar { display: none; }
-  body { padding-left: 0; }
-  nav { left: 0; }
-  .hamburger { display: flex; }
+    .sidebar { display: none; }
+    body { padding-left: 0; }
+    nav { left: 0; padding-right: 0.5rem; }
+    .hamburger { display: flex; }
+    #navbar .lang-wrap { margin-right: 0.25rem; }
   .timeline::before { left: 20px; }
   .timeline-item, .timeline-item:nth-child(odd) { flex-direction: column; }
   .timeline-item:nth-child(odd) .timeline-card,
@@ -1198,6 +1198,9 @@ footer {
   .hero-name { font-size: 1.8rem; }
   .cards-grid { grid-template-columns: 1fr; }
   .project-gallery { grid-template-columns: 1fr; }
+}
+@media (max-width: 400px) {
+  .nav-logo { font-size: 0.65rem; letter-spacing: 1px; }
 }
 
 /* ── DETAIL PAGE GALLERY ── */
