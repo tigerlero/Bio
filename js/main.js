@@ -6,12 +6,13 @@ function initSite() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let W, H, particles = [];
-    const COUNT = 90;
-    const MAX_DIST = 130;
+    const COUNT = 120;
+    const MAX_DIST = 140;
 
     function resize() {
       W = canvas.width = window.innerWidth;
       H = canvas.height = window.innerHeight;
+      particles.forEach(function(p){ p.x = Math.random()*W; p.y = Math.random()*H; });
     }
     window.addEventListener('resize', resize);
     resize();
