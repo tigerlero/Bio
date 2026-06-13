@@ -1297,6 +1297,10 @@ class ProfileLoader {
    */
   async load() {
     if (this.cached) return this.cached;
+    if (window.__CHAT_PROFILE_DATA) {
+      this.cached = window.__CHAT_PROFILE_DATA;
+      return this.cached;
+    }
     try {
       const res = await fetch(CONFIG.PROFILE_PATH);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
