@@ -151,8 +151,8 @@
       if (d.resting) { var si = dogs.indexOf(d); targetX = W - 60; targetY = 110 + si * 70; }
       var dx = targetX - d.x, dy = targetY - d.y, dist = Math.sqrt(dx*dx + dy*dy);
       if (dist > 15) { var sp = d.sp * 2.0; d.vx += dx/dist*sp*0.08; d.vy += dy/dist*sp*0.08; }
-      // avoid hero button zone (center-top)
-      var hz = { x:W/2, y:Math.min(H*0.3,350), w:W*0.55, h:200 };
+      // avoid hero button zone (center-top, not overlapping houses on the right)
+      var hz = { x:W*0.45, y:Math.min(H*0.3,350), w:W*0.3, h:200 };
       if (Math.abs(d.x - hz.x) < hz.w && Math.abs(d.y - hz.y) < hz.h) {
         var px = d.x - hz.x, py = d.y - hz.y, pd = Math.sqrt(px*px+py*py)||1;
         d.vx += px/pd*1.2; d.vy += py/pd*1.2;
