@@ -60,7 +60,7 @@
     cx.strokeRect(s*0.15,s*0.3+sw,s*0.09,s*0.3); cx.beginPath(); cx.ellipse(s*0.195,s*0.6+sw,s*0.06,s*0.03,0,0,Math.PI*2); cx.stroke();
     cx.strokeRect(s*0.35,s*0.3-sw,s*0.09,s*0.3); cx.beginPath(); cx.ellipse(s*0.395,s*0.6-sw,s*0.06,s*0.03,0,0,Math.PI*2); cx.stroke();
     // neck
-    cx.beginPath(); cx.ellipse(s*0.38,-s*0.05,s*0.2,s*0.22,0,0,Math.PI*2); cx.stroke();
+    cx.beginPath(); cx.ellipse(s*0.38,-s*0.05,s*0.14,s*0.16,0,0,Math.PI*2); cx.stroke();
     // head
     var hx=s*0.55, hy=-s*0.18;
     cx.beginPath(); cx.ellipse(hx,hy,s*0.22,s*0.25,0,0,Math.PI*2); cx.stroke();
@@ -100,14 +100,20 @@
 
   function drawHouses() {
     for (var hi = 0; hi < dogs.length; hi++) {
-      var hx = W - 60, hy = 110 + hi * 70, hw = 44, hh = 46;
+      var hx = W - 60, hy = 110 + hi * 70, hw = 48, hh = 54;
       cx.save();
       cx.translate(hx, hy);
       cx.strokeStyle = LINE; cx.lineWidth = 2; cx.globalAlpha = 0.3;
-      cx.beginPath(); cx.moveTo(-hw*0.55, 0); cx.lineTo(0, -hh*0.6); cx.lineTo(hw*0.55, 0); cx.closePath(); cx.stroke();
-      cx.strokeRect(-hw*0.55, 0, hw*1.1, hh*0.4);
+      // roof (shorter)
+      cx.beginPath(); cx.moveTo(-hw*0.55, 0); cx.lineTo(0, -hh*0.35); cx.lineTo(hw*0.55, 0); cx.closePath(); cx.stroke();
+      // base (taller)
+      cx.strokeRect(-hw*0.55, 0, hw*1.1, hh*0.5);
+      // door
+      cx.globalAlpha = 0.2; cx.strokeRect(-6, hh*0.2, 12, hh*0.3);
+      cx.globalAlpha = 0.15; cx.beginPath(); cx.arc(4, hh*0.33, 2, 0, Math.PI*2); cx.fill();
+      // initial
       cx.globalAlpha = 0.4; cx.font = 'bold 24px monospace'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-      cx.fillStyle = LINE; cx.fillText(dogs[hi].nm[0], 0, -hh*0.3);
+      cx.fillStyle = LINE; cx.fillText(dogs[hi].nm[0], 0, -hh*0.18);
       cx.restore();
     }
   }
