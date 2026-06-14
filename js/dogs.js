@@ -15,11 +15,12 @@
   window.addEventListener('resize', resize);
 
   var dogs = [
-    { x:W*0.2,y:H*0.75,vx:0,vy:0,s:1.0,er:'p',nm:'Onar',sp:1.2,ears:'black',pet:0,resting:true },
-    { x:W*0.4,y:H*0.78,vx:0,vy:0,s:0.9,er:'f',nm:'Goldie',sp:1.0,pet:0,resting:true },
-    { x:W*0.6,y:H*0.76,vx:0,vy:0,s:0.75,er:'p',nm:'Reggie',sp:1.5,pet:0,resting:true },
-    { x:W*0.8,y:H*0.8,vx:0,vy:0,s:0.5,er:'f',nm:'Luna',sp:2.0,pet:0,resting:true }
+    { x:0,y:0,vx:0,vy:0,s:1.0,er:'p',nm:'Onar',sp:1.2,ears:'black',pet:0,resting:true },
+    { x:0,y:0,vx:0,vy:0,s:0.9,er:'f',nm:'Goldie',sp:1.0,pet:0,resting:true },
+    { x:0,y:0,vx:0,vy:0,s:0.75,er:'p',nm:'Reggie',sp:1.5,pet:0,resting:true },
+    { x:0,y:0,vx:0,vy:0,s:0.5,er:'f',nm:'Luna',sp:2.0,pet:0,resting:true }
   ];
+  for (var di = 0; di < dogs.length; di++) { if (dogs[di].resting) { dogs[di].x = W - 60; dogs[di].y = 110 + di * 70 + 14; } }
   var ball = { x:W/2,y:H/2,vx:0,vy:0,r:10,a:false,t:0,held:false };
   function allResting() { for (var i=0;i<dogs.length;i++) { if (!dogs[i].resting) return false; } return true; }
   document.body.style.cursor = allResting() ? 'default' : 'grab';
